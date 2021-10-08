@@ -19,31 +19,10 @@
 </head>
 
 <body>
-    <!-- top navigation for non logged in users -->
-    {% if not session.user %}
-    <div>
-        <div class="row flex-nowrap flex-column g-0">
-            <header>
-                <nav class="navbar navbar-expand-lg navbar-light bg-light px-3 px-md-5">
-                    <div class="container-fluid">
-                        <a class="navbar-brand" href="#">Stock MGMT</a>
-
-                        <ul class="navbar-nav d-flex flex-row">
-                            <li class="nav-item">
-                                <a class="nav-link me-3" href="#">Log In</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('signup') }}">Sign Up</a>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
-            </header>
-            <!-- end top navigation -->
-
-        {% else %}
 
     <!-- navigations for logged in users / dashboard navigation -->
+    <!-- index.html has its own navbar. signup.html and login.html don't have navbar -->
+    {% if session.user %}
     <div class="container-fluid">
         <div class="row flex-nowrap">
             <!-- side navigation bar -->
@@ -117,7 +96,7 @@
                 {% endif %}
 
                 <!-- main dashboard content -->
-                <main class="container">
+                <main class="min-vw-100">
                     {% block content %}
 
 
