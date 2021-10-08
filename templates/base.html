@@ -19,6 +19,7 @@
 </head>
 
 <body>
+    {% if not session.user %}
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
@@ -35,7 +36,51 @@
             </div>
         </nav>
     </header>
-
+    {% else %}
+    <nav class="sidenav col-md-1 col-lg-2 bg-primary px-sm-2 px-0">
+        <div
+            class="d-flex flex-column align-items-md-center align-items-lg-start text-white bg-primary min-vh-100">
+            <ul class="nav flex-column text-white text-decoration-none">
+                <li class="fs-4">
+                    <span class="d-md-none d-lg-inline">Username</span>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="#">
+                        <i class="bi bi-power me-2"></i>
+                        <span class="d-md-none d-lg-inline">Log Off</span>
+                    </a>
+                </li>
+            </ul>
+            <hr>
+            <ul class="nav nav-pills flex-column mb-auto">
+                <li class="nav-item">
+                    <a href="#" class="nav-link text-white">
+                        <i class="bi bi-collection me-2"></i>
+                        <span class="d-md-none d-lg-inline">Categories</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link text-white">
+                        <i class="bi bi-person-lines-fill me-2"></i>
+                        <span class="d-md-none d-lg-inline">Suppliers</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link text-white">
+                        <i class="bi bi-grid me-2"></i>
+                        <span class="d-md-none d-lg-inline">Products</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link text-white">
+                        <i class="bi bi-speedometer2 me-2"></i>
+                        <span class="d-md-none d-lg-inline">Stock Flow</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    {% endif %}
     {% block content %}
 
 
