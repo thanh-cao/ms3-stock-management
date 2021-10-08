@@ -95,6 +95,20 @@
 
                 {% endif %}
 
+                <!-- flash messages -->
+                <section>
+                    {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                    {% for message in messages %}
+                    <div class="row flashes">
+                        <h4 class="green lighten-4 center-align">{{ message }}</h4>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                    {% endwith %}
+                </section>
+                <!-- end flash messages -->
+
                 <!-- main dashboard content -->
                 <main class="min-vw-100">
                     {% block content %}

@@ -9,18 +9,16 @@
     </div>
     <div class="row wrapper-glassmorphism text-white">
         <div class="col">
-            <h1 clas="mb-3">Sign Up!</h1>
+            <h1 clas="mb-3">Log In</h1>
             <form action="{{ url_for('signup') }}" method="POST">
                 {{ form.csrf_token }}
-                {{ render_field(form.name) }}
                 {{ render_field(form.email) }}
-                {{ render_field(form.company_name) }}
                 {{ render_field(form.password) }}
                 {{ render_submit_btn(form.submit) }}
             </form>
 
             <hr class="my-4">
-            <p>Already got an account? <a href="{{ url_for('login') }}">Log in here</a> instead</p>
+            <p>Not yet a user? <a href="{{ url_for('signup') }}">Sign up here</a> instead</p>
         </div>
     </div>
 </section>
