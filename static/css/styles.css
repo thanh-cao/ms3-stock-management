@@ -1,0 +1,35 @@
+body {
+    font-family: 'Roboto', 'san-serif';
+}
+
+/* navigation bar */
+.sidenav i {
+    font-size: 1.2rem;
+}
+
+.navbar-nav .dropdown-menu {
+    position: absolute;
+    z-index: 1;
+}
+
+/* side navigation bar on mobile screen */
+@media only screen and (max-width : 540px) {
+    nav.sidenav {
+        width: 0;
+        padding: 0;
+        transition: 0.5s;
+    }
+
+    nav.sidenav.show {
+        width: 180px;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+    }
+
+    div.mobile {
+        width: 100%;
+        position: relative;
+    }
+}
