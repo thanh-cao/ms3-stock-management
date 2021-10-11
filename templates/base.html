@@ -19,31 +19,10 @@
 </head>
 
 <body>
-    <!-- top navigation for non logged in users -->
-    {% if not session.user %}
-    <div>
-        <div class="row flex-nowrap flex-column g-0">
-            <header>
-                <nav class="navbar navbar-expand-lg navbar-light bg-light px-3 px-md-5">
-                    <div class="container-fluid">
-                        <a class="navbar-brand" href="#">Stock MGMT</a>
-
-                        <ul class="navbar-nav d-flex flex-row">
-                            <li class="nav-item">
-                                <a class="nav-link active me-3" aria-current="page" href="#">Log In</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Sign Up</a>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
-            </header>
-            <!-- end top navigation -->
-
-        {% else %}
 
     <!-- navigations for logged in users / dashboard navigation -->
+    <!-- index.html has its own navbar. signup.html and login.html don't have navbar -->
+    {% if session.user %}
     <div class="container-fluid">
         <div class="row flex-nowrap">
             <!-- side navigation bar -->
@@ -116,8 +95,22 @@
 
                 {% endif %}
 
+                <!-- flash messages -->
+                <section>
+                    {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                    {% for message in messages %}
+                    <div class="row flashes">
+                        <h4 class="green lighten-4 center-align">{{ message }}</h4>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                    {% endwith %}
+                </section>
+                <!-- end flash messages -->
+
                 <!-- main dashboard content -->
-                <main class="container">
+                <main class="min-vw-100">
                     {% block content %}
 
 

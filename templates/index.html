@@ -1,6 +1,21 @@
 {% extends 'base.html' %}
 {% block content %}
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light px-3 px-md-5">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Stock MGMT</a>
 
+            <ul class="navbar-nav d-flex flex-row">
+                <li class="nav-item">
+                    <a class="nav-link me-3" href="{{ url_for('user.login') }}">Log In</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('user.register') }}">Sign Up</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
 <h2>Index page</h2>
 
 {% endblock %}

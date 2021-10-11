@@ -1,0 +1,15 @@
+{% macro render_field(field) %}
+<div class="mb-3">
+    <label for="{{ field.name }}" class="form-label">{{ field.label.text }}</label>
+    {{ field(class_='form-control', **kwargs)|safe }}
+    <ul class="list-unstyled">
+        {% for error in field.errors %}
+        <li class="text-danger">{{ error }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endmacro %}
+
+{% macro render_submit_btn(btn) %}
+{{ btn(class_='btn btn-primary', **kwargs)| safe}}
+{% endmacro %}

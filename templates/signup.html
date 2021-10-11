@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% from '_form_macros.html' import render_field %}
+{% from '_form_macros.html' import render_submit_btn %}
+
+{% block content %}
+<section class="form-backdrop d-flex flex-column align-items-center justify-content-center min-vh-100">
+    <div class="row mb-3">
+        <a href="{{ url_for('index') }}"><h1>Home</h1></a>
+    </div>
+    <div class="row wrapper-glassmorphism text-white">
+        <div class="col">
+            <h1 clas="mb-3">Sign Up!</h1>
+            <form action="{{ url_for('user.register') }}" method="POST">
+                {{ form.hidden_tag() }}
+                {{ form.csrf_token }}
+
+            
+                {{ render_field(form.name) }}
+                {{ render_field(form.username) }}
+                {{ render_field(form.company_name) }}
+                {{ render_field(form.password) }}
+                {{ render_field(form.retype_password) }}
+                {{ render_submit_btn(form.submit) }}
+            </form>
+
+            <hr class="my-4">
+            <p>Already got an account? <a href="{{ url_for('user.login') }}">Log in here</a> instead</p>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
