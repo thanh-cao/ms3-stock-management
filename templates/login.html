@@ -10,15 +10,15 @@
     <div class="row wrapper-glassmorphism text-white">
         <div class="col">
             <h1 clas="mb-3">Log In</h1>
-            <form action="{{ url_for('signup') }}" method="POST">
+            <form action="{{ url_for('user.login') }}" method="POST">
                 {{ form.csrf_token }}
-                {{ render_field(form.email) }}
+                {{ render_field(form.username) }}
                 {{ render_field(form.password) }}
                 {{ render_submit_btn(form.submit) }}
             </form>
 
             <hr class="my-4">
-            <p>Not yet a user? <a href="{{ url_for('signup') }}">Sign up here</a> instead</p>
+            <p>Not yet a user? <a href="{{ url_for('user.register') }}">Sign up here</a> instead</p>
         </div>
     </div>
 </section>

@@ -1,20 +1,25 @@
-from app import db
+from flask_mongoengine import MongoEngine
+from flask_user import UserMixin
 import datetime
 
 
+db = MongoEngine()
+# field choices
 USER_ROLE = ('admin', 'staff')
 
 
-class User(db.EmbeddedDocument):
+class Access(db.EmbeddedDocument):
     username = db.StringField(required=True)
     pin = db.IntField(required=True, length=4)
     role = db.StringField(required=True, choices=USER_ROLE)
 
 
-class Account(db.Document):
-    name = db.StringField(minlength=5, maxlength=30)
-    email = db.EmailField(required=True, unique=True)
-    password = db.StringField(required=True)
-    company_name = db.StringField(required=True)
+class Account(db.Document, UserMixin):
+    name = db.StringField(default='')
+    username = db.StringField()
+    # email = db.EmailField(required=True, unique=True)
+    password = db.StringField()
+    company_name = db.StringField()
     signup_date = db.DateTimeField(default=datetime.datetime.utcnow)
-    user_access = db.ListField(db.EmbeddedDocumentField(User, required=True))
+    user_access = db.EmbeddedDocumentField(Access)
+    active = db.BooleanField(default=True)
