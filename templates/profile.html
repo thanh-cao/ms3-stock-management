@@ -16,23 +16,59 @@
                     <h5 class="card-title fw-bold">Account Information</h5>
                     <div class="form-floating">
                         <p class="card-text form-control border-0 mb-1">{{ account.name }}</p>
-                        <label for="floatingInputGrid">Name</label>
+                        <label>Name</label>
                     </div>
                     <div class="form-floating">
                         <p class="card-text form-control border-0 mb-1">{{ account.company_name }}</p>
-                        <label for="floatingInputGrid">Company's Name</label>
+                        <label>Company's Name</label>
                     </div>
                     <div class="form-floating">
                         <p class="card-text form-control border-0 mb-1">{{ account.company_name }}</p>
-                        <label for="floatingInputGrid">Email Address</label>
+                        <label>Email Address</label>
                     </div>
                     <a class="btn btn-primary" data-action="showForm" data-target="#profileForm">Edit Profile</a>
+                </div>
+            </div>
+
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">User Access</h5>
+                    <div class="row">
+                        <div class="col-6">
+                            <span class="text-muted">Username</span>
+                        </div>
+                        <div class="col-3">
+                            <span class="text-muted">Role</span>
+                        </div>
+                        <div class="col-3">
+                        </div>
+                    </div>
+
+                    <div class="row mt-2 align-items-center">
+                        <div class="col-6">
+                            {{ account.username }}
+                        </div>
+                        <div class="col-3">
+                            admin
+                        </div>
+                        <div class="col-3">
+                            <a href="#" class="text-decoration-none btn btn-sm btn-outline-primary">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                            <a href="#" class="text-decoration-none btn btn-sm btn-outline-danger">                             
+                                <i class="bi bi-trash"></i>                              
+                            </a>
+                        </div>
+                    </div>
+
+                    <a class="btn btn-primary mt-4" data-action="showForm" data-target="#userAccessForm">Create New
+                        Access</a>
                 </div>
             </div>
         </div>
 
         <div class="col-12 col-md-6">
-            <form id="profileForm" class="d-none" action="" method="POST">
+            <form id="profileForm" class="d-none mt-4" action="" method="POST">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title fw-bold">Edit Profile</h5>
@@ -42,8 +78,24 @@
                         {{ render_field(account_form.username) }}
                         {{ render_field(account_form.company_name) }}
                         <a href="#" class="btn btn-primary">Update</a>
-                        <a href="#" class="btn btn-outline-primary" data-action="hideForm"
+                        <a href="#" class="btn btn-outline-secondary" data-action="hideForm"
                             data-target="#profileForm">Cancel</a>
+                    </div>
+                </div>
+            </form>
+
+            <form id="userAccessForm" class="d-none mt-4" action="" method="POST">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Create User Access</h5>
+                        {{ access_form.csrf_token }}
+
+                        {{ render_field(access_form.username) }}
+                        {{ render_field(access_form.pin) }}
+                        {{ render_field(access_form.role) }}
+                        <a href="#" class="btn btn-primary">Create New</a>
+                        <a href="#" class="btn btn-outline-secondary" data-action="hideForm"
+                            data-target="#userAccessForm">Cancel</a>
                     </div>
                 </div>
             </form>

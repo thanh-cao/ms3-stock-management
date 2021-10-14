@@ -48,3 +48,8 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.18);
     padding: 5rem;
 }
+
+/* utilities */
+.text-muted {
+    font-size: 0.85rem;
+}
