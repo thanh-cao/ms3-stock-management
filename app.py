@@ -6,6 +6,7 @@ from flask_mongoengine import MongoEngine
 from flask_wtf.csrf import CSRFProtect
 from flask_user import login_required, current_user, roles_required
 from flask_login import logout_user
+from bson.objectid import ObjectId
 from models import *
 from forms import *
 from config import ConfigClass
@@ -29,14 +30,21 @@ user_manager = CustomUserManager(app, db, Account)
 @app.route('/')
 @app.route('/index')
 def index():
+    if current_user.is_authenticated:
+        return redirect(url_for('profile'))
     return render_template('index.html')
 
 
 @app.route('/profile')
 @login_required
 def profile():
-    name = current_user.name
-    return render_template('profile.html', name=name)
+    account = current_user
+    account_form = CustomRegisterForm()
+    access_form = UserAccess()
+    return render_template('profile.html',
+                        account=account,
+                        account_form=account_form,
+                        access_form=access_form)
 
 
 if __name__ == '__main__':

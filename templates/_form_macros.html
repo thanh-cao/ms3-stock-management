@@ -1,6 +1,6 @@
 {% macro render_field(field) %}
 <div class="mb-3">
-    <label for="{{ field.name }}" class="form-label">{{ field.label.text }}</label>
+    <!-- <label for="{{ field.name }}" class="form-label">{{ field.label.text }}</label> -->
     {{ field(class_='form-control', **kwargs)|safe }}
     <ul class="list-unstyled">
         {% for error in field.errors %}

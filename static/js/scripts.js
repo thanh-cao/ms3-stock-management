@@ -4,6 +4,9 @@ $(document).ready(function () {
         openSidenav();
     });
 
+    $('[data-action="showForm"]').on('click', showForm);
+    $('[data-action="hideForm"]').on('click', hideForm);
+
     $(document).on('click', (e) => {
         console.log(e.target);
         if ($('nav.sidenav').hasClass('show') && !$(e.target).closest('nav.sidenav').length) {
@@ -23,3 +26,16 @@ closeSidenav = () => {
     $('body').css('backgroundColor', 'rgb(255,255,255)');
     console.log('close');
 };
+
+function showForm(target) {
+    target = $(this).attr('data-target');
+    $(`form${target}`).toggleClass('d-none');
+    location.href = `${target}`;
+}
+
+function hideForm(target) {
+    target = $(this).attr('data-target');
+    $(`form${target}`).addClass('d-none');
+    console.log(target);
+    console.log($(`form${target}`));
+}
