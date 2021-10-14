@@ -22,7 +22,7 @@
 
     <!-- navigations for logged in users / dashboard navigation -->
     <!-- index.html has its own navbar. signup.html and login.html don't have navbar -->
-    {% if session.user %}
+    {% if call_or_get(current_user.is_authenticated) %}
     <div class="container-fluid">
         <div class="row flex-nowrap">
             <!-- side navigation bar -->
@@ -71,7 +71,7 @@
             </nav>
             <!-- end side navigation bar -->
 
-            <div class="col-12 position-relative col-md-auto">
+            <div class="col-12 position-relative col-md-10">
                 <!-- top toolbar for account holder  -->
                 <header class="navbar navbar-light">
                     <button class="navbar-toggler d-inline-block d-md-none" type="button"
@@ -82,11 +82,11 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="toolbarDropdown" role="button"
                                 data-bs-toggle="dropdown" aria-expanded="false">
-                                Company's name
+                                {{ current_user.company_name }}
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="toolbarDropdown">
-                                <li><a class="dropdown-item" href="#">Profile</a></li>
-                                <li><a class="dropdown-item" href="#">Sign Out</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('profile') }}">Profile</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('user.logout') }}">Sign Out</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -95,22 +95,23 @@
 
                 {% endif %}
 
-                <!-- flash messages -->
-                <section>
-                    {% with messages = get_flashed_messages() %}
-                    {% if messages %}
-                    {% for message in messages %}
-                    <div class="row flashes">
-                        <h4 class="green lighten-4 center-align">{{ message }}</h4>
-                    </div>
-                    {% endfor %}
-                    {% endif %}
-                    {% endwith %}
-                </section>
-                <!-- end flash messages -->
+
 
                 <!-- main dashboard content -->
-                <main class="min-vw-100">
+                <main>
+                    <!-- flash messages -->
+                    <section>
+                        {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                        {% for message in messages %}
+                        <div class="row flashes">
+                            <h4 class="green lighten-4 center-align">{{ message }}</h4>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                        {% endwith %}
+                    </section>
+                    <!-- end flash messages -->
                     {% block content %}
 
 
