@@ -35,16 +35,30 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/profile')
+@app.route('/profile/', methods=['GET', 'POST'])
 @login_required
 def profile():
     account = current_user
     account_form = CustomRegisterForm()
     access_form = UserAccess()
+
     return render_template('profile.html',
-                        account=account,
-                        account_form=account_form,
-                        access_form=access_form)
+                           account=account,
+                           account_form=account_form,
+                           access_form=access_form)
+
+
+@app.route('/profile/edit/<account_id>', methods=['GET', 'POST'])
+def edit_profile(account_id):
+    account = Account.objects.get(id=account_id)
+    if request.method == 'POST':
+        updated_profile = {
+            'name': request.form.get('name'),
+            'company_name': request.form.get('company_name')
+        }
+        account.update(**updated_profile)
+        print(updated_profile)
+        return redirect(url_for('profile'))
 
 
 if __name__ == '__main__':

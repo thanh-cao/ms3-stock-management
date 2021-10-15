@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
-{% from '_form_macros.html' import render_field %}
-{% from '_form_macros.html' import render_submit_btn %}
+{% from '_form_macros.html' import render_field, render_field_with_value, render_submit_btn %}
 
 {% block content %}
 
@@ -19,12 +18,16 @@
                         <label>Name</label>
                     </div>
                     <div class="form-floating">
-                        <p class="card-text form-control border-0 mb-1">{{ account.company_name }}</p>
-                        <label>Company's Name</label>
+                        <p class="card-text form-control border-0 mb-1">{{ account.name }}</p>
+                        <label>Username</label>
                     </div>
                     <div class="form-floating">
                         <p class="card-text form-control border-0 mb-1">{{ account.company_name }}</p>
                         <label>Email Address</label>
+                    </div>
+                    <div class="form-floating">
+                        <p class="card-text form-control border-0 mb-1">{{ account.company_name }}</p>
+                        <label>Company's Name</label>
                     </div>
                     <a class="btn btn-primary" data-action="showForm" data-target="#profileForm">Edit Profile</a>
                 </div>
@@ -55,29 +58,28 @@
                             <a href="#" class="text-decoration-none btn btn-sm btn-outline-primary">
                                 <i class="bi bi-pencil-square"></i>
                             </a>
-                            <a href="#" class="text-decoration-none btn btn-sm btn-outline-danger">                             
-                                <i class="bi bi-trash"></i>                              
+                            <a href="#" class="text-decoration-none btn btn-sm btn-outline-danger">
+                                <i class="bi bi-trash"></i>
                             </a>
                         </div>
                     </div>
 
-                    <a class="btn btn-primary mt-4" data-action="showForm" data-target="#userAccessForm">Create New
-                        Access</a>
+                    <a href="#" class="btn btn-primary mt-4" data-action="showForm" data-target="#userAccessForm">
+                        Create New Access</a>
                 </div>
             </div>
         </div>
 
         <div class="col-12 col-md-6">
-            <form id="profileForm" class="d-none mt-4" action="" method="POST">
+            <form id="profileForm" class="d-none mt-4" action="{{ url_for('edit_profile', account_id=account.id) }}" method="POST">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title fw-bold">Edit Profile</h5>
                         {{ account_form.csrf_token }}
 
-                        {{ render_field(account_form.name) }}
-                        {{ render_field(account_form.username) }}
-                        {{ render_field(account_form.company_name) }}
-                        <a href="#" class="btn btn-primary">Update</a>
+                        {{ render_field_with_value(account_form.name, current_user.name) }}
+                        {{ render_field_with_value(account_form.company_name, current_user.company_name) }}
+                        <button type="submit" class="btn btn-primary">Update</button>
                         <a href="#" class="btn btn-outline-secondary" data-action="hideForm"
                             data-target="#profileForm">Cancel</a>
                     </div>

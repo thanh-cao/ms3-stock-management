@@ -21,7 +21,7 @@ class UserAccess(FlaskForm):
     username = StringField(Length(min=5, max=10, message='Username name must be between 5 and 10 characters!'),
                             validators=[DataRequired()],
                             render_kw={'placeholder': 'Username'}
-                            )
+                        )
     pin = IntegerField(validators=[Length(max=4), DataRequired()],
                         render_kw={'placeholder': 'Pin code'})
     role = SelectField(choices=[('', 'Choose Role'),
