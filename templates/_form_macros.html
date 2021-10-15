@@ -1,7 +1,7 @@
 {% macro render_field(field) %}
 <div class="mb-3">
-    <!-- <label for="{{ field.name }}" class="form-label">{{ field.label.text }}</label> -->
     {{ field(class_='form-control', **kwargs)|safe }}
+    <div class="form-text">{{ field.description }}</div>
     <ul class="list-unstyled">
         {% for error in field.errors %}
         <li class="text-danger">{{ error }}</li>
@@ -12,4 +12,17 @@
 
 {% macro render_submit_btn(btn) %}
 {{ btn(class_='btn btn-primary', **kwargs)| safe}}
+{% endmacro %}
+
+
+{% macro render_field_with_value(field, data) %}
+<div class="form-floating">
+    {{ field(class_='form-control', value=data)|safe }}
+    <label for="{{ field.name }}">{{ field.label.text }}</label>
+    <ul class="list-unstyled">
+        {% for error in field.errors %}
+        <li class="text-danger">{{ error }}</li>
+        {% endfor %}
+    </ul>
+</div>
 {% endmacro %}

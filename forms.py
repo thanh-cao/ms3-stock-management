@@ -18,12 +18,13 @@ class CustomUserManager(UserManager):
 
 
 class UserAccess(FlaskForm):
-    username = StringField(Length(min=5, max=10, message='Username name must be between 5 and 10 characters!'),
-                            validators=[DataRequired()],
-                            render_kw={'placeholder': 'Username'}
-                            )
-    pin = IntegerField(validators=[Length(max=4), DataRequired()],
-                        render_kw={'placeholder': 'Pin code'})
+    username = StringField(validators=[Length(min=5, max=10), DataRequired()],
+                            render_kw={'placeholder': 'Username'},
+                            description='Username name must be between 5 and 10 characters'
+                            )        
+    pin = IntegerField(validators=[Length(min=4, max=6), DataRequired()],
+                        render_kw={'placeholder': 'Pin code'},
+                        description='Choose 4 to 6 digits for pin code')
     role = SelectField(choices=[('', 'Choose Role'),
                                 ('admin', 'admin'),
                                 ('staff', 'staff')],
