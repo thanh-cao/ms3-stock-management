@@ -18,7 +18,7 @@
                         <label>Name</label>
                     </div>
                     <div class="form-floating">
-                        <p class="card-text form-control border-0 mb-1">{{ account.name }}</p>
+                        <p class="card-text form-control border-0 mb-1">{{ account.username }}</p>
                         <label>Username</label>
                     </div>
                     <div class="form-floating">
@@ -46,14 +46,16 @@
                         <div class="col-3">
                         </div>
                     </div>
-
+                    {% for user in user_access %}
                     <div class="row mt-2 align-items-center">
                         <div class="col-6">
-                            {{ account.username }}
+                            {{ user.username }}
                         </div>
+                        {% for role in user.roles %}
                         <div class="col-3">
-                            admin
+                            {{ role|capitalize }}
                         </div>
+                        {% endfor %}
                         <div class="col-3">
                             <a href="#" class="text-decoration-none btn btn-sm btn-outline-primary">
                                 <i class="bi bi-pencil-square"></i>
@@ -63,6 +65,7 @@
                             </a>
                         </div>
                     </div>
+                    {% endfor %}
 
                     <a href="#" class="btn btn-primary mt-4" data-action="showForm" data-target="#userAccessForm">
                         Create New Access</a>
@@ -78,6 +81,8 @@
                         {{ account_form.csrf_token }}
 
                         {{ render_field_with_value(account_form.name, current_user.name) }}
+                        {{ render_field_with_value(account_form.username, current_user.username) }}
+                        <!-- {{ render_field_with_value(account_form.email, current_user.email) }} -->
                         {{ render_field_with_value(account_form.company_name, current_user.company_name) }}
                         <button type="submit" class="btn btn-primary">Update</button>
                         <a href="#" class="btn btn-outline-secondary" data-action="hideForm"
@@ -86,7 +91,7 @@
                 </div>
             </form>
 
-            <form id="userAccessForm" class="d-none mt-4" action="" method="POST">
+            <form id="userAccessForm" class="d-none mt-4" action="{{ url_for('create_access') }}" method="POST">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title fw-bold">Create User Access</h5>
@@ -95,7 +100,7 @@
                         {{ render_field(access_form.username) }}
                         {{ render_field(access_form.pin) }}
                         {{ render_field(access_form.role) }}
-                        <a href="#" class="btn btn-primary">Create New</a>
+                        <button type="submit" class="btn btn-primary">Create New</button>
                         <a href="#" class="btn btn-outline-secondary" data-action="hideForm"
                             data-target="#userAccessForm">Cancel</a>
                     </div>

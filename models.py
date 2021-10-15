@@ -13,6 +13,6 @@ class User(db.Document, UserMixin):
     password = db.StringField()
     company_name = db.StringField()
     signup_date = db.DateTimeField(default=datetime.datetime.utcnow)
-    roles = db.ListField(db.StringField(), default=['staff'])
+    roles = db.ListField(db.StringField(), default=[])
     pin = db.IntField(default=1010)
     active = db.BooleanField(default=True)

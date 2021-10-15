@@ -3,6 +3,7 @@ from flask import (
     Flask, flash, render_template,
     redirect, request, session, url_for)
 from flask_mongoengine import MongoEngine
+from mongoengine.queryset.visitor import Q
 from flask_wtf.csrf import CSRFProtect
 from flask_user import login_required, current_user, roles_required
 from flask_user.signals import user_registered
@@ -48,15 +49,17 @@ def create_super_admin(sender, user, **extra):
 @roles_required('super_admin')
 def profile():
     account = current_user
+    user_access = User.objects(Q(roles='admin') | Q(roles='staff'))
     account_form = CustomRegisterForm()
     access_form = UserAccess()
     return render_template('profile.html',
                            account=account,
+                           user_access=user_access,
                            account_form=account_form,
                            access_form=access_form)
 
 
-@app.route('/profile/edit/<account_id>', methods=['GET', 'POST'])
+@app.route('/profile/edit/<account_id>', methods=['POST'])
 @login_required
 @roles_required('super_admin')
 def edit_profile(account_id):
@@ -68,6 +71,23 @@ def edit_profile(account_id):
         }
         account.update(**updated_profile)
         flash('Profile successfully updated')
+        return redirect(url_for('profile'))
+
+
+@app.route('/profile/create-accesss', methods=['POST'])
+@login_required
+@roles_required('super_admin')
+def create_access():
+    company = current_user.company_name
+    if request.method == 'POST':
+        access = User(
+            username=request.form.get('username'),
+            pin=request.form.get('pin'),
+            company_name=company,
+            roles=[request.form.get('role')]
+            )
+        access.save()
+        flash('New user access successfully updated')
         return redirect(url_for('profile'))
 
 
