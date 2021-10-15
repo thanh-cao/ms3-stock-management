@@ -46,22 +46,22 @@
                         <div class="col-3">
                         </div>
                     </div>
-                    {% for user in user_access %}
+                    {% for access in user_access %}
                     <div class="row mt-2 align-items-center">
                         <div class="col-6">
-                            {{ user.username }}
+                            {{ access.username }}
                         </div>
-                        {% for role in user.roles %}
+                        {% for role in access.roles %}
                         <div class="col-3">
                             {{ role|capitalize }}
                         </div>
                         {% endfor %}
                         <div class="col-3">
-                            <a href="#" class="text-decoration-none btn btn-sm btn-outline-primary">
-                                <i class="bi bi-pencil-square"></i>
+                            <a data-action="showForm" data-target="#editUserAccessForm{{ access.id }}" class="text-decoration-none btn btn-sm btn-outline-primary">
+                                <i class="bi bi-pencil-square" aria-label="Edit current user access"></i>
                             </a>
                             <a href="#" class="text-decoration-none btn btn-sm btn-outline-danger">
-                                <i class="bi bi-trash"></i>
+                                <i class="bi bi-trash" aria-label="Delete current user access"></i>
                             </a>
                         </div>
                     </div>
@@ -106,6 +106,22 @@
                     </div>
                 </div>
             </form>
+            {% for access in user_access %}
+            <form id="editUserAccessForm{{ access.id }}" class="d-none mt-4" action="#" method="POST">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Edit User Access</h5>
+                        {{ access_form.csrf_token }}
+                        {{ render_field_with_value(access_form.username, access.username) }}
+                        {{ render_field_with_value(access_form.pin, access.pin) }}
+                        {{ render_field_with_value(access_form.role, access.role) }}
+                        <button type="submit" class="btn btn-primary">Update</button>
+                        <a href="#" class="btn btn-outline-secondary" data-action="hideForm"
+                            data-target="#editUserAccessForm{{ access.id }}">Cancel</a>
+                    </div>
+                </div>
+            </form>
+            {% endfor %}
         </div>
     </div>
 </section>

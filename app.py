@@ -74,7 +74,7 @@ def edit_profile(account_id):
         return redirect(url_for('profile'))
 
 
-@app.route('/profile/create-accesss', methods=['POST'])
+@app.route('/profile/create_accesss', methods=['POST'])
 @login_required
 @roles_required('super_admin')
 def create_access():
@@ -88,6 +88,24 @@ def create_access():
             )
         access.save()
         flash('New user access successfully updated')
+        return redirect(url_for('profile'))
+
+
+@app.route('/profile/edit_accesss/<access_id>', methods=['POST'])
+@login_required
+@roles_required('super_admin')
+def edit_accesss(access_id):
+    access = User.objects.get(id=access_id)
+    access.roles.pop()
+    if request.method == 'POST':
+        new_role = request.form.get('role')
+        access.roles.append(new_role)
+        updated_access = {
+            'username': request.form('username'),
+            'pin': request.form('pin'),
+        }
+        access.update(**updated_access)
+        flash('Access successfully updated')
         return redirect(url_for('profile'))
 
 
