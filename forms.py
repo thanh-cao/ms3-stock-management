@@ -7,8 +7,11 @@ import email_validator
 
 
 class CustomRegisterForm(RegisterForm):
-    name = StringField(label='Name', validators=[DataRequired()], render_kw={'placeholder': 'Name'})
-    company_name = StringField(label='Company\'s Name', render_kw={'placeholder': 'Company\'s Name'})
+    name = StringField(label='Name',
+                        validators=[DataRequired()],
+                        render_kw={'placeholder': 'Name'})
+    company_name = StringField(label='Company\'s Name',
+                                render_kw={'placeholder': 'Company\'s Name'})
 
 
 class CustomUserManager(UserManager):
@@ -19,13 +22,17 @@ class CustomUserManager(UserManager):
 
 class UserAccess(FlaskForm):
     username = StringField(validators=[Length(min=5, max=10), DataRequired()],
-                            render_kw={'placeholder': 'Username'},
-                            description='Username name must be between 5 and 10 characters'
-                            )        
+                           render_kw={'placeholder': 'Username'},
+                           description='Username name must be between 5 and 10 characters')
     pin = IntegerField(validators=[Length(min=4, max=6), DataRequired()],
-                        render_kw={'placeholder': 'Pin code'},
-                        description='Choose 4 to 6 digits for pin code')
+                       render_kw={'placeholder': 'Pin code'},
+                       description='Choose 4 to 6 digits for pin code')
     role = SelectField(choices=[('', 'Choose Role'),
                                 ('admin', 'admin'),
                                 ('staff', 'staff')],
-                        validators=[AnyOf('admin', 'staff')])
+                       validators=[AnyOf('admin', 'staff')])
+
+
+class Category(FlaskForm):
+    category_name = StringField(DataRequired(), render_kw={'placeholder': 'Category name'})
+    submit = SubmitField(label='Create')

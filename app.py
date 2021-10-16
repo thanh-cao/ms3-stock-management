@@ -43,8 +43,10 @@ def create_super_admin(sender, user, **extra):
     user.roles.append('super_admin')
     user.save()
 
-
-@app.route('/profile/', methods=['GET', 'POST'])
+#############################
+### Profile / User access ###
+#############################
+@app.route('/profile')
 @login_required
 @roles_required('super_admin')
 def profile():
@@ -108,6 +110,16 @@ def edit_accesss(access_id):
         flash('Access successfully updated')
         return redirect(url_for('profile'))
 
+
+#############################
+##### Product category ######
+#############################
+
+@app.route('/categories')
+@login_required
+def categories():
+    category_form = Category()
+    return render_template('categories.html', categories=categories, form=category_form)
 
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),

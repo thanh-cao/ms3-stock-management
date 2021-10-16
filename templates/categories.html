@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% from '_form_macros.html' import render_field, render_field_with_value, render_submit_btn %}
+
+{% block content %}
+
+<section class="mt-2">
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <div class="card px-3">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">Manage Categories</h5>
+
+                    <div class="row mt-3 border border-dark align-items-center py-2 g-0">
+                        <div class="col-9 ps-3">
+                            Category 1
+                        </div>
+                        <div class="col-3 text-center">
+                            <a data-action="showForm" data-target="#editCategory"
+                                class="text-decoration-none btn btn-sm btn-outline-primary">
+                                <i class="bi bi-pencil-square" aria-label="Edit category"></i>
+                            </a>
+                            <a href="#" class="text-decoration-none btn btn-sm btn-outline-danger">
+                                <i class="bi bi-trash" aria-label="Delete category"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <a class="btn btn-primary mt-4" data-action="showForm" data-target="#createCategory">
+                        Create new category</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6">
+            <form id="createCategory" class="d-none mt-4" action="" method="POST">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Create new category</h5>
+                        {{ form.csrf_token }}
+
+                        {{ render_field(form.category_name) }}
+                        {{ render_submit_btn(form.submit) }}
+                        <a href="#" class="btn btn-outline-secondary" data-action="hideForm"
+                            data-target="#createCategory">Cancel</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

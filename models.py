@@ -2,6 +2,8 @@ from flask_mongoengine import MongoEngine
 from flask_user import UserMixin
 import datetime
 
+from mongoengine.fields import ReferenceField
+
 
 db = MongoEngine()
 
@@ -16,3 +18,8 @@ class User(db.Document, UserMixin):
     roles = db.ListField(db.StringField(), default=[])
     pin = db.IntField(default=1010)
     active = db.BooleanField(default=True)
+
+
+class Category(db.Document):
+    category_name = db.StringField()
+    company_id = db.ReferenceField('User')
