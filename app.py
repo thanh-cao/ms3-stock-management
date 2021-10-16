@@ -43,8 +43,10 @@ def create_super_admin(sender, user, **extra):
     user.roles.append('super_admin')
     user.save()
 
-
-@app.route('/profile/', methods=['GET', 'POST'])
+#############################
+### Profile / User access ###
+#############################
+@app.route('/profile')
 @login_required
 @roles_required('super_admin')
 def profile():
@@ -107,6 +109,48 @@ def edit_accesss(access_id):
         access.update(**updated_access)
         flash('Access successfully updated')
         return redirect(url_for('profile'))
+
+
+#############################
+##### Product category ######
+#############################
+
+@app.route('/categories')
+@login_required
+def categories():
+    category_form = CategoryForm()
+    categories = Category.objects()
+    return render_template('categories.html', categories=categories, form=category_form)
+
+
+@app.route('/categories/create', methods=['POST'])
+@login_required
+def create_category():
+    if request.method == 'POST':
+        new_category = Category(category_name=request.form.get('category_name'))
+        new_category.save()
+        return redirect(url_for('categories'))
+
+
+@app.route('/edit_category/<category_id>', methods=['POST'])
+@login_required
+def edit_category(category_id):
+    category = Category.objects.get(id=category_id)
+    if request.method == 'POST':
+        print(category)
+        editted = {
+            'category_name': request.form.get('category_name')
+        }
+        category.update(**editted)
+        return redirect(url_for('categories'))
+
+
+@app.route('/categories/delete/<category_id>')
+@login_required
+def delete_category(category_id):
+    category = Category.objects.get(id=category_id)
+    category.delete()
+    return redirect(url_for('categories'))
 
 
 if __name__ == '__main__':

@@ -43,7 +43,7 @@
                     <hr>
                     <ul class="nav nav-pills flex-column mb-auto">
                         <li class="nav-item">
-                            <a href="#" class="nav-link text-white">
+                            <a href="{{ url_for('categories') }}" class="nav-link text-white">
                                 <i class="bi bi-collection me-2"></i>
                                 <span class="d-md-none d-lg-inline">Categories</span>
                             </a>
@@ -105,7 +105,7 @@
                         {% if messages %}
                         {% for message in messages %}
                         <div class="row flashes">
-                            <h4 class="green lighten-4 center-align">{{ message }}</h4>
+                            <h4 class="badge">{{ message }}</h4>
                         </div>
                         {% endfor %}
                         {% endif %}
