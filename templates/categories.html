@@ -10,21 +10,22 @@
                 <div class="card-body">
                     <h5 class="card-title fw-bold">Manage Categories</h5>
 
+                    {% for category in categories %}
                     <div class="row mt-3 border border-dark align-items-center py-2 g-0">
                         <div class="col-9 ps-3">
-                            Category 1
+                            {{ category.category_name }}
                         </div>
                         <div class="col-3 text-center">
-                            <a data-action="showForm" data-target="#editCategory"
+                            <a data-action="showForm" data-target="#editCategory" data-id="category._id"
                                 class="text-decoration-none btn btn-sm btn-outline-primary">
                                 <i class="bi bi-pencil-square" aria-label="Edit category"></i>
                             </a>
-                            <a href="#" class="text-decoration-none btn btn-sm btn-outline-danger">
+                            <a href="{{ url_for('delete_category', category_id=category.id) }}" class="text-decoration-none btn btn-sm btn-outline-danger">
                                 <i class="bi bi-trash" aria-label="Delete category"></i>
                             </a>
                         </div>
                     </div>
-
+                    {% endfor %}
                     <a class="btn btn-primary mt-4" data-action="showForm" data-target="#createCategory">
                         Create new category</a>
                 </div>
@@ -32,7 +33,7 @@
         </div>
 
         <div class="col-12 col-md-6">
-            <form id="createCategory" class="d-none mt-4" action="" method="POST">
+            <form id="createCategory" class="d-none mt-4" action="{{ url_for('create_category') }}" method="POST">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title fw-bold">Create new category</h5>

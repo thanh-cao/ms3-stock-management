@@ -33,6 +33,6 @@ class UserAccess(FlaskForm):
                        validators=[AnyOf('admin', 'staff')])
 
 
-class Category(FlaskForm):
+class CategoryForm(FlaskForm):
     category_name = StringField(DataRequired(), render_kw={'placeholder': 'Category name'})
-    submit = SubmitField(label='Create')
+    submit = SubmitField(label='Submit')

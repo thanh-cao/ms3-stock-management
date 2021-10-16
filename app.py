@@ -118,8 +118,26 @@ def edit_accesss(access_id):
 @app.route('/categories')
 @login_required
 def categories():
-    category_form = Category()
+    category_form = CategoryForm()
+    categories = Category.objects()
     return render_template('categories.html', categories=categories, form=category_form)
+
+
+@app.route('/categories/create', methods=['POST'])
+@login_required
+def create_category():
+    if request.method == 'POST':
+        new_category = Category(category_name=request.form.get('category_name'))
+        new_category.save()
+        return redirect(url_for('categories'))
+
+
+@app.route('/categories/delete/<category_id>')
+@login_required
+def delete_category(category_id):
+    category = Category.objects.get(id=category_id)
+    category.delete()
+    return redirect(url_for('categories'))
 
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),
