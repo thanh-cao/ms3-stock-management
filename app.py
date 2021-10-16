@@ -132,12 +132,26 @@ def create_category():
         return redirect(url_for('categories'))
 
 
+@app.route('/edit_category/<category_id>', methods=['POST'])
+@login_required
+def edit_category(category_id):
+    category = Category.objects.get(id=category_id)
+    if request.method == 'POST':
+        print(category)
+        editted = {
+            'category_name': request.form.get('category_name')
+        }
+        category.update(**editted)
+        return redirect(url_for('categories'))
+
+
 @app.route('/categories/delete/<category_id>')
 @login_required
 def delete_category(category_id):
     category = Category.objects.get(id=category_id)
     category.delete()
     return redirect(url_for('categories'))
+
 
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),

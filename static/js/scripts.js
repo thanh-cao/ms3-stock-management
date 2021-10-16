@@ -31,6 +31,13 @@ function showForm(target) {
     target = $(this).attr('data-target');
     $(`form${target}`).toggleClass('d-none');
     location.href = `${target}`;
+
+    // If the show has data-id attribute, create a dynamic form's action based on data-id
+    if ($(this).attr('data-id')) {
+        baseRoute = `/${$(this).attr('data-target').substring(1)}/`;
+        actionRoute = baseRoute + $(this).attr('data-id');
+        $(`form${target}`).attr('action', actionRoute);
+    };
 }
 
 function hideForm(target) {

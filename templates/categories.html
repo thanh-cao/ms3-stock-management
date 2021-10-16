@@ -16,11 +16,12 @@
                             {{ category.category_name }}
                         </div>
                         <div class="col-3 text-center">
-                            <a data-action="showForm" data-target="#editCategory" data-id="category._id"
+                            <a data-action="showForm" data-target="#edit_category" data-id="{{ category.id }}"
                                 class="text-decoration-none btn btn-sm btn-outline-primary">
                                 <i class="bi bi-pencil-square" aria-label="Edit category"></i>
                             </a>
-                            <a href="{{ url_for('delete_category', category_id=category.id) }}" class="text-decoration-none btn btn-sm btn-outline-danger">
+                            <a href="{{ url_for('delete_category', category_id=category.id) }}"
+                                class="text-decoration-none btn btn-sm btn-outline-danger">
                                 <i class="bi bi-trash" aria-label="Delete category"></i>
                             </a>
                         </div>
@@ -43,6 +44,20 @@
                         {{ render_submit_btn(form.submit) }}
                         <a href="#" class="btn btn-outline-secondary" data-action="hideForm"
                             data-target="#createCategory">Cancel</a>
+                    </div>
+                </div>
+            </form>
+
+            <form id="edit_category" class="d-none mt-4" action="" method="POST">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Edit category</h5>
+                        {{ form.csrf_token }}
+
+                        {{ render_field(form.category_name) }}
+                        {{ render_submit_btn(form.submit) }}
+                        <a href="#" class="btn btn-outline-secondary" data-action="hideForm"
+                            data-target="#edit_category">Cancel</a>
                     </div>
                 </div>
             </form>
