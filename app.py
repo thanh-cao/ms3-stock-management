@@ -43,9 +43,9 @@ def create_super_admin(sender, user, **extra):
     user.roles.append('super_admin')
     user.save()
 
-#############################
 ### Profile / User access ###
-#############################
+
+
 @app.route('/profile')
 @login_required
 @roles_required('super_admin')
@@ -87,7 +87,7 @@ def create_access():
             pin=request.form.get('pin'),
             company_name=company,
             roles=[request.form.get('role')]
-            )
+        )
         access.save()
         flash('New user access successfully updated')
         return redirect(url_for('profile'))
@@ -115,21 +115,23 @@ def edit_accesss(access_id):
 ##### Product category ######
 #############################
 
+
 @app.route('/categories')
 @login_required
-def categories():
-    category_form = CategoryForm()
+def get_categories():
+    form = CategoryForm()
     categories = Category.objects()
-    return render_template('categories.html', categories=categories, form=category_form)
+    return render_template('categories.html', categories=categories, form=form)
 
 
 @app.route('/categories/create', methods=['POST'])
 @login_required
 def create_category():
     if request.method == 'POST':
-        new_category = Category(category_name=request.form.get('category_name'))
+        new_category = Category(
+            category_name=request.form.get('category_name'))
         new_category.save()
-        return redirect(url_for('categories'))
+        return redirect(url_for('get_categories'))
 
 
 @app.route('/edit_category/<category_id>', methods=['POST'])
@@ -142,7 +144,7 @@ def edit_category(category_id):
             'category_name': request.form.get('category_name')
         }
         category.update(**editted)
-        return redirect(url_for('categories'))
+        return redirect(url_for('get_categories'))
 
 
 @app.route('/categories/delete/<category_id>')
@@ -150,7 +152,19 @@ def edit_category(category_id):
 def delete_category(category_id):
     category = Category.objects.get(id=category_id)
     category.delete()
-    return redirect(url_for('categories'))
+    return redirect(url_for('get_categories'))
+
+
+#############################
+######## Suppliers ##########
+#############################
+
+
+@app.route('/suppliers')
+def get_suppliers():
+    suppliers = Supplier.objects()
+    form = SupplierForm()
+    return render_template('suppliers.html', suppliers=suppliers, form=form)
 
 
 if __name__ == '__main__':
