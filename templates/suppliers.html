@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% from '_form_macros.html' import render_field, render_field_with_value, render_submit_btn %}
+
+{% block content %}
+<section class="mt-2">
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <div class="card px-3">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">Manage Suppliers</h5>
+
+                    <div class="accordion mt-3" id="accordionSuppliers">
+
+                        {% for supplier in suppliers %}
+
+                        <!-- First item of the accordion is always shown  -->
+                        {% if loop.index == 1 %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading-{{ supplier.id }}">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#supplier-{{ loop.index }}" aria-expanded="true"
+                                    aria-controls="supplier-{{ loop.index }}">
+                                    {{ supplier.supplier_name }}
+                                </button>
+                            </h2>
+                            <div id="supplier-{{ loop.index }}" class="accordion-collapse collapse show"
+                                aria-labelledby="heading-{{ supplier.id }}" data-bs-parent="#accordionSuppliers">
+                        
+                        <!-- The rest of the accordion items should be collapsed  -->
+                        {% else %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading-{{ supplier.id }}">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#supplier-{{ loop.index }}" aria-expanded="false"
+                                    aria-controls="supplier-{{ loop.index }}">
+                                    {{ supplier.supplier_name }}
+                                </button>
+                            </h2>
+                            <div id="supplier-{{ loop.index }}" class="accordion-collapse collapse"
+                                aria-labelledby="heading-{{ supplier.id }}" data-bs-parent="#accordionExample">                               
+                        {% endif %}
+                                <!-- The body of the accordion item  -->
+                                <div class="accordion-body">
+                                    <ul class="list-unstyled">
+                                        <li>{{ supplier.contact_person }}</li>
+                                        <li>{{ supplier.phone }}</li>
+                                        <li>{{ supplier.email }}</li>
+                                        <li>{{ supplier.address }}</li>
+                                    </ul>
+
+                                    <!-- Action buttons for each supplier  -->
+                                    <div>
+                                        <a data-action="showForm" data-target="#edit_supplier"
+                                            data-id="{{ supplier.id }}"
+                                            class="text-decoration-none btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-pencil-square" aria-label="Edit supplier"></i>
+                                        </a>
+                                        <a href="{{ url_for('delete_supplier', supplier_id=supplier.id) }}"
+                                            class="text-decoration-none btn btn-sm btn-outline-danger">
+                                            <i class="bi bi-trash" aria-label="Delete supplier"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {% endfor %}
+                    </div>
+
+                    <a class="btn btn-primary mt-4" data-action="showForm" data-target="#create_supplier">
+                        Create new supplier</a>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-12 col-md-6">
+            <form id="create_supplier" class="d-none mt-4 mt-md-0" action="{{ url_for('create_supplier') }}"
+                method="POST">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Create new supplier</h5>
+                        {{ form.csrf_token }}
+
+                        {{ render_field(form.supplier_name) }}
+                        {{ render_field(form.contact_person) }}
+                        {{ render_field(form.phone) }}
+                        {{ render_field(form.email) }}
+                        {{ render_field(form.address) }}
+                        {{ render_submit_btn(form.submit) }}
+                        <a href="#" class="btn btn-outline-secondary" data-action="hideForm"
+                            data-target="#create_supplier">Cancel</a>
+                    </div>
+                </div>
+            </form>
+
+            <form id="edit_supplier" class="d-none mt-4 mt-md-0" action="" method="POST">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Edit supplier</h5>
+                        {{ form.csrf_token }}
+
+                        {{ render_field(form.supplier_name) }}
+                        {{ render_field(form.contact_person) }}
+                        {{ render_field(form.address) }}
+                        {{ render_field(form.phone) }}
+                        {{ render_field(form.email) }}
+                        {{ render_submit_btn(form.submit) }}
+                        <a href="#" class="btn btn-outline-secondary" data-action="hideForm"
+                            data-target="#edit_supplier">Cancel</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

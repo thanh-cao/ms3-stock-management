@@ -3,15 +3,15 @@ from flask_user import UserManager
 from flask_user.forms import RegisterForm
 from wtforms import *
 from wtforms.validators import *
-import email_validator
+from wtforms.fields.html5 import EmailField
 
 
 class CustomRegisterForm(RegisterForm):
     name = StringField(label='Name',
-                        validators=[DataRequired()],
-                        render_kw={'placeholder': 'Name'})
+                       validators=[DataRequired()],
+                       render_kw={'placeholder': 'Name'})
     company_name = StringField(label='Company\'s Name',
-                                render_kw={'placeholder': 'Company\'s Name'})
+                               render_kw={'placeholder': 'Company\'s Name'})
 
 
 class CustomUserManager(UserManager):
@@ -23,7 +23,7 @@ class CustomUserManager(UserManager):
 class UserAccess(FlaskForm):
     username = StringField(validators=[Length(min=5, max=10), DataRequired()],
                            render_kw={'placeholder': 'Username'},
-                           description='Username name must be between 5 and 10 characters')
+                           description='Username between 5 and 10 characters')
     pin = IntegerField(validators=[Length(min=4, max=6), DataRequired()],
                        render_kw={'placeholder': 'Pin code'},
                        description='Choose 4 to 6 digits for pin code')
@@ -34,5 +34,17 @@ class UserAccess(FlaskForm):
 
 
 class CategoryForm(FlaskForm):
-    category_name = StringField(DataRequired(), render_kw={'placeholder': 'Category name'})
+    category_name = StringField(DataRequired(), render_kw={
+                                'placeholder': 'Category name'})
+    submit = SubmitField(label='Submit')
+
+
+class SupplierForm(FlaskForm):
+    supplier_name = StringField(DataRequired(), render_kw={
+                                'placeholder': 'Supplier\'s name'})
+    contact_person = StringField(render_kw={'placeholder': 'Contact person'})
+    address = StringField(render_kw={'placeholder': 'Address'})
+    phone = IntegerField(validators=[DataRequired(message='Please input correct digits for phone')],
+                         render_kw={'placeholder': 'Phone'})
+    email = EmailField(render_kw={'placeholder': 'Email'})
     submit = SubmitField(label='Submit')
