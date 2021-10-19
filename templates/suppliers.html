@@ -64,7 +64,7 @@
                                     </ul>
 
                                     <div>
-                                        <a data-action="showForm" data-target="#edit_supplier" data-id=""
+                                        <a data-action="showForm" data-target="#edit_supplier" data-id="{{ supplier.id }}"
                                             class="text-decoration-none btn btn-sm btn-outline-primary">
                                             <i class="bi bi-pencil-square" aria-label="Edit supplier"></i>
                                         </a>
@@ -75,9 +75,9 @@
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
+                        {% endfor %}
                     </div>
-                    {% endif %}
-                    {% endfor %}
 
                     <a class="btn btn-primary mt-4" data-action="showForm" data-target="#create_supplier">
                         Create new supplier</a>
@@ -106,6 +106,23 @@
                 </div>
             </form>
 
+            <form id="edit_supplier" class="d-none mt-4 mt-md-0" action="" method="POST">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Edit supplier</h5>
+                        {{ form.csrf_token }}
+
+                        {{ render_field(form.supplier_name) }}
+                        {{ render_field(form.contact_person) }}
+                        {{ render_field(form.address) }}
+                        {{ render_field(form.phone) }}
+                        {{ render_field(form.email) }}
+                        {{ render_submit_btn(form.submit) }}
+                        <a href="#" class="btn btn-outline-secondary" data-action="hideForm"
+                            data-target="#edit_supplier">Cancel</a>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </section>

@@ -138,7 +138,6 @@ def create_category():
 def edit_category(category_id):
     category = Category.objects.get(id=category_id)
     if request.method == 'POST':
-        print(category)
         editted = {
             'category_name': request.form.get('category_name')
         }
@@ -177,6 +176,22 @@ def create_supplier():
             phone=request.form.get('phone'),
             email=request.form.get('email'))
         new_supplier.save()
+        return redirect(url_for('get_suppliers'))
+
+
+@app.route('/edit_supplier/<supplier_id>', methods=['POST'])
+@login_required
+def edit_supplier(supplier_id):
+    supplier = Supplier.objects.get(id=supplier_id)
+    if request.method == 'POST':
+        editted = {
+            'supplier_name': request.form.get('supplier_name'),
+            'contact_person': request.form.get('contact_person'),
+            'address': request.form.get('address'),
+            'phone': request.form.get('phone'),
+            'email': request.form.get('email')
+        }
+        supplier.update(**editted)
         return redirect(url_for('get_suppliers'))
 
 
