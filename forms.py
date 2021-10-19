@@ -44,6 +44,7 @@ class SupplierForm(FlaskForm):
                                 'placeholder': 'Supplier\'s name'})
     contact_person = StringField(render_kw={'placeholder': 'Contact person'})
     address = StringField(render_kw={'placeholder': 'Address'})
-    phone = IntegerField(render_kw={'placeholder': 'Phone'})
+    phone = IntegerField(validators=[DataRequired(message='Please input correct digits for phone')],
+                         render_kw={'placeholder': 'Phone'})
     email = EmailField(render_kw={'placeholder': 'Email'})
     submit = SubmitField(label='Submit')

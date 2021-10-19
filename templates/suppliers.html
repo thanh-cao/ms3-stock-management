@@ -10,63 +10,65 @@
                     <h5 class="card-title fw-bold">Manage Suppliers</h5>
 
                     <div class="accordion mt-3" id="accordionSuppliers">
+
+                        {% for supplier in suppliers %}
+                        {% if loop.index == 1 %}
                         <div class="accordion-item">
-                            <h2 class="accordion-header" id="supplier's name 1">
+                            <h2 class="accordion-header" id="heading-{{ supplier.id }}">
                                 <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#supplier1Id" aria-expanded="true" aria-controls="supplier1Id">
-                                    Supplier's name 1
+                                    data-bs-target="#supplier-{{ loop.index }}" aria-expanded="true"
+                                    aria-controls="supplier-{{ loop.index }}">
+                                    {{ supplier.supplier_name }}
                                 </button>
                             </h2>
-                            <div id="supplier1Id" class="accordion-collapse collapse show"
-                                aria-labelledby="supplier's name 1" data-bs-parent="#accordionSuppliers">
+                            <div id="supplier-{{ loop.index }}" class="accordion-collapse collapse show"
+                                aria-labelledby="heading-{{ supplier.id }}" data-bs-parent="#accordionSuppliers">
                                 <div class="accordion-body">
                                     <ul class="list-unstyled">
-                                        <li>Contact person</li>
-                                        <li>Phone</li>
-                                        <li>Email</li>
-                                        <li>Address</li>
+                                        <li>{{ supplier.contact_person }}</li>
+                                        <li>{{ supplier.phone }}</li>
+                                        <li>{{ supplier.email }}</li>
+                                        <li>{{ supplier.address }}</li>
                                     </ul>
 
                                     <div>
-                                        <a data-action="showForm" data-target="#edit_supplier"
-                                            data-id=""
+                                        <a data-action="showForm" data-target="#edit_supplier" data-id=""
                                             class="text-decoration-none btn btn-sm btn-outline-primary">
                                             <i class="bi bi-pencil-square" aria-label="Edit supplier"></i>
                                         </a>
-                                        <a href="#"
-                                            class="text-decoration-none btn btn-sm btn-outline-danger">
+                                        <a href="#" class="text-decoration-none btn btn-sm btn-outline-danger">
                                             <i class="bi bi-trash" aria-label="Delete supplier"></i>
                                         </a>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        {% else %}
 
                         <div class="accordion-item">
-                            <h2 class="accordion-header">
+                            <h2 class="accordion-header" id="heading-{{ supplier.id }}">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                    Supplier's name #2
+                                    data-bs-target="#supplier-{{ loop.index }}" aria-expanded="false"
+                                    aria-controls="supplier-{{ loop.index }}">
+                                    {{ supplier.supplier_name }}
                                 </button>
                             </h2>
-                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
-                                data-bs-parent="#accordionSuppliers">
+                            <div id="supplier-{{ loop.index }}" class="accordion-collapse collapse"
+                                aria-labelledby="heading-{{ supplier.id }}" data-bs-parent="#accordionExample">
                                 <div class="accordion-body">
                                     <ul class="list-unstyled">
-                                        <li>Contact person</li>
-                                        <li>Phone</li>
-                                        <li>Email</li>
-                                        <li>Address</li>
+                                        <li>{{ supplier.contact_person }}</li>
+                                        <li>{{ supplier.phone }}</li>
+                                        <li>{{ supplier.email }}</li>
+                                        <li>{{ supplier.address }}</li>
                                     </ul>
 
                                     <div>
-                                        <a data-action="showForm" data-target="#edit_supplier"
-                                            data-id=""
+                                        <a data-action="showForm" data-target="#edit_supplier" data-id=""
                                             class="text-decoration-none btn btn-sm btn-outline-primary">
                                             <i class="bi bi-pencil-square" aria-label="Edit supplier"></i>
                                         </a>
-                                        <a href="#"
-                                            class="text-decoration-none btn btn-sm btn-outline-danger">
+                                        <a href="#" class="text-decoration-none btn btn-sm btn-outline-danger">
                                             <i class="bi bi-trash" aria-label="Delete supplier"></i>
                                         </a>
                                     </div>
@@ -74,6 +76,8 @@
                             </div>
                         </div>
                     </div>
+                    {% endif %}
+                    {% endfor %}
 
                     <a class="btn btn-primary mt-4" data-action="showForm" data-target="#create_supplier">
                         Create new supplier</a>
@@ -81,8 +85,27 @@
             </div>
         </div>
 
+
         <div class="col-12 col-md-6">
-            
+            <form id="create_supplier" class="d-none mt-4 mt-md-0" action="{{ url_for('create_supplier') }}"
+                method="POST">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Create new supplier</h5>
+                        {{ form.csrf_token }}
+
+                        {{ render_field(form.supplier_name) }}
+                        {{ render_field(form.contact_person) }}
+                        {{ render_field(form.phone) }}
+                        {{ render_field(form.email) }}
+                        {{ render_field(form.address) }}
+                        {{ render_submit_btn(form.submit) }}
+                        <a href="#" class="btn btn-outline-secondary" data-action="hideForm"
+                            data-target="#create_supplier">Cancel</a>
+                    </div>
+                </div>
+            </form>
+
         </div>
     </div>
 </section>

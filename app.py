@@ -37,15 +37,14 @@ def index():
     return render_template('index.html')
 
 
-# create default super_admin role upon registration to account holder/owner
+# Create default super_admin role upon registration to account holder/owner
 @user_registered.connect_via(app)
 def create_super_admin(sender, user, **extra):
     user.roles.append('super_admin')
     user.save()
 
-### Profile / User access ###
 
-
+# Routes for Profile / User access
 @app.route('/profile')
 @login_required
 @roles_required('super_admin')
@@ -127,7 +126,7 @@ def get_categories():
 @app.route('/categories/create', methods=['POST'])
 @login_required
 def create_category():
-    if request.method == 'POST':
+    if request.method == 'POST' and request.form.validate_on_submit():
         new_category = Category(
             category_name=request.form.get('category_name'))
         new_category.save()
@@ -165,6 +164,20 @@ def get_suppliers():
     suppliers = Supplier.objects()
     form = SupplierForm()
     return render_template('suppliers.html', suppliers=suppliers, form=form)
+
+
+@app.route('/suppliers/create', methods=['POST'])
+@login_required
+def create_supplier():
+    if request.method == 'POST':
+        new_supplier = Supplier(
+            supplier_name=request.form.get('supplier_name'),
+            contact_person=request.form.get('contact_person'),
+            address=request.form.get('address'),
+            phone=request.form.get('phone'),
+            email=request.form.get('email'))
+        new_supplier.save()
+        return redirect(url_for('get_suppliers'))
 
 
 if __name__ == '__main__':
