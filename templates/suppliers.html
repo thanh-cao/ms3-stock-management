@@ -12,6 +12,8 @@
                     <div class="accordion mt-3" id="accordionSuppliers">
 
                         {% for supplier in suppliers %}
+
+                        <!-- First item of the accordion is always shown  -->
                         {% if loop.index == 1 %}
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="heading-{{ supplier.id }}">
@@ -23,28 +25,9 @@
                             </h2>
                             <div id="supplier-{{ loop.index }}" class="accordion-collapse collapse show"
                                 aria-labelledby="heading-{{ supplier.id }}" data-bs-parent="#accordionSuppliers">
-                                <div class="accordion-body">
-                                    <ul class="list-unstyled">
-                                        <li>{{ supplier.contact_person }}</li>
-                                        <li>{{ supplier.phone }}</li>
-                                        <li>{{ supplier.email }}</li>
-                                        <li>{{ supplier.address }}</li>
-                                    </ul>
-
-                                    <div>
-                                        <a data-action="showForm" data-target="#edit_supplier" data-id=""
-                                            class="text-decoration-none btn btn-sm btn-outline-primary">
-                                            <i class="bi bi-pencil-square" aria-label="Edit supplier"></i>
-                                        </a>
-                                        <a href="#" class="text-decoration-none btn btn-sm btn-outline-danger">
-                                            <i class="bi bi-trash" aria-label="Delete supplier"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        
+                        <!-- The rest of the accordion items should be collapsed  -->
                         {% else %}
-
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="heading-{{ supplier.id }}">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
@@ -54,7 +37,9 @@
                                 </button>
                             </h2>
                             <div id="supplier-{{ loop.index }}" class="accordion-collapse collapse"
-                                aria-labelledby="heading-{{ supplier.id }}" data-bs-parent="#accordionExample">
+                                aria-labelledby="heading-{{ supplier.id }}" data-bs-parent="#accordionExample">                               
+                        {% endif %}
+                                <!-- The body of the accordion item  -->
                                 <div class="accordion-body">
                                     <ul class="list-unstyled">
                                         <li>{{ supplier.contact_person }}</li>
@@ -63,19 +48,22 @@
                                         <li>{{ supplier.address }}</li>
                                     </ul>
 
+                                    <!-- Action buttons for each supplier  -->
                                     <div>
-                                        <a data-action="showForm" data-target="#edit_supplier" data-id="{{ supplier.id }}"
+                                        <a data-action="showForm" data-target="#edit_supplier"
+                                            data-id="{{ supplier.id }}"
                                             class="text-decoration-none btn btn-sm btn-outline-primary">
                                             <i class="bi bi-pencil-square" aria-label="Edit supplier"></i>
                                         </a>
-                                        <a href="#" class="text-decoration-none btn btn-sm btn-outline-danger">
+                                        <a href="{{ url_for('delete_supplier', supplier_id=supplier.id) }}"
+                                            class="text-decoration-none btn btn-sm btn-outline-danger">
                                             <i class="bi bi-trash" aria-label="Delete supplier"></i>
                                         </a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        {% endif %}
+
                         {% endfor %}
                     </div>
 

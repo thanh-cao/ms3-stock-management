@@ -195,6 +195,14 @@ def edit_supplier(supplier_id):
         return redirect(url_for('get_suppliers'))
 
 
+@app.route('/suppliers/delete/<supplier_id>')
+@login_required
+def delete_supplier(supplier_id):
+    supplier = Supplier.objects.get(id=supplier_id)
+    supplier.delete()
+    return redirect(url_for('get_suppliers'))
+
+
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),
             port=os.environ.get('PORT'),
