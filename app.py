@@ -203,6 +203,17 @@ def delete_supplier(supplier_id):
     return redirect(url_for('get_suppliers'))
 
 
+#############################
+######### Products ##########
+#############################
+
+
+@app.route('/products')
+@login_required
+def get_products():
+    return render_template('products.html')
+
+
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),
             port=os.environ.get('PORT'),
