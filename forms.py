@@ -48,3 +48,15 @@ class SupplierForm(FlaskForm):
                          render_kw={'placeholder': 'Phone'})
     email = EmailField(render_kw={'placeholder': 'Email'})
     submit = SubmitField(label='Submit')
+
+
+class ProductForm(FlaskForm):
+    name = StringField(DataRequired(), render_kw={
+                                'placeholder': 'Product name'})
+    category = SelectField('Category')
+    brand = StringField(render_kw={'placeholder': 'Brand name'})
+    supplier = SelectField('Supplier')
+    unit_of_measurement = StringField(render_kw={'placeholder': 'Unit of measurement'})
+    min_stock_allowed = IntegerField(render_kw={'placeholder': 'Minimum stock allowed'})
+    current_stock = IntegerField(render_kw={'placeholder': 'Current stock level'})
+    submit = SubmitField(label='Submit')

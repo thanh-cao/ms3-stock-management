@@ -2,6 +2,173 @@
 {% from '_form_macros.html' import render_field, render_field_with_value, render_submit_btn %}
 {% block content %}
 
-Products page
+<section class="mt-2">
+    <div class="row">
+        <div class="col-12 col-md-7">
+            <div class="search-product">
+                <form class="d-flex" action="" method="POST">
+                    <input class="form-control me-2" type="text" name="query" placeholder="Search product"
+                        aria-label="Search product">
+                    <button class="btn btn-outline-primary" type="submit">Search</button>
+                </form>
+            </div>
+
+            <a class="btn btn-primary mt-4" data-action="showForm" data-target="#createProduct">
+                Create new product
+            </a>
+        </div>
+        <div class="col-12 col-md-7"></div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12 col-md-7">
+            <div class="product-listing">
+                <div class="accordion" id="accordionExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                Product category #1
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                            data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <div class="row align-items-center mb-2 border-bottom">
+                                    <div class="col-6">
+                                        <span class="text-muted">Product Name</span>
+                                    </div>
+                                    <div class="col-2">
+                                        <span class="text-muted text-center">Current Stock</span>
+                                    </div>
+                                    <div class="col-2">
+                                        <span class="text-muted text-center">Today's change</span>
+                                    </div>
+                                    <div class="col-2">
+                                    </div>
+                                </div>
+                                <div class="row align-items-center mb-2 border-bottom">
+                                    <div class="col-6">
+                                        Product Name
+                                    </div>
+                                    <div class="col-2 text-center">
+                                        12
+                                    </div>
+                                    <div class="col-2 text-center">
+                                        5
+                                    </div>
+                                    <div class="col-2">
+                                        <a class="btn text-primary p-0" data-action="showForm"
+                                            data-target="#createCategory">
+                                            Update Stock
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="row align-items-center">
+                                    <div class="col-6">
+                                        Product Name
+                                    </div>
+                                    <div class="col-2 text-center">
+                                        12
+                                    </div>
+                                    <div class="col-2 text-center">
+                                        5
+                                    </div>
+                                    <div class="col-2">
+                                        <a class="btn text-primary p-0" data-action="showForm"
+                                            data-target="#createCategory">
+                                            Update Stock
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                Product category #2
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+                            data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <div class="row align-items-center mb-2 border-bottom">
+                                    <div class="col-6">
+                                        <span class="text-muted">Product Name</span>
+                                    </div>
+                                    <div class="col-2">
+                                        <span class="text-muted">Current Stock</span>
+                                    </div>
+                                    <div class="col-2">
+                                        <span class="text-muted">Today's change</span>
+                                    </div>
+                                    <div class="col-2">
+                                    </div>
+                                </div>
+                                <div class="row align-items-center mb-2 border-bottom">
+                                    <div class="col-6">
+                                        Product Name
+                                    </div>
+                                    <div class="col-2">
+                                        12
+                                    </div>
+                                    <div class="col-2">
+                                        5
+                                    </div>
+                                    <div class="col-2">
+                                        <a class="btn text-primary p-0" data-action="showForm"
+                                            data-target="#createCategory">
+                                            Update Stock
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="row align-items-center">
+                                    <div class="col-6">
+                                        Product Name
+                                    </div>
+                                    <div class="col-2">
+                                        12
+                                    </div>
+                                    <div class="col-2">
+                                        5
+                                    </div>
+                                    <div class="col-2">
+                                        <a class="btn text-primary p-0" data-action="showForm"
+                                            data-target="#createCategory">
+                                            Update Stock
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-12 col-md-5">
+            <form id="createProduct" class="d-none mt-4 mt-md-0" action="" method="POST">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Create new product</h5>
+
+                        {{ render_field(form.name) }}
+                        {{ render_field(form.brand) }}
+                        {{ render_field(form.unit_of_measurement) }}
+                        {{ render_field(form.min_stock_allowed) }}
+                        {{ render_field(form.current_stock) }}
+                        {{ render_submit_btn(form.submit) }}
+                        <a href="#" class="btn btn-outline-secondary" data-action="hideForm"
+                            data-target="#createProduct">Cancel</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
 
 {% endblock %}
