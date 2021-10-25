@@ -126,7 +126,7 @@ def get_categories():
 @app.route('/categories/create', methods=['POST'])
 @login_required
 def create_category():
-    if request.method == 'POST' and request.form.validate_on_submit():
+    if request.method == 'POST':
         new_category = Category(
             category_name=request.form.get('category_name'))
         new_category.save()
@@ -211,7 +211,51 @@ def delete_supplier(supplier_id):
 @app.route('/products')
 @login_required
 def get_products():
-    return render_template('products.html')
+    # Create new product form and choices for select fields
+    form = ProductForm()
+    categories = Category.objects()
+    suppliers = Supplier.objects()
+    products = Product.objects()
+    form.category_id.choices = [(category.id, category.category_name)
+                                for category in categories]
+    form.supplier_id.choices = [(supplier.id, supplier.supplier_name)
+                                for supplier in suppliers]
+
+    return render_template('products.html',
+                           products=products,
+                           categories=categories,
+                           form=form)
+
+
+@app.route('/products/create', methods=['POST'])
+@login_required
+def create_product():
+    if request.method == 'POST':
+        new_product = Product(
+            name=request.form.get('name'),
+            category_id=request.form.get('category_id'),
+            brand=request.form.get('brand'),
+            supplier_id=request.form.get('supplier_id'),
+            unit_of_measurement=request.form.get('unit_of_measurement'),
+            min_stock_allowed=request.form.get('min_stock_allowed'))
+        new_product.save()
+        stock = Stock(
+            current_stock=request.form.get('current_stock'),
+            stock_change=0,
+            date=datetime.datetime.now().date(),
+            product_id=new_product.id)
+        stock.save()
+        new_product.stock_list.append(stock.id)
+        new_product.save()
+
+        # Add new product to its respective category collection
+        category_id = request.form.get('category_id')
+        category = Category.objects.get(id=category_id)
+        category.product_list.append(new_product.id)
+        category.save()
+
+        flash('New product successfully created')
+        return redirect(url_for('get_products'))
 
 
 if __name__ == '__main__':

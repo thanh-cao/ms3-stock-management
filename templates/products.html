@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% from '_form_macros.html' import render_field, render_field_with_value, render_submit_btn %}
+{% from '_form_macros.html' import render_field, render_field_with_value, render_select_field, render_submit_btn %}
 {% block content %}
 
 <section class="mt-2">
@@ -23,16 +23,32 @@
     <div class="row mt-4">
         <div class="col-12 col-md-7">
             <div class="product-listing">
-                <div class="accordion" id="accordionExample">
+                <div class="accordion" id="accordionProducts">
+
+                    {% for category in categories %}
+                    {% if loop.index == 1 %}
                     <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingOne">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                Product category #1
+                        <h2 class="accordion-header" id="{{ category.id }}">
+                            <button class="accordion-button text-primary" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#category-{{ loop.index }}" aria-expanded="true" aria-controls="category-{{ loop.index }}">
+                               {{ category.category_name }}
                             </button>
                         </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
-                            data-bs-parent="#accordionExample">
+                        <div id="category-{{ loop.index }}" class="accordion-collapse collapse show" aria-labelledby="{{ category.category_name }}"
+                            data-bs-parent="#accordionProducts">
+
+                    {% else %}
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="{{ category.category_name }}">
+                            <button class="accordion-button collapsed text-primary" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#category-{{ loop.index }}" aria-expanded="false" aria-controls="category-{{ loop.index }}">
+                                {{ category.category_name }}
+                            </button>
+                        </h2>
+                        <div id="category-{{ loop.index }}" class="accordion-collapse collapse" aria-labelledby="{{ category.category_name }}"
+                            data-bs-parent="#accordionProducts">
+                    {% endif %}
+
                             <div class="accordion-body">
                                 <div class="row align-items-center mb-2 border-bottom">
                                     <div class="col-6">
@@ -47,9 +63,12 @@
                                     <div class="col-2">
                                     </div>
                                 </div>
+                                
+                                {% for product in products %}
+                                {% if product.category_id.id == category.id %}
                                 <div class="row align-items-center mb-2 border-bottom">
                                     <div class="col-6">
-                                        Product Name
+                                        {{ product.name }}
                                     </div>
                                     <div class="col-2 text-center">
                                         12
@@ -64,99 +83,26 @@
                                         </a>
                                     </div>
                                 </div>
-                                <div class="row align-items-center">
-                                    <div class="col-6">
-                                        Product Name
-                                    </div>
-                                    <div class="col-2 text-center">
-                                        12
-                                    </div>
-                                    <div class="col-2 text-center">
-                                        5
-                                    </div>
-                                    <div class="col-2">
-                                        <a class="btn text-primary p-0" data-action="showForm"
-                                            data-target="#createCategory">
-                                            Update Stock
-                                        </a>
-                                    </div>
-                                </div>
+                                {% endif %}
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingTwo">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                Product category #2
-                            </button>
-                        </h2>
-                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
-                            data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <div class="row align-items-center mb-2 border-bottom">
-                                    <div class="col-6">
-                                        <span class="text-muted">Product Name</span>
-                                    </div>
-                                    <div class="col-2">
-                                        <span class="text-muted">Current Stock</span>
-                                    </div>
-                                    <div class="col-2">
-                                        <span class="text-muted">Today's change</span>
-                                    </div>
-                                    <div class="col-2">
-                                    </div>
-                                </div>
-                                <div class="row align-items-center mb-2 border-bottom">
-                                    <div class="col-6">
-                                        Product Name
-                                    </div>
-                                    <div class="col-2">
-                                        12
-                                    </div>
-                                    <div class="col-2">
-                                        5
-                                    </div>
-                                    <div class="col-2">
-                                        <a class="btn text-primary p-0" data-action="showForm"
-                                            data-target="#createCategory">
-                                            Update Stock
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="row align-items-center">
-                                    <div class="col-6">
-                                        Product Name
-                                    </div>
-                                    <div class="col-2">
-                                        12
-                                    </div>
-                                    <div class="col-2">
-                                        5
-                                    </div>
-                                    <div class="col-2">
-                                        <a class="btn text-primary p-0" data-action="showForm"
-                                            data-target="#createCategory">
-                                            Update Stock
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
-
             </div>
         </div>
 
         <div class="col-12 col-md-5">
-            <form id="createProduct" class="d-none mt-4 mt-md-0" action="" method="POST">
+            <form id="createProduct" class="d-none mt-4 mt-md-0" action="{{ url_for('create_product') }}" method="POST">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title fw-bold">Create new product</h5>
-
+                        {{ form.csrf_token }}
                         {{ render_field(form.name) }}
                         {{ render_field(form.brand) }}
+                        {{ render_select_field(form.category_id) }}
+                        {{ render_select_field(form.supplier_id) }}
                         {{ render_field(form.unit_of_measurement) }}
                         {{ render_field(form.min_stock_allowed) }}
                         {{ render_field(form.current_stock) }}
