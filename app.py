@@ -237,15 +237,9 @@ def create_product():
             brand=request.form.get('brand'),
             supplier_id=request.form.get('supplier_id'),
             unit_of_measurement=request.form.get('unit_of_measurement'),
-            min_stock_allowed=request.form.get('min_stock_allowed'))
-        new_product.save()
-        stock = Stock(
+            min_stock_allowed=request.form.get('min_stock_allowed'),
             current_stock=request.form.get('current_stock'),
-            stock_change=0,
-            date=datetime.datetime.now().date(),
-            product_id=new_product.id)
-        stock.save()
-        new_product.stock_list.append(stock.id)
+            stock_change=0)
         new_product.save()
 
         # Add new product to its respective category collection
@@ -256,6 +250,13 @@ def create_product():
 
         flash('New product successfully created')
         return redirect(url_for('get_products'))
+
+
+@app.route('/products/<product_id>')
+@login_required
+def product_details(product_id):
+    product = Product.objects.get(id=product_id)
+    return render_template('product-details.html', product=product)
 
 
 if __name__ == '__main__':

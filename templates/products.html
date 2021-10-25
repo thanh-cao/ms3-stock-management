@@ -68,7 +68,7 @@
                                 {% if product.category_id.id == category.id %}
                                 <div class="row align-items-center mb-2 border-bottom">
                                     <div class="col-6">
-                                        {{ product.name }}
+                                        <a href="{{ url_for('product_details', product_id=product.id) }}" class="text-decoration-none text-black">{{ product.name }}</a>
                                     </div>
                                     <div class="col-2 text-center">
                                         12

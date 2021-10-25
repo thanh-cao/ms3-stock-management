@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% from '_form_macros.html' import render_field, render_field_with_value, render_select_field, render_submit_btn %}
+{% block content %}
+<section class="mt-2">
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <div class="card px-3">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">Product Details</h5>
+
+
+                    <div class="row mt-3 align-items-center py-2 g-0">
+                        <div class="form-floating">
+                            <p class="card-text form-control border-0 mb-1">{{ product.name }}</p>
+                            <label>Product name</label>
+                        </div>
+                        <div class="form-floating">
+                            <p class="card-text form-control border-0 mb-1">{{ product.brand }}</p>
+                            <label>Product brand</label>
+                        </div>
+                        <div class="form-floating">
+                            <p class="card-text form-control border-0 mb-1">{{ product.category_id.category_name }}</p>
+                            <label>Product category</label>
+                        </div>
+                        <div class="form-floating">
+                            <p class="card-text form-control border-0 mb-1">{{ product.supplier_id.supplier_name }}</p>
+                            <label>Supplier</label>
+                        </div>
+                        <div class="form-floating">
+                            <p class="card-text form-control border-0 mb-1">{{ product.unit_of_measurement }}</p>
+                            <label>Unit of measurement</label>
+                        </div>
+                        <div class="form-floating">
+                            <p class="card-text form-control border-0 mb-1">{{ product.min_stock_allowed }}</p>
+                            <label>Minimum stock</label>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="form-floating">
+                                <p class="card-text form-control border-0 mb-1">{{ product.current_stock }}</p>
+                                <label>Current stock</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-floating">
+                                <p class="card-text form-control border-0 mb-1">{{ product.stock_change }}</p>
+                                <label class="px-0">Today's change</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="my-auto">
+                        <a class="btn btn-sm btn-primary me-2" data-action="showForm" data-target="#updateStock">
+                            Update Stock
+                        </a>
+                        <a href="#" class="btn btn-sm btn-outline-primary text-decoration-none me-2" data-action="showForm" data-target="#editProduct">
+                            Edit
+                        </a>
+                        <a href="#" class="btn btn-sm btn-outline-danger">
+                           Delete
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6">
+            <form id="editProduct" class="d-none mt-4" action="" method="POST">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Edit product details</h5>
+
+                        <a href="#" class="btn btn-outline-secondary" data-action="hideForm"
+                            data-target="#editProduct">Cancel</a>
+                    </div>
+                </div>
+            </form>
+
+            <form id="updateStock" class="d-none mt-4" action="" method="POST">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Update Stock</h5>
+
+                        <a href="#" class="btn btn-outline-secondary" data-action="hideForm"
+                            data-target="#updateStock">Cancel</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

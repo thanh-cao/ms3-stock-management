@@ -47,5 +47,7 @@ class Product(db.Document):
     supplier_id = db.ReferenceField('Supplier')
     unit_of_measurement = db.StringField()
     min_stock_allowed = db.IntField()
-    stock_list = db.ListField(db.ReferenceField('Stock', default=[]))
+    current_stock = db.IntField()
+    stock_change = db.IntField()
+    # stock_list = db.ListField(db.ReferenceField('Stock', default=[]))
     company_id = db.ReferenceField('User')
