@@ -51,7 +51,7 @@ class SupplierForm(FlaskForm):
 
 
 class ProductForm(FlaskForm):
-    name = StringField(DataRequired(), render_kw={
+    name = StringField(validators=[DataRequired()], render_kw={
                                 'placeholder': 'Product name'})
     category_id = SelectField(label='Choose category')
     brand = StringField(render_kw={'placeholder': 'Brand name'})

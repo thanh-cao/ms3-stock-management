@@ -255,8 +255,33 @@ def create_product():
 @app.route('/products/<product_id>')
 @login_required
 def product_details(product_id):
+    form = ProductForm()
+    categories = Category.objects()
+    suppliers = Supplier.objects()
+    form.category_id.choices = [(category.id, category.category_name)
+                                for category in categories]
+    form.supplier_id.choices = [(supplier.id, supplier.supplier_name)
+                                for supplier in suppliers]
     product = Product.objects.get(id=product_id)
-    return render_template('product-details.html', product=product)
+    return render_template('product-details.html', product=product, form=form)
+
+
+@app.route('/products/edit/<product_id>', methods=['POST'])
+@login_required
+def edit_product(product_id):
+    product = Product.objects.get(id=product_id)
+    if request.method == 'POST':
+        editted = {
+            'name': request.form.get('name'),
+            'category_id': ObjectId(request.form.get('category_id')),
+            'brand': request.form.get('brand'),
+            'supplier_id': ObjectId(request.form.get('supplier_id')),
+            'unit_of_measurement': request.form.get('unit_of_measurement'),
+            'min_stock_allowed': request.form.get('min_stock_allowed')
+        }
+        product.update(**editted)
+        flash('Product successfully updated')
+        return redirect(url_for('product_details', product_id=product_id))
 
 
 if __name__ == '__main__':

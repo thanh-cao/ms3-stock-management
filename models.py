@@ -41,7 +41,7 @@ class Stock(db.Document):
 
 
 class Product(db.Document):
-    name = db.StringField()
+    name = db.StringField(unique=True)
     category_id = db.ReferenceField('Category')
     brand = db.StringField()
     supplier_id = db.ReferenceField('Supplier')
