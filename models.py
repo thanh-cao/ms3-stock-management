@@ -20,7 +20,6 @@ class User(db.Document, UserMixin):
 
 class Category(db.Document):
     category_name = db.StringField()
-    product_list = db.ListField(db.ReferenceField('Product', default=[]))
     company_id = db.ReferenceField('User')
 
 

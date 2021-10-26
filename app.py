@@ -242,12 +242,6 @@ def create_product():
             stock_change=0)
         new_product.save()
 
-        # Add new product to its respective category collection
-        category_id = request.form.get('category_id')
-        category = Category.objects.get(id=category_id)
-        category.product_list.append(new_product.id)
-        category.save()
-
         flash('New product successfully created')
         return redirect(url_for('get_products'))
 
@@ -282,6 +276,15 @@ def edit_product(product_id):
         product.update(**editted)
         flash('Product successfully updated')
         return redirect(url_for('product_details', product_id=product_id))
+
+
+@app.route('/products/delete/<product_id>')
+@login_required
+def delete_product(product_id):
+    product = Product.objects.get(id=product_id)
+    product.delete()
+    flash('Product is deleted')
+    return redirect(url_for('get_products'))
 
 
 if __name__ == '__main__':
