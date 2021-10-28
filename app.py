@@ -126,7 +126,7 @@ def get_categories():
 @app.route('/categories/create', methods=['POST'])
 @login_required
 def create_category():
-    if request.method == 'POST' and request.form.validate_on_submit():
+    if request.method == 'POST':
         new_category = Category(
             category_name=request.form.get('category_name'))
         new_category.save()
@@ -201,6 +201,105 @@ def delete_supplier(supplier_id):
     supplier = Supplier.objects.get(id=supplier_id)
     supplier.delete()
     return redirect(url_for('get_suppliers'))
+
+
+#############################
+######### Products ##########
+#############################
+
+
+@app.route('/products')
+@login_required
+def get_products():
+    # Create new product form and choices for select fields
+    form = ProductForm()
+    categories = Category.objects()
+    suppliers = Supplier.objects()
+    products = Product.objects()
+    form.category_id.choices = [(category.id, category.category_name)
+                                for category in categories]
+    form.supplier_id.choices = [(supplier.id, supplier.supplier_name)
+                                for supplier in suppliers]
+    return render_template('products.html',
+                           products=products,
+                           categories=categories,
+                           form=form)
+
+
+@app.route('/products/create', methods=['POST'])
+@login_required
+def create_product():
+    if request.method == 'POST':
+        new_product = Product(
+            name=request.form.get('name'),
+            category_id=request.form.get('category_id'),
+            brand=request.form.get('brand'),
+            supplier_id=request.form.get('supplier_id'),
+            unit_of_measurement=request.form.get('unit_of_measurement'),
+            min_stock_allowed=request.form.get('min_stock_allowed'),
+            current_stock=request.form.get('current_stock'),
+            stock_change=0)
+        new_product.save()
+
+        flash('New product successfully created')
+        return redirect(url_for('get_products'))
+
+
+@app.route('/products/<product_id>')
+@login_required
+def product_details(product_id):
+    form = ProductForm()
+    categories = Category.objects()
+    suppliers = Supplier.objects()
+    form.category_id.choices = [(category.id, category.category_name)
+                                for category in categories]
+    form.supplier_id.choices = [(supplier.id, supplier.supplier_name)
+                                for supplier in suppliers]
+    product = Product.objects.get(id=product_id)
+    return render_template('product-details.html', product=product, form=form)
+
+
+@app.route('/products/edit/<product_id>', methods=['POST'])
+@login_required
+def edit_product(product_id):
+    product = Product.objects.get(id=product_id)
+    if request.method == 'POST':
+        editted = {
+            'name': request.form.get('name'),
+            'category_id': ObjectId(request.form.get('category_id')),
+            'brand': request.form.get('brand'),
+            'supplier_id': ObjectId(request.form.get('supplier_id')),
+            'unit_of_measurement': request.form.get('unit_of_measurement'),
+            'min_stock_allowed': request.form.get('min_stock_allowed')
+        }
+        product.update(**editted)
+        flash('Product successfully updated')
+        return redirect(url_for('product_details', product_id=product_id))
+
+
+@app.route('/products/delete/<product_id>')
+@login_required
+def delete_product(product_id):
+    product = Product.objects.get(id=product_id)
+    product.delete()
+    flash('Product is deleted')
+    return redirect(url_for('get_products'))
+
+
+@app.route('/update_stock/<product_id>', methods=['POST'])
+@login_required
+def update_stock(product_id):
+    product = Product.objects.get(id=product_id)
+    if request.method == 'POST':
+        stock_change = int(request.form.get('stock_change'))
+        product.update_stock(stock_change)
+        updated = {
+            'current_stock': product.current_stock,
+            'stock_change': product.stock_change,
+        }
+        product.update(**updated)
+        flash('Stock successfully updated')
+        return redirect(request.referrer)
 
 
 if __name__ == '__main__':

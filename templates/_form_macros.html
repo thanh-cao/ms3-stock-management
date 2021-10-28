@@ -26,3 +26,36 @@
     </ul>
 </div>
 {% endmacro %}
+
+
+{% macro render_select_field(field) %}
+<div class="mb-3">
+    <select class="form-control" id="{{ field.name }}" name="{{ field.name }}">
+        <option disabled selected>{{ field.label.text }}</option>
+        
+        {% for choice in field.choices %}
+        <option value="{{ choice[0] }}">{{ choice[1] }}</option>      
+        {% endfor %}
+    </select>
+</div>
+{% endmacro%}
+
+{% macro render_select_field_with_value(field, data) %}
+<div class="form-floating">
+    <select class="form-control" id="{{ field.name }}" name="{{ field.name }}">        
+        {% for choice in field.choices %}
+        {% if choice[1] == data %}
+        <option value="{{ choice[0] }}" selected>{{ choice[1] }}</option>
+        {% else %}
+        <option value="{{ choice[0] }}">{{ choice[1] }}</option>
+        {% endif %}
+        {% endfor %}
+    </select>
+    <label for="{{ field.name }}">{{ field.label.text }}</label>
+    <ul class="list-unstyled">
+        {% for error in field.errors %}
+        <li class="text-danger">{{ error }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endmacro%}

@@ -30,3 +30,26 @@ class Supplier(db.Document):
     phone = db.IntField()
     email = db.EmailField()
     company_id = db.ReferenceField('User')
+
+
+class Stock(db.Document):
+    current_stock = db.IntField()
+    stock_change = db.IntField()
+    date = db.DateTimeField()
+    product_id = db.ReferenceField('Product')
+
+
+class Product(db.Document):
+    name = db.StringField(unique=True)
+    category_id = db.ReferenceField('Category')
+    brand = db.StringField()
+    supplier_id = db.ReferenceField('Supplier')
+    unit_of_measurement = db.StringField()
+    min_stock_allowed = db.IntField()
+    current_stock = db.IntField()
+    stock_change = db.IntField()
+    company_id = db.ReferenceField('User')
+
+    def update_stock(self, stock_change):
+        self.current_stock += stock_change
+        self.stock_change += stock_change

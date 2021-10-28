@@ -55,7 +55,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="nav-link text-white">
+                            <a href="{{ url_for('get_products') }}" class="nav-link text-white">
                                 <i class="bi bi-grid me-2"></i>
                                 <span class="d-md-none d-lg-inline">Products</span>
                             </a>
@@ -71,7 +71,7 @@
             </nav>
             <!-- end side navigation bar -->
 
-            <div class="col-12 position-relative col-md-10 pb-4">
+            <div class="col-12 position-relative col-md-11 col-lg-10 pb-4">
                 <!-- top toolbar for account holder  -->
                 <header class="navbar navbar-light">
                     <button class="navbar-toggler d-inline-block d-md-none" type="button"
@@ -105,7 +105,7 @@
                         {% if messages %}
                         {% for message in messages %}
                         <div class="row flashes">
-                            <h4 class="badge">{{ message }}</h4>
+                            <p class="badge text-primary">{{ message }}</>
                         </div>
                         {% endfor %}
                         {% endif %}
