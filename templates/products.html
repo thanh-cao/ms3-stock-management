@@ -71,14 +71,14 @@
                                         <a href="{{ url_for('product_details', product_id=product.id) }}" class="text-decoration-none text-black">{{ product.name }}</a>
                                     </div>
                                     <div class="col-2 text-center">
-                                        12
+                                        {{ product.current_stock }}
                                     </div>
                                     <div class="col-2 text-center">
-                                        5
+                                        {{ product.stock_change }}
                                     </div>
                                     <div class="col-2">
                                         <a class="btn text-primary p-0" data-action="showForm"
-                                            data-target="#createCategory">
+                                            data-target="#update_stock" data-id="{{ product.id }}">
                                             Update Stock
                                         </a>
                                     </div>
@@ -109,6 +109,23 @@
                         {{ render_submit_btn(form.submit) }}
                         <a href="#" class="btn btn-outline-secondary" data-action="hideForm"
                             data-target="#createProduct">Cancel</a>
+                    </div>
+                </div>
+            </form>
+
+            <form id="update_stock" class="d-none mt-4 mt-md-0" action="" method="POST">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Update Stock</h5>
+                        {{ form.csrf_token }}
+                        <div class="form-floating">
+                            <p class="card-text form-control border-0 mb-1"> product.name </p>
+                            <label>Product Name</label>
+                        </div>
+                        {{ render_field(form.stock_change) }}
+                        {{ render_submit_btn(form.submit) }}
+                        <a href="#" class="btn btn-outline-secondary" data-action="hideForm"
+                            data-target="#update_stock">Cancel</a>
                     </div>
                 </div>
             </form>

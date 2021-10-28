@@ -49,13 +49,13 @@
                     </div>
 
                     <div class="my-auto">
-                        <a class="btn btn-sm btn-primary me-2" data-action="showForm" data-target="#updateStock">
+                        <a class="btn btn-md btn-primary me-2" data-action="showForm" data-target="#updateStock">
                             Update Stock
                         </a>
-                        <a href="#" class="btn btn-sm btn-outline-primary text-decoration-none me-2" data-action="showForm" data-target="#editProduct">
+                        <a href="#" class="btn btn-md btn-outline-primary text-decoration-none me-2" data-action="showForm" data-target="#editProduct">
                             Edit
                         </a>
-                        <a href="{{ url_for('delete_product', product_id=product.id) }}" class="btn btn-sm btn-outline-danger">
+                        <a href="{{ url_for('delete_product', product_id=product.id) }}" class="btn btn-md btn-outline-danger">
                            Delete
                         </a>
                     </div>
@@ -83,11 +83,17 @@
                 </div>
             </form>
 
-            <form id="updateStock" class="d-none mt-4" action="" method="POST">
+            <form id="updateStock" class="d-none mt-4 mt-md-0" action="{{ url_for('update_stock', product_id=product.id) }}" method="POST">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title fw-bold">Update Stock</h5>
-
+                        {{ form.csrf_token }}
+                        <div class="form-floating">
+                            <p class="card-text form-control border-0 mb-1">{{ product.name }}</p>
+                            <label>Product Name</label>
+                        </div>
+                        {{ render_field(form.stock_change) }}
+                        {{ render_submit_btn(form.submit) }}
                         <a href="#" class="btn btn-outline-secondary" data-action="hideForm"
                             data-target="#updateStock">Cancel</a>
                     </div>

@@ -59,4 +59,5 @@ class ProductForm(FlaskForm):
     unit_of_measurement = StringField(render_kw={'placeholder': 'Unit of measurement'})
     min_stock_allowed = IntegerField(render_kw={'placeholder': 'Minimum stock allowed'})
     current_stock = IntegerField(render_kw={'placeholder': 'Current stock'})
+    stock_change = IntegerField(render_kw={'placeholder': 'Stock change'})
     submit = SubmitField(label='Submit')

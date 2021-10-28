@@ -220,7 +220,6 @@ def get_products():
                                 for category in categories]
     form.supplier_id.choices = [(supplier.id, supplier.supplier_name)
                                 for supplier in suppliers]
-
     return render_template('products.html',
                            products=products,
                            categories=categories,
@@ -285,6 +284,22 @@ def delete_product(product_id):
     product.delete()
     flash('Product is deleted')
     return redirect(url_for('get_products'))
+
+
+@app.route('/update_stock/<product_id>', methods=['POST'])
+@login_required
+def update_stock(product_id):
+    product = Product.objects.get(id=product_id)
+    if request.method == 'POST':
+        stock_change = int(request.form.get('stock_change'))
+        product.update_stock(stock_change)
+        updated = {
+            'current_stock': product.current_stock,
+            'stock_change': product.stock_change,
+        }
+        product.update(**updated)
+        flash('Stock successfully updated')
+        return redirect(request.referrer)
 
 
 if __name__ == '__main__':

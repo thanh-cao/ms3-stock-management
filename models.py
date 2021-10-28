@@ -48,5 +48,8 @@ class Product(db.Document):
     min_stock_allowed = db.IntField()
     current_stock = db.IntField()
     stock_change = db.IntField()
-    # stock_list = db.ListField(db.ReferenceField('Stock', default=[]))
     company_id = db.ReferenceField('User')
+
+    def update_stock(self, stock_change):
+        self.current_stock += stock_change
+        self.stock_change += stock_change
