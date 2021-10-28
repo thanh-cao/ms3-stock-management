@@ -302,6 +302,17 @@ def update_stock(product_id):
         return redirect(request.referrer)
 
 
+#############################
+######## Dashboard ##########
+#############################
+
+
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    return render_template('dashboard.html')
+
+
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),
             port=os.environ.get('PORT'),

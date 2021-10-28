@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% from '_form_macros.html' import render_field, render_field_with_value, render_select_field, render_select_field_with_value, render_submit_btn %}
+{% block content %}
+
+<!-- Restock now section only visible if there is any product whose current stock is equal to or lower than minimum allowed  -->
+<section class="mt-3 mb-4 container">
+    <div class="row">
+        <div class="col-12 col-md-7">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="text-danger card-title">Restock Now!</h2>
+                    <p class="text-muted">These products have reached their minimum stock allowed</p>
+                    <div class="row align-items-center mb-2 g-0">
+                        <div class="col-6 ps-2">
+                            <span class="text-muted">Product Name</span>
+                        </div>
+                        <div class="col-3 text-center">
+                            <span class="text-muted">Current Stock</span>
+                        </div>
+                        <div class="col-3 text-center">
+                            <span class="text-muted">Minimum allowed</span>
+                        </div>
+                    </div>
+
+                    <div class="row border border-dark align-items-center py-2 g-0">
+                        <div class="col-6 ps-2">
+                            Curry paste
+                        </div>
+                        <div class="col-3 text-center">
+                            3 boxes
+                        </div>
+                        <div class="col-3 text-center">
+                            5 boxes
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-5"></div>
+    </div>
+</section>
+
+<section class="mt-3 mb-4 container">
+    <div class="row">
+        <div class="col-12 col-md-7">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Pending Stock</h2>
+
+                    <div class="row align-items-center mb-2 g-0">
+                        <div class="col-6 ps-2">
+                            <span class="text-muted">Supplier</span>
+                        </div>
+                        <div class="col-3 text-center">
+                            <span class="text-muted">Expected date</span>
+                        </div>
+                        <div class="col-3 text-center">
+                            <span class="text-muted">Status</span>
+                        </div>
+                    </div>
+
+                    <div class="row border border-dark align-items-center py-2 g-0">
+                        <div class="col-6 ps-2">
+                            PepsiCo
+                        </div>
+                        <div class="col-3 text-center">
+                            07/10
+                        </div>
+                        <div class="col-3 text-center">
+                            <span class="badge bg-warning">Pending</span>
+                        </div>
+                    </div>
+
+                    <a class="btn btn-sm btn-primary mt-4" data-action="showForm" data-target="#createPendingStock">
+                        Create new pending stock
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-12 col-md-5"></div>
+    </div>
+</section>
+
+<section class="container">
+    <div class="row">
+        <div class="col-12 col-md-7">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Stock Update</h2>
+
+                    <div class="search-product mb-4">
+                        <form class="d-flex" action="" method="POST">
+                            <input class="form-control me-2" type="text" name="query" placeholder="Search product"
+                                aria-label="Search product">
+                            <button class="btn btn-outline-primary" type="submit">Search</button>
+                        </form>
+                    </div>
+
+                    <div class="row align-items-center mb-2 g-0">
+                        <div class="col-6">
+                            <span class="text-muted ps-2">Product Name</span>
+                        </div>
+                        <div class="col-2">
+                            <span class="text-muted text-center">Current Stock</span>
+                        </div>
+                        <div class="col-2">
+                            <span class="text-muted text-center">Today's change</span>
+                        </div>
+                        <div class="col-2">
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center mb-2 py-2 border border-dark g-0">
+                        <div class="col-6 ps-2">
+                            Product Name
+                        </div>
+                        <div class="col-2">
+                            10
+                        </div>
+                        <div class="col-2">
+                            5
+                        </div>
+                        <div class="col-2">
+                            <a class="btn text-primary p-0" data-action="showForm" data-target="#update_stock"
+                                data-id="">
+                                Update
+                            </a>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-5">
+
+        </div>
+    </div>
+</section>
+{% endblock %}

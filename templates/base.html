@@ -61,7 +61,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="nav-link text-white">
+                            <a href="{{ url_for('dashboard') }}" class="nav-link text-white">
                                 <i class="bi bi-speedometer2 me-2"></i>
                                 <span class="d-md-none d-lg-inline">Stock Flow</span>
                             </a>
@@ -73,12 +73,12 @@
 
             <div class="col-12 position-relative col-md-11 col-lg-10 pb-4">
                 <!-- top toolbar for account holder  -->
-                <header class="navbar navbar-light">
+                <header class="navbar navbar-light justify-content-start">
                     <button class="navbar-toggler d-inline-block d-md-none" type="button"
                         aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    <ul class="navbar-nav">
+                    <ul class="navbar-nav ms-3">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="toolbarDropdown" role="button"
                                 data-bs-toggle="dropdown" aria-expanded="false">
