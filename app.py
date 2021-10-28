@@ -310,7 +310,15 @@ def update_stock(product_id):
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    return render_template('dashboard.html')
+    products = Product.objects()
+
+    # Create a list of products that need to be restocked now
+    restocks = []
+    for product in products:
+        if product.current_stock <= product.min_stock_allowed:
+            restocks.append(product)
+
+    return render_template('dashboard.html', products=products, restocks=restocks)
 
 
 if __name__ == '__main__':

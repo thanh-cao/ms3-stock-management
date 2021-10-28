@@ -3,6 +3,7 @@
 {% block content %}
 
 <!-- Restock now section only visible if there is any product whose current stock is equal to or lower than minimum allowed  -->
+{% if restocks|length > 0 %}
 <section class="mt-3 mb-4 container">
     <div class="row">
         <div class="col-12 col-md-7">
@@ -21,19 +22,19 @@
                             <span class="text-muted">Minimum allowed</span>
                         </div>
                     </div>
-
-                    <div class="row border border-dark align-items-center py-2 g-0">
+                    {% for restock in restocks %}
+                    <div class="row border border-dark align-items-center mb-2 py-2 g-0">
                         <div class="col-6 ps-2">
-                            Curry paste
+                            {{ restock.name }}
                         </div>
                         <div class="col-3 text-center">
-                            3 boxes
+                            {{ restock.current_stock }} {{ restock.unit_of_measurement }}
                         </div>
                         <div class="col-3 text-center">
-                            5 boxes
+                            {{ restock.min_stock_allowed }} {{ restock.unit_of_measurement }}
                         </div>
                     </div>
-
+                    {% endfor %}
                 </div>
             </div>
         </div>
@@ -41,7 +42,10 @@
         <div class="col-12 col-md-5"></div>
     </div>
 </section>
+{% endif %}
+ <!-- End of restock now section  -->
 
+<!-- Pending stock section showing a list of incoming orders -->
 <section class="mt-3 mb-4 container">
     <div class="row">
         <div class="col-12 col-md-7">
@@ -84,7 +88,9 @@
         <div class="col-12 col-md-5"></div>
     </div>
 </section>
+<!-- End of pending stock section  -->
 
+<!-- Stock update section where user can search for a product to update and a list of products with stock change today  -->
 <section class="container">
     <div class="row">
         <div class="col-12 col-md-7">
@@ -131,7 +137,7 @@
                             </a>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
         </div>
@@ -141,4 +147,5 @@
         </div>
     </div>
 </section>
+<!-- End of stock update section  -->
 {% endblock %}
