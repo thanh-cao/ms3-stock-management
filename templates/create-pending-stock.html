@@ -24,7 +24,7 @@
                                 <span class="text-muted">Product Name</span>
                             </div>
                             <div class="col-3 text-center">
-                                <span class="text-muted">Number of units</span>
+                                <span class="text-muted">Expected Stock</span>
                             </div>
                             <div class="col-3"></div>
                         </div>
@@ -34,7 +34,7 @@
                                 {{ item.name }}
                             </div>
                             <div class="col-3 text-center">
-                                {{ item.quantity }}
+                                {{ item.expected_stock }} {{ item.unit_of_measurement }}
                             </div>
                             <div class="col-3 text-center">
                                 <a data-action="showForm" data-target="#edit_category" data-id=""
@@ -48,8 +48,10 @@
                         </div>
                         {% endfor %}
                         {% endif %}
-                        {{ render_submit_btn(form.submit) }}
-                        <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">Cancel</a>
+                        <div class="mt-4">
+                            {{ render_submit_btn(form.submit) }}
+                            <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">Cancel</a>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -79,6 +81,10 @@
                                 <ul class="suggestions list-group">
 
                                 </ul>
+                            </div>
+                            <div class="col-5 form-floating unit-measurement d-none">
+                                {{ product_form.unit_of_measurement(class='card-text form-control border-0 px-0') }}
+                                <label class="px-0">Unit of measurement</label>
                             </div>
                         </div>
                     </form>

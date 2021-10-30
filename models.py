@@ -53,3 +53,11 @@ class Product(db.Document):
     def update_stock(self, stock_change):
         self.current_stock += stock_change
         self.stock_change += stock_change
+
+
+class PendingStock(db.Document):
+    supplier_id = db.ReferenceField('Supplier')
+    delivery_date = db.DateField()
+    created_date = db.DateField(default=datetime.datetime.now)
+    created_by = db.ReferenceField('User')
+    product_list = db.ListField()

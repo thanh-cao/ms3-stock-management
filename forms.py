@@ -68,7 +68,7 @@ class ProductForm(FlaskForm):
 
 class PendingStockForm(FlaskForm):
     supplier_id = SelectField(label='Choose supplier')
-    delivery_date = DateField(label='Expected delivery date',                       
+    delivery_date = DateField(label='Expected delivery date',
                               render_kw={'min': datetime.date.today()})
     submit = SubmitField(label='Submit')
 
@@ -77,3 +77,4 @@ class AddProduct(FlaskForm):
     id = HiddenField()
     name = StringField(render_kw={'placeholder': 'Search product'})
     expected_stock = IntegerField(render_kw={'placeholder': 'Expected stock'})
+    unit_of_measurement = StringField()

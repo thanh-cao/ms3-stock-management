@@ -326,16 +326,46 @@ def dashboard():
 # @app.route('/pending-stock/create', methods=['GET', 'POST'])
 @login_required
 def create_pending_stock():
-    form = PendingStockForm()
-    product_form = AddProduct()
-    products = Product.objects()
+    form = PendingStockForm()  # the main form to be saved in database
+    product_form = AddProduct()  # add products to pending stock form
+    products = Product.objects()  # populate type ahead suggestions
     suppliers = Supplier.objects()
     form.supplier_id.choices = [(supplier.id, supplier.supplier_name)
                                 for supplier in suppliers]
 
+    if form.validate_on_submit():
+        product_list = session['pending']
+        pending_stock = PendingStock(supplier_id=request.form.get('supplier_id'),
+                                     delivery_date=request.form.get('delivery_date'),
+                                     created_date=datetime.datetime.now().date(),
+                                     created_by=current_user.id,
+                                     product_list=product_list)
+        pending_stock.save()
+        session.pop('pending')
+        return redirect(url_for('dashboard'))
+
     return render_template('create-pending-stock.html', form=form,
                            products=products,
                            product_form=product_form)
+
+
+@app.route('/add-product', methods=['POST'])
+@login_required
+def add_product():
+    '''
+    Create a session object called 'pending' and add products into the session
+    which is then later parsed to pending stock form to be saved in database
+    '''
+    if 'pending' not in session:
+        session['pending'] = []
+    form = AddProduct()
+    if form.validate_on_submit():
+        session['pending'].append({'id': form.id.data,
+                                   'name': form.name.data,
+                                   'expected_stock': form.expected_stock.data,
+                                   'unit_of_measurement': form.unit_of_measurement.data})
+        session.modified = True
+    return redirect(request.referrer)
 
 
 if __name__ == '__main__':
