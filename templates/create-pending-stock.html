@@ -17,7 +17,7 @@
                         <label for="{{ form.delivery_date.name }}">{{ form.delivery_date.label.text }}</label>
                         {{ render_field(form.delivery_date)    }}
 
-                       
+                        {% if session.pending and session.pending|length > 0 %}
 
                         <div class="row align-items-center mb-2 g-0">
                             <div class="col-6 ps-2">
@@ -28,13 +28,13 @@
                             </div>
                             <div class="col-3"></div>
                         </div>
-                       
+                        {% for item in session.pending %}
                         <div class="row align-items-center mb-2 g-0">
                             <div class="col-6 ps-2">
-                                Curry Paste
+                                {{ item.name }}
                             </div>
                             <div class="col-3 text-center">
-                                3 boxes
+                                {{ item.quantity }}
                             </div>
                             <div class="col-3 text-center">
                                 <a data-action="showForm" data-target="#edit_category" data-id=""
@@ -46,7 +46,8 @@
                                 </a>
                             </div>
                         </div>
-                       
+                        {% endfor %}
+                        {% endif %}
                         {{ render_submit_btn(form.submit) }}
                         <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">Cancel</a>
                     </form>
@@ -55,7 +56,7 @@
 
             <div class="card mt-4">
                 <div class="card-body">
-                    <form class="search-form" action="" method="POST">
+                    <form class="search-form" action="{{url_for('add_product')}}" method="POST">
                         <h5 class="card-title fw-bold">Add product</h5>
                         {{ product_form.csrf_token }}
                         {{ product_form.id(value='productid') }}
@@ -93,5 +94,13 @@
         </div>
     </div>
 </section>
+
+{% endblock %}
+{% block javascript %}
+<script>
+    const products = {{ products | tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/typeahead.js') }}"></script>
+
 
 {% endblock %}

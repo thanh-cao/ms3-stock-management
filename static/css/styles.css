@@ -72,3 +72,7 @@ i.bi-plus-circle:hover {
     border-radius: 50%;
     background-color: var(--bs-primary);
 }
+
+.list-group-item:hover {
+    background-color:rgba(221, 221, 221, 0.8);
+}
