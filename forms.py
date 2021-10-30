@@ -3,7 +3,8 @@ from flask_user import UserManager
 from flask_user.forms import RegisterForm
 from wtforms import *
 from wtforms.validators import *
-from wtforms.fields.html5 import EmailField
+from wtforms.fields.html5 import EmailField, DateField
+import datetime
 
 
 class CustomRegisterForm(RegisterForm):
@@ -52,12 +53,27 @@ class SupplierForm(FlaskForm):
 
 class ProductForm(FlaskForm):
     name = StringField(validators=[DataRequired()], render_kw={
-                                'placeholder': 'Product name'})
+        'placeholder': 'Product name'})
     category_id = SelectField(label='Choose category')
     brand = StringField(render_kw={'placeholder': 'Brand name'})
     supplier_id = SelectField(label='Choose supplier')
-    unit_of_measurement = StringField(render_kw={'placeholder': 'Unit of measurement'})
-    min_stock_allowed = IntegerField(render_kw={'placeholder': 'Minimum stock allowed'})
+    unit_of_measurement = StringField(
+        render_kw={'placeholder': 'Unit of measurement'})
+    min_stock_allowed = IntegerField(
+        render_kw={'placeholder': 'Minimum stock allowed'})
     current_stock = IntegerField(render_kw={'placeholder': 'Current stock'})
     stock_change = IntegerField(render_kw={'placeholder': 'Stock change'})
     submit = SubmitField(label='Submit')
+
+
+class PendingStockForm(FlaskForm):
+    supplier_id = SelectField(label='Choose supplier')
+    delivery_date = DateField(label='Expected delivery date',                       
+                              render_kw={'min': datetime.date.today()})
+    submit = SubmitField(label='Submit')
+
+
+class AddProduct(FlaskForm):
+    id = HiddenField()
+    name = StringField(render_kw={'placeholder': 'Search product'})
+    expected_stock = IntegerField(render_kw={'placeholder': 'Expected stock'})

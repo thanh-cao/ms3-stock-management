@@ -311,14 +311,31 @@ def update_stock(product_id):
 @login_required
 def dashboard():
     products = Product.objects()
-
     # Create a list of products that need to be restocked now
     restocks = []
     for product in products:
         if product.current_stock <= product.min_stock_allowed:
             restocks.append(product)
 
-    return render_template('dashboard.html', products=products, restocks=restocks)
+    return render_template('dashboard.html',
+                           products=products,
+                           restocks=restocks)
+
+
+@app.route('/pending-stock/create', methods=['GET', 'POST'])
+# @app.route('/pending-stock/create', methods=['GET', 'POST'])
+@login_required
+def create_pending_stock():
+    form = PendingStockForm()
+    product_form = AddProduct()
+    products = Product.objects()
+    suppliers = Supplier.objects()
+    form.supplier_id.choices = [(supplier.id, supplier.supplier_name)
+                                for supplier in suppliers]
+
+    return render_template('create-pending-stock.html', form=form,
+                           products=products,
+                           product_form=product_form)
 
 
 if __name__ == '__main__':

@@ -34,7 +34,7 @@ body {
     }
 }
 
-/* form */
+/* signup / login form */
 .form-backdrop {
     background-image: linear-gradient(109.5deg, rgba(76, 221, 242, 1) 11.2%, rgba(92, 121, 255, 1) 91.1%);
 }
@@ -52,4 +52,23 @@ body {
 /* utilities */
 .text-muted {
     font-size: 0.85rem;
+}
+
+button.add-item {
+    cursor: pointer;
+    background-color: transparent;
+    border: 0px solid transparent;
+    padding: 0;
+}
+
+i.bi-plus-circle {
+    color: var(--bs-primary);
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+i.bi-plus-circle:hover {
+    color: white;
+    border-radius: 50%;
+    background-color: var(--bs-primary);
 }
