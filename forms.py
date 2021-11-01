@@ -45,15 +45,16 @@ class SupplierForm(FlaskForm):
                                 'placeholder': 'Supplier\'s name'})
     contact_person = StringField(render_kw={'placeholder': 'Contact person'})
     address = StringField(render_kw={'placeholder': 'Address'})
-    phone = IntegerField(validators=[DataRequired(message='Please input correct digits for phone')],
+    phone = IntegerField(validators=[DataRequired(
+                         message='Please input correct digits for phone')],
                          render_kw={'placeholder': 'Phone'})
     email = EmailField(render_kw={'placeholder': 'Email'})
     submit = SubmitField(label='Submit')
 
 
 class ProductForm(FlaskForm):
-    name = StringField(validators=[DataRequired()], render_kw={
-        'placeholder': 'Product name'})
+    name = StringField(validators=[DataRequired()],
+                       render_kw={'placeholder': 'Product name'})
     category_id = SelectField(label='Choose category')
     brand = StringField(render_kw={'placeholder': 'Brand name'})
     supplier_id = SelectField(label='Choose supplier')
@@ -67,14 +68,22 @@ class ProductForm(FlaskForm):
 
 
 class PendingStockForm(FlaskForm):
-    supplier_id = SelectField(label='Choose supplier')
+    supplier_id = SelectField(label='Choose supplier',
+                              validators=[DataRequired()])
     delivery_date = DateField(label='Expected delivery date',
+                              validators=[DataRequired()],
                               render_kw={'min': datetime.date.today()})
     submit = SubmitField(label='Submit')
 
 
-class AddProduct(FlaskForm):
+class AddProduct(Form):
     id = HiddenField()
-    name = StringField(render_kw={'placeholder': 'Search product'})
-    expected_stock = IntegerField(render_kw={'placeholder': 'Expected stock'})
+    name = StringField(validators=[DataRequired(message='Some message here')],
+                       render_kw={'placeholder': 'Search product',
+                                  'class': 'form-control search',
+                                  'autocomplete': 'off'})
+    expected_stock = IntegerField(validators=[InputRequired(),
+                                  NumberRange(min=1, max=100,
+                                  message='Please input valid number')],
+                                  render_kw={'placeholder': 'Expected stock'})
     unit_of_measurement = StringField()

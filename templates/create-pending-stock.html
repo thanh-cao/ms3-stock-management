@@ -18,36 +18,34 @@
                         {{ render_field(form.delivery_date)    }}
 
                         {% if session.pending and session.pending|length > 0 %}
-
                         <div class="row align-items-center mb-2 g-0">
                             <div class="col-6 ps-2">
                                 <span class="text-muted">Product Name</span>
                             </div>
-                            <div class="col-3 text-center">
+                            <div class="col-4 text-center">
                                 <span class="text-muted">Expected Stock</span>
                             </div>
-                            <div class="col-3"></div>
+                            <div class="col-2"></div>
                         </div>
+                   
                         {% for item in session.pending %}
                         <div class="row align-items-center mb-2 g-0">
+                           
                             <div class="col-6 ps-2">
-                                {{ item.name }}
+                                {{ item.name }}  
                             </div>
-                            <div class="col-3 text-center">
-                                {{ item.expected_stock }} {{ item.unit_of_measurement }}
+                            <div class="col-4 text-center">
+                                {{item.expected_stock}} {{ item.unit_of_measurement }}
                             </div>
-                            <div class="col-3 text-center">
-                                <a data-action="showForm" data-target="#edit_category" data-id=""
-                                    class="text-decoration-none btn btn-sm btn-outline-primary">
-                                    <i class="bi bi-pencil-square" aria-label="Edit category"></i>
-                                </a>
-                                <a href="" class="text-decoration-none btn btn-sm btn-outline-danger">
+                            <div class="col-2 text-center">
+                                <a href="{{ url_for('remove_product_from_pending_stock', id=item.id) }}" class="text-decoration-none btn btn-sm btn-outline-danger">
                                     <i class="bi bi-trash" aria-label="Delete category"></i>
                                 </a>
                             </div>
                         </div>
                         {% endfor %}
                         {% endif %}
+
                         <div class="mt-4">
                             {{ render_submit_btn(form.submit) }}
                             <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">Cancel</a>
@@ -58,19 +56,19 @@
 
             <div class="card mt-4">
                 <div class="card-body">
-                    <form class="search-form" action="{{url_for('add_product')}}" method="POST">
+                    <form class="search-form" action="{{url_for('add_product_to_pending_stock')}}" method="POST">
                         <h5 class="card-title fw-bold">Add product</h5>
                         {{ product_form.csrf_token }}
                         {{ product_form.id(value='productid') }}
                         <div class="row g-0 align-items-center">
                             <div class="col-6">
-                                {{ product_form.name(class='form-control search') }}
+                                {{ render_field(product_form.name) }}
                             </div>
                             <div class="col-5">
-                                {{ product_form.expected_stock(class='form-control') }}
+                                {{ render_field(product_form.expected_stock)}}
                             </div>
                             <div class="col-1 text-center">
-                                <button type="submit" class="add-item">
+                                <button type="submit" class="add-item mb-3">
                                     <i class="bi bi-plus-circle" aria-label="add item to grocery list"></i>
                                 </button>
                             </div>
@@ -90,8 +88,6 @@
                     </form>
                 </div>
             </div>
-
-
         </div>
 
 
@@ -104,6 +100,8 @@
 {% endblock %}
 {% block javascript %}
 <script>
+     // products variable retrieved from MongoDB in backend is rendered by jinja into a json file
+     // which is then assigned to a javascript variable in order to populate suggestions in typeahead.js
     const products = {{ products | tojson }};
 </script>
 <script src="{{ url_for('static', filename='js/typeahead.js') }}"></script>

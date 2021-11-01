@@ -323,7 +323,6 @@ def dashboard():
 
 
 @app.route('/pending-stock/create', methods=['GET', 'POST'])
-# @app.route('/pending-stock/create', methods=['GET', 'POST'])
 @login_required
 def create_pending_stock():
     form = PendingStockForm()  # the main form to be saved in database
@@ -335,11 +334,12 @@ def create_pending_stock():
 
     if form.validate_on_submit():
         product_list = session['pending']
-        pending_stock = PendingStock(supplier_id=request.form.get('supplier_id'),
-                                     delivery_date=request.form.get('delivery_date'),
-                                     created_date=datetime.datetime.now().date(),
-                                     created_by=current_user.id,
-                                     product_list=product_list)
+        pending_stock = PendingStock(
+                        supplier_id=form.supplier_id.data,
+                        delivery_date=form.delivery_date.data,
+                        created_date=datetime.datetime.now().date(),
+                        created_by=current_user.id,
+                        product_list=product_list)
         pending_stock.save()
         session.pop('pending')
         return redirect(url_for('dashboard'))
@@ -349,9 +349,9 @@ def create_pending_stock():
                            product_form=product_form)
 
 
-@app.route('/add-product', methods=['POST'])
+@app.route('/add-pending-product', methods=['POST'])
 @login_required
-def add_product():
+def add_product_to_pending_stock():
     '''
     Create a session object called 'pending' and add products into the session
     which is then later parsed to pending stock form to be saved in database
@@ -360,11 +360,28 @@ def add_product():
         session['pending'] = []
     form = AddProduct()
     if form.validate_on_submit():
-        session['pending'].append({'id': form.id.data,
-                                   'name': form.name.data,
-                                   'expected_stock': form.expected_stock.data,
-                                   'unit_of_measurement': form.unit_of_measurement.data})
+        session['pending'].append(
+                          {'id': form.id.data,
+                           'name': form.name.data,
+                           'expected_stock': form.expected_stock.data,
+                           'unit_of_measurement': form.unit_of_measurement.data
+                           })
         session.modified = True
+    return redirect(request.referrer)
+
+
+@app.route('/remove-pending-product/<id>')
+@login_required
+def remove_product_from_pending_stock(id):
+    '''
+    Find matching item from session 'pending' based on item's id and remove it
+    '''
+    for item in session['pending']:
+        for key, value in item.items():
+            if key == 'id' and value == id:
+                found = item
+    session['pending'].remove(found)
+    session.modified = True
     return redirect(request.referrer)
 
 
