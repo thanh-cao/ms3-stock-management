@@ -61,3 +61,5 @@ class PendingStock(db.Document):
     created_date = db.DateField(default=datetime.datetime.now)
     created_by = db.ReferenceField('User')
     product_list = db.ListField()
+    stock_is_updated = db.BooleanField(default=False)
+    is_approved = db.BooleanField(default=False)

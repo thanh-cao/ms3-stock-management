@@ -8,7 +8,7 @@
 
             <div class="card">
                 <div class="card-body">
-                    <form id="update_stock" class="mb-2" action="" method="POST">
+                    <form id="update_stock" class="mb-2" action="{{ url_for('create_pending_stock') }}" method="POST">
                         <h5 class="card-title fw-bold">Create new pending stock</h5>
                         {{ form.csrf_token }}
 

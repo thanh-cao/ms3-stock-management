@@ -311,6 +311,7 @@ def update_stock(product_id):
 @login_required
 def dashboard():
     products = Product.objects()
+    pending_stocks = PendingStock.objects()
     # Create a list of products that need to be restocked now
     restocks = []
     for product in products:
@@ -319,7 +320,8 @@ def dashboard():
 
     return render_template('dashboard.html',
                            products=products,
-                           restocks=restocks)
+                           restocks=restocks,
+                           pending_stocks=pending_stocks)
 
 
 @app.route('/pending-stock/create', methods=['GET', 'POST'])
@@ -333,6 +335,9 @@ def create_pending_stock():
                                 for supplier in suppliers]
 
     if form.validate_on_submit():
+        if 'pending' not in session:
+            flash('Please add products to your pending stock form')
+            return redirect(request.referrer)
         product_list = session['pending']
         pending_stock = PendingStock(
                         supplier_id=form.supplier_id.data,
@@ -358,13 +363,13 @@ def add_product_to_pending_stock():
     '''
     if 'pending' not in session:
         session['pending'] = []
-    form = AddProduct()
-    if form.validate_on_submit():
+    product_form = AddProduct()
+    if product_form.validate_on_submit():
         session['pending'].append(
-                          {'id': form.id.data,
-                           'name': form.name.data,
-                           'expected_stock': form.expected_stock.data,
-                           'unit_of_measurement': form.unit_of_measurement.data
+                          {'id': product_form.id.data,
+                           'name': product_form.name.data,
+                           'expected_stock': product_form.expected_stock.data,
+                           'unit_of_measurement': product_form.unit_of_measurement.data
                            })
         session.modified = True
     return redirect(request.referrer)
@@ -383,6 +388,14 @@ def remove_product_from_pending_stock(id):
     session['pending'].remove(found)
     session.modified = True
     return redirect(request.referrer)
+
+
+@app.route('/pending-stock/<id>')
+@login_required
+def pending_stock_details(id):
+    pending = PendingStock.objects.get(id=id)
+    return render_template('pending-stock-details.html',
+                           pending=pending)
 
 
 if __name__ == '__main__':

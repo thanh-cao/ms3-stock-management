@@ -73,6 +73,7 @@ i.bi-plus-circle:hover {
     background-color: var(--bs-primary);
 }
 
+.hover-gray:hover,
 .list-group-item:hover {
     background-color:rgba(221, 221, 221, 0.8);
 }

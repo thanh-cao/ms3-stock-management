@@ -76,9 +76,9 @@ class PendingStockForm(FlaskForm):
     submit = SubmitField(label='Submit')
 
 
-class AddProduct(Form):
+class AddProduct(FlaskForm):
     id = HiddenField()
-    name = StringField(validators=[DataRequired(message='Some message here')],
+    name = StringField(validators=[DataRequired()],
                        render_kw={'placeholder': 'Search product',
                                   'class': 'form-control search',
                                   'autocomplete': 'off'})

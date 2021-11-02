@@ -43,7 +43,7 @@
     </div>
 </section>
 {% endif %}
- <!-- End of restock now section  -->
+<!-- End of restock now section  -->
 
 <!-- Pending stock section showing a list of incoming orders -->
 <section class="mt-3 mb-4 container">
@@ -64,20 +64,28 @@
                             <span class="text-muted">Status</span>
                         </div>
                     </div>
-
-                    <div class="row border border-dark align-items-center py-2 g-0">
-                        <div class="col-6 ps-2">
-                            PepsiCo
+                    {% for pending in pending_stocks %}
+                    <a href="{{ url_for('pending_stock_details', id=pending.id) }}"
+                        class="text-decoration-none text-black">
+                        <div class="row border border-dark align-items-center py-2 g-0 mb-3 hover-gray">
+                            <div class="col-6 ps-2">
+                                {{ pending.supplier_id.supplier_name }}
+                            </div>
+                            <div class="col-3 text-center">
+                                {{ pending.delivery_date }}
+                            </div>
+                            <div class="col-3 text-center">
+                                {% if pending.is_approved == True %}
+                                <span class="badge bg-success">Done</span>
+                                {% else %}
+                                <span class="badge bg-warning">Pending</span>
+                                {% endif %}
+                            </div>
                         </div>
-                        <div class="col-3 text-center">
-                            07/10
-                        </div>
-                        <div class="col-3 text-center">
-                            <span class="badge bg-warning">Pending</span>
-                        </div>
-                    </div>
-
-                    <a href="{{ url_for('create_pending_stock') }}" class="btn btn-sm btn-primary mt-4" data-action="showForm" data-target="#createPendingStock">
+                    </a>
+                    {% endfor %}
+                    <a href="{{ url_for('create_pending_stock') }}" class="btn btn-sm btn-primary mt-4"
+                        data-action="showForm" data-target="#createPendingStock">
                         Create new pending stock
                     </a>
                 </div>
