@@ -398,6 +398,14 @@ def pending_stock_details(id):
                            pending=pending)
 
 
+@app.route('/pending-stock/delete/<id>')
+@login_required
+def delete_pending_stock(id):
+    pending = PendingStock.objects.get(id=id)
+    pending.delete()
+    return redirect(url_for('dashboard'))
+
+
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),
             port=os.environ.get('PORT'),
