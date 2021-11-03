@@ -138,10 +138,10 @@ def create_category():
 def edit_category(category_id):
     category = Category.objects.get(id=category_id)
     if request.method == 'POST':
-        editted = {
+        edit = {
             'category_name': request.form.get('category_name')
         }
-        category.update(**editted)
+        category.update(**edit)
         return redirect(url_for('get_categories'))
 
 
@@ -184,14 +184,14 @@ def create_supplier():
 def edit_supplier(supplier_id):
     supplier = Supplier.objects.get(id=supplier_id)
     if request.method == 'POST':
-        editted = {
+        edit = {
             'supplier_name': request.form.get('supplier_name'),
             'contact_person': request.form.get('contact_person'),
             'address': request.form.get('address'),
             'phone': request.form.get('phone'),
             'email': request.form.get('email')
         }
-        supplier.update(**editted)
+        supplier.update(**edit)
         return redirect(url_for('get_suppliers'))
 
 
@@ -264,7 +264,7 @@ def product_details(product_id):
 def edit_product(product_id):
     product = Product.objects.get(id=product_id)
     if request.method == 'POST':
-        editted = {
+        edit = {
             'name': request.form.get('name'),
             'category_id': ObjectId(request.form.get('category_id')),
             'brand': request.form.get('brand'),
@@ -272,7 +272,7 @@ def edit_product(product_id):
             'unit_of_measurement': request.form.get('unit_of_measurement'),
             'min_stock_allowed': request.form.get('min_stock_allowed')
         }
-        product.update(**editted)
+        product.update(**edit)
         flash('Product successfully updated')
         return redirect(url_for('product_details', product_id=product_id))
 
@@ -312,11 +312,18 @@ def update_stock(product_id):
 def dashboard():
     products = Product.objects()
     pending_stocks = PendingStock.objects()
+
     # Create a list of products that need to be restocked now
     restocks = []
     for product in products:
         if product.current_stock <= product.min_stock_allowed:
             restocks.append(product)
+
+    # If there's a pending session previously created from abandoned process of
+    # creating new or editting pending stock form, it should be cleared
+    # for new actions
+    if 'pending' in session:
+        session.pop('pending')
 
     return render_template('dashboard.html',
                            products=products,
@@ -393,7 +400,13 @@ def remove_product_from_pending_stock(id):
 @app.route('/pending-stock/<id>')
 @login_required
 def pending_stock_details(id):
+    '''
+    Detailed view for pending stock. A 'pending' session is also created
+    with product list in the pending stock to be used
+    later if user wants to edit pending stock form
+    '''
     pending = PendingStock.objects.get(id=id)
+    session['pending'] = pending.product_list
     return render_template('pending-stock-details.html',
                            pending=pending)
 
@@ -401,9 +414,45 @@ def pending_stock_details(id):
 @app.route('/pending-stock/delete/<id>')
 @login_required
 def delete_pending_stock(id):
+    '''
+    Delete chosen pending stock
+    '''
     pending = PendingStock.objects.get(id=id)
     pending.delete()
     return redirect(url_for('dashboard'))
+
+
+@app.route('/pending-stock/edit/<id>', methods=['GET', 'POST'])
+@login_required
+def edit_pending_stock(id):
+    '''
+    Edit chosen pending stock. Session 'pending' which is created
+    on pending stock detailed view, is used to populate product list
+    '''
+    pending_stock = PendingStock.objects.get(id=id)
+    form = PendingStockForm()
+    product_form = AddProduct()
+    products = Product.objects()  # populate type ahead suggestions
+
+    if request.method == 'POST':
+        if len(session['pending']) == 0:
+            flash('Please add products to your pending stock form')
+            return redirect(request.referrer)
+        product_list = session['pending']
+        edit = {'delivery_date': form.delivery_date.data,
+                'created_date': datetime.datetime.now().date(),
+                'created_by': ObjectId(current_user.id),
+                'product_list': product_list}
+        pending_stock.update(**edit)
+        session.pop('pending')
+        flash('Pending stock form updated successfully')
+        return redirect(url_for('pending_stock_details', id=id))
+
+    return render_template('edit-pending-stock.html',
+                           pending_stock=pending_stock,
+                           products=products,
+                           form=form,
+                           product_form=product_form)
 
 
 if __name__ == '__main__':

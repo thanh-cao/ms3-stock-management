@@ -19,7 +19,7 @@
                                 <p class="card-text form-control border-0 mb-1">{{ pending.delivery_date }}</p>
                                 <label class="px-0">Expected delivery</label>
                             </div>
-                        </div>        
+                        </div>
                     </div>
 
                     <div class="row align-items-center pb-3 mb-3 g-0 border-bottom border-dark border-1">
@@ -63,14 +63,15 @@
                         </div>
                     </div>
                     {% endfor %}
-                    
-                    {% if pending.is_approved == False %}              
+
+                    {% if pending.is_approved == False %}
                     <div class="mt-4">
                         <a href="" class="btn btn-sm btn-primary mb-2 mb-sm-0">Update Stock</a>
                         <a href="" class="btn btn-sm btn-success mb-2 mb-sm-0">Approve</a>
                         <br class="d-block d-sm-none">
-                        <a href="" class="btn btn-sm btn-outline-primary">Edit</a>
-                        <a href="{{ url_for('delete_pending_stock', id=pending.id) }}" class="btn btn-sm btn-outline-danger">Delete</a>
+                        <a href="{{ url_for('edit_pending_stock', id=pending.id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                        <a href="{{ url_for('delete_pending_stock', id=pending.id) }}"
+                            class="btn btn-sm btn-outline-danger">Delete</a>
                     </div>
                     {% endif %}
                 </div>
@@ -78,8 +79,7 @@
         </div>
 
 
-        <div class="col-12 col-md-5">
-
+        <div class="col-12 col-md-5">         
         </div>
     </div>
 </section>
