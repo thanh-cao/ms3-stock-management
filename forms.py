@@ -86,4 +86,7 @@ class AddProduct(FlaskForm):
                                   NumberRange(min=1, max=100,
                                   message='Please input valid number')],
                                   render_kw={'placeholder': 'Expected stock'})
+    received_stock = IntegerField(validators=[InputRequired(),
+                                  NumberRange(min=1, max=100,
+                                  message='Please input valid number')])
     unit_of_measurement = StringField()

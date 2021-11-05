@@ -1,7 +1,7 @@
 import os
 from flask import (
     Flask, flash, render_template,
-    redirect, request, session, url_for)
+    redirect, request, session, url_for, jsonify)
 from flask_mongoengine import MongoEngine
 from mongoengine.queryset.visitor import Q
 from flask_wtf.csrf import CSRFProtect
@@ -293,11 +293,7 @@ def update_stock(product_id):
     if request.method == 'POST':
         stock_change = int(request.form.get('stock_change'))
         product.update_stock(stock_change)
-        updated = {
-            'current_stock': product.current_stock,
-            'stock_change': product.stock_change,
-        }
-        product.update(**updated)
+        product.save()
         flash('Stock successfully updated')
         return redirect(request.referrer)
 
@@ -319,11 +315,12 @@ def dashboard():
         if product.current_stock <= product.min_stock_allowed:
             restocks.append(product)
 
-    # If there's a pending session previously created from abandoned process of
-    # creating new or editting pending stock form, it should be cleared
+    # If there's a session previously created from abandoned process of
+    # creating new, editting pending stock form or updating stock, it should be cleared
     # for new actions
-    if 'pending' in session:
-        session.pop('pending')
+    for item in ['pending', 'stock']:
+        if item in session:
+            session.pop(item)
 
     return render_template('dashboard.html',
                            products=products,
@@ -370,15 +367,15 @@ def add_product_to_pending_stock():
     '''
     if 'pending' not in session:
         session['pending'] = []
-    product_form = AddProduct()
-    if product_form.validate_on_submit():
-        session['pending'].append(
-                          {'id': product_form.id.data,
-                           'name': product_form.name.data,
-                           'expected_stock': product_form.expected_stock.data,
-                           'unit_of_measurement': product_form.unit_of_measurement.data
+
+    form = AddProduct()
+    session['pending'].append(
+                          {'id': form.id.data,
+                           'name': form.name.data,
+                           'expected_stock': form.expected_stock.data,
+                           'unit_of_measurement': form.unit_of_measurement.data
                            })
-        session.modified = True
+    session.modified = True
     return redirect(request.referrer)
 
 
@@ -389,11 +386,9 @@ def remove_product_from_pending_stock(id):
     Find matching item from session 'pending' based on item's id and remove it
     '''
     for item in session['pending']:
-        for key, value in item.items():
-            if key == 'id' and value == id:
-                found = item
-    session['pending'].remove(found)
-    session.modified = True
+        if item['id'] == id:
+            session['pending'].remove(item)
+            session.modified = True
     return redirect(request.referrer)
 
 
@@ -407,8 +402,11 @@ def pending_stock_details(id):
     '''
     pending = PendingStock.objects.get(id=id)
     session['pending'] = pending.product_list
+    form = AddProduct()
+
     return render_template('pending-stock-details.html',
-                           pending=pending)
+                           pending=pending,
+                           form=form)
 
 
 @app.route('/pending-stock/delete/<id>')
@@ -453,6 +451,56 @@ def edit_pending_stock(id):
                            products=products,
                            form=form,
                            product_form=product_form)
+
+
+@csrf.exempt
+@app.route('/pending-stock/update', methods=['POST'])
+def update_pending_stock():
+    '''
+    When user inputs the number of stock received upon stock delivery, the change is stored in
+    session 'stock' in order to prepare data before stock change is actually updated in the database
+    when user clicks approve
+    '''
+    if 'stock' not in session:
+        session['stock'] = []
+
+    for item in session['stock']:
+        if item['id'] == request.form['id']:
+            item.update({'received_stock': request.form['received_stock']})
+            return jsonify(session['stock'])
+
+    session['stock'].append({'id': request.form['id'],
+                             'received_stock': request.form['received_stock']})
+    session.modified = True
+    print(f"after added {session['stock']}")
+    return jsonify(session['stock'])
+
+
+@app.route('/pending-stock/approve/<id>')
+@login_required
+def approve_pending_stock(id):
+    '''
+    When user approves stock received, product list in pending stock is
+    updated with received stock. After that, stock update is done for each
+    product based on their product's ID. Status of the pending stock is
+    changed to 'done' and after that user cannot made any further change
+    to the pending stock.
+    '''
+    pending_stock = PendingStock.objects.get(id=id)
+
+    for pending_product in pending_stock.product_list:
+        for item in session['stock']:
+            if item['id'] == pending_product['id']:
+                pending_product['received_stock'] = item['received_stock']
+
+        product = Product.objects.get(id=pending_product['id'])
+        product.update_stock(int(item['received_stock']))
+        product.save()
+
+    pending_stock.is_approved = True
+    pending_stock.save()
+    session.pop('stock')
+    return redirect(request.referrer)
 
 
 if __name__ == '__main__':
