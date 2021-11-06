@@ -113,7 +113,7 @@
                             <button class="btn btn-outline-primary" type="submit">Search</button>
                         </form>
                     </div>
-
+                    {% if stock_change_product and stock_change_product|length > 0 %}
                     <div class="row align-items-center mb-2 g-0">
                         <div class="col-6">
                             <span class="text-muted ps-2">Product Name</span>
@@ -127,16 +127,16 @@
                         <div class="col-2">
                         </div>
                     </div>
-
+                    {% for product in stock_change_product %}
                     <div class="row align-items-center mb-2 py-2 border border-dark g-0">
                         <div class="col-6 ps-2">
-                            Product Name
+                            {{ product.name }}
                         </div>
                         <div class="col-2">
-                            10
+                            {{ product.current_stock }}
                         </div>
                         <div class="col-2">
-                            5
+                            {{ product.stock_change }}
                         </div>
                         <div class="col-2">
                             <a class="btn text-primary p-0" data-action="showForm" data-target="#update_stock"
@@ -145,7 +145,8 @@
                             </a>
                         </div>
                     </div>
-
+                    {% endfor %}
+                    {% endif %}
                 </div>
             </div>
         </div>

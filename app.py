@@ -220,10 +220,11 @@ def get_products():
                                 for category in categories]
     form.supplier_id.choices = [(supplier.id, supplier.supplier_name)
                                 for supplier in suppliers]
+    today = datetime.datetime.now().date()  # to find stock_change for today
     return render_template('products.html',
                            products=products,
                            categories=categories,
-                           form=form)
+                           form=form, today=today)
 
 
 @app.route('/products/create', methods=['POST'])
@@ -237,8 +238,7 @@ def create_product():
             supplier_id=request.form.get('supplier_id'),
             unit_of_measurement=request.form.get('unit_of_measurement'),
             min_stock_allowed=request.form.get('min_stock_allowed'),
-            current_stock=request.form.get('current_stock'),
-            stock_change=0)
+            current_stock=request.form.get('current_stock'))
         new_product.save()
 
         flash('New product successfully created')
@@ -256,7 +256,9 @@ def product_details(product_id):
     form.supplier_id.choices = [(supplier.id, supplier.supplier_name)
                                 for supplier in suppliers]
     product = Product.objects.get(id=product_id)
-    return render_template('product-details.html', product=product, form=form)
+    today = datetime.datetime.now().date()
+    return render_template('product-details.html', product=product,
+                           form=form, today=today)
 
 
 @app.route('/products/edit/<product_id>', methods=['POST'])
@@ -310,20 +312,24 @@ def dashboard():
     pending_stocks = PendingStock.objects()
 
     # Create a list of products that need to be restocked now
+    # and products with stock change today
     restocks = []
+    stock_change_product = []
     for product in products:
         if product.current_stock <= product.min_stock_allowed:
             restocks.append(product)
+        if product.stock_change_date.date() == datetime.datetime.now().date():
+            stock_change_product.append(product)
 
     # If there's a session previously created from abandoned process of
-    # creating new, editting pending stock form or updating stock, it should be cleared
-    # for new actions
+    # creating new, editting pending stock form or updating stock, it should
+    # be cleared for new actions
     for item in ['pending', 'stock']:
         if item in session:
             session.pop(item)
 
     return render_template('dashboard.html',
-                           products=products,
+                           stock_change_product=stock_change_product,
                            restocks=restocks,
                            pending_stocks=pending_stocks)
 
@@ -457,9 +463,10 @@ def edit_pending_stock(id):
 @app.route('/pending-stock/update', methods=['POST'])
 def update_pending_stock():
     '''
-    When user inputs the number of stock received upon stock delivery, the change is stored in
-    session 'stock' in order to prepare data before stock change is actually updated in the database
-    when user clicks approve
+    When user inputs the number of stock received upon stock delivery,
+    the change is stored in session 'stock' in order to prepare data
+    before stock change is actually updated in the database when user
+    clicks approve
     '''
     if 'stock' not in session:
         session['stock'] = []

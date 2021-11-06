@@ -66,15 +66,19 @@
                                 
                                 {% for product in products %}
                                 {% if product.category_id.id == category.id %}
-                                <div class="row align-items-center mb-2 border-bottom">
-                                    <div class="col-6">
-                                        <a href="{{ url_for('product_details', product_id=product.id) }}" class="text-decoration-none text-black">{{ product.name }}</a>
-                                    </div>
+                                <div class="row align-items-center mb-2 border-bottom hover-gray">
+                                    <a href="{{ url_for('product_details', product_id=product.id) }}" class="text-decoration-none text-black col-6">
+                                        {{ product.name }}
+                                    </a>
                                     <div class="col-2 text-center">
                                         {{ product.current_stock }}
                                     </div>
                                     <div class="col-2 text-center">
-                                        {{ product.stock_change }}
+                                        {% if product.stock_change_date.date() == today %}
+                                            {{ product.stock_change }}
+                                        {% else %}
+                                            0
+                                        {% endif %}
                                     </div>
                                     <div class="col-2">
                                         <a class="btn text-primary p-0" data-action="showForm"
