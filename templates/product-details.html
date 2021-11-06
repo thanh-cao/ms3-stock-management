@@ -42,7 +42,13 @@
                         </div>
                         <div class="col-6">
                             <div class="form-floating">
-                                <p class="card-text form-control border-0 mb-1">{{ product.stock_change }}</p>
+                                <p class="card-text form-control border-0 mb-1">
+                                    {% if product.stock_change_date.date() == today %}
+                                        {{ product.stock_change }}
+                                    {% else %}
+                                        0 {{today}}
+                                    {% endif %}
+                                </p>
                                 <label class="px-0">Today's change</label>
                             </div>
                         </div>

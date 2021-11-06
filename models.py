@@ -32,24 +32,34 @@ class Supplier(db.Document):
     company_id = db.ReferenceField('User')
 
 
-class Stock(db.Document):
-    current_stock = db.IntField()
-    stock_change = db.IntField()
-    date = db.DateTimeField()
-    product_id = db.ReferenceField('Product')
-
-
 class Product(db.Document):
-    name = db.StringField(unique=True)
-    category_id = db.ReferenceField('Category')
+    name = db.StringField(unique=True, required=True)
+    category_id = db.ReferenceField('Category', required=True)
     brand = db.StringField()
-    supplier_id = db.ReferenceField('Supplier')
-    unit_of_measurement = db.StringField()
-    min_stock_allowed = db.IntField()
-    current_stock = db.IntField()
-    stock_change = db.IntField()
+    supplier_id = db.ReferenceField('Supplier', required=True)
+    unit_of_measurement = db.StringField(required=True)
+    min_stock_allowed = db.IntField(required=True)
+    current_stock = db.IntField(default=0)
+    stock_change = db.IntField(default=0)
+    stock_change_date = db.DateTimeField(default=datetime.datetime.now)
     company_id = db.ReferenceField('User')
 
     def update_stock(self, stock_change):
+        # reset stock_change every new day in order to accumulate stock_change
+        # that is made today
+        if self.stock_change_date.date() != datetime.datetime.now().date():
+            self.stock_change_date = datetime.datetime.now().date()
+            self.stock_change = 0
+            self.stock_change += stock_change
+
         self.current_stock += stock_change
         self.stock_change += stock_change
+
+
+class PendingStock(db.Document):
+    supplier_id = db.ReferenceField('Supplier')
+    delivery_date = db.DateField()
+    created_date = db.DateField(default=datetime.datetime.now)
+    created_by = db.ReferenceField('User')
+    product_list = db.ListField()
+    is_approved = db.BooleanField(default=False)

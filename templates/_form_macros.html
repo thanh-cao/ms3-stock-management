@@ -1,12 +1,16 @@
 {% macro render_field(field) %}
 <div class="mb-3">
     {{ field(class_='form-control', **kwargs)|safe }}
+    {% if field.description %}
     <div class="form-text">{{ field.description }}</div>
+    {% endif %}
+    {% if field.errors %}
     <ul class="list-unstyled">
         {% for error in field.errors %}
         <li class="text-danger">{{ error }}</li>
         {% endfor %}
     </ul>
+    {% endif %}
 </div>
 {% endmacro %}
 

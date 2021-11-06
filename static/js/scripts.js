@@ -8,7 +8,6 @@ $(document).ready(function () {
     $('[data-action="hideForm"]').on('click', hideForm);
 
     $(document).on('click', (e) => {
-        console.log(e.target);
         if ($('nav.sidenav').hasClass('show') && !$(e.target).closest('nav.sidenav').length) {
             closeSidenav();
         }
@@ -18,18 +17,16 @@ $(document).ready(function () {
 openSidenav = () => {
     $('nav.sidenav').addClass('show');
     $('body').css('backgroundColor', 'rgba(0,0,0,0.4)');
-    console.log('click');
 };
 
 closeSidenav = () => {
     $('nav.sidenav').removeClass('show');
     $('body').css('backgroundColor', 'rgb(255,255,255)');
-    console.log('close');
 };
 
 function showForm(target) {
     target = $(this).attr('data-target');
-    $(`form${target}`).toggleClass('d-none');
+    $(`${target}`).toggleClass('d-none');
     location.href = `${target}`;
 
     // If the show has data-id attribute, create a dynamic form's action based on data-id
@@ -42,7 +39,5 @@ function showForm(target) {
 
 function hideForm(target) {
     target = $(this).attr('data-target');
-    $(`form${target}`).addClass('d-none');
-    console.log(target);
-    console.log($(`form${target}`));
+    $(`${target}`).addClass('d-none');
 }

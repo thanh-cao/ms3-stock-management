@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% from '_form_macros.html' import render_field, render_field_with_value, render_select_field, render_select_field_with_value, render_submit_btn %}
+{% block content %}
+
+<section class="mt-3 container">
+    <div class="row">
+        <div class="col-12 col-md-7">
+
+            <div class="card">
+                <div class="card-body">
+                    <form class="mb-2" action="{{ url_for('edit_pending_stock', id=pending_stock.id) }}" method="POST">
+                        <h5 class="card-title fw-bold">Edit pending stock</h5>
+                        {{ form.csrf_token }}
+
+                        <div class="form-floating">
+                            <p class="card-text form-control border-0 mb-1">{{ pending_stock.supplier_id.supplier_name }}</p>
+                            <label>Supplier</label>
+                        </div>                        
+                        
+                        {{ render_field_with_value(form.delivery_date, pending_stock.delivery_date)}}
+
+                        <div class="row align-items-center mb-2 g-0">
+                            <div class="col-6 ps-2">
+                                <span class="text-muted">Product Name</span>
+                            </div>
+                            <div class="col-4 text-center">
+                                <span class="text-muted">Expected Stock</span>
+                            </div>
+                            <div class="col-2"></div>
+                        </div>
+                   
+                        {% for item in session.pending %}
+                        <div class="row align-items-center mb-2 g-0">                        
+                            <div class="col-6 ps-2">
+                                {{ item.name }}  
+                            </div>
+                            <div class="col-4 text-center">
+                                {{item.expected_stock}} {{ item.unit_of_measurement }}
+                            </div>
+                            <div class="col-2 text-center">
+                                <a href="{{ url_for('remove_product_from_pending_stock', id=item.id) }}" class="text-decoration-none btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash" aria-label="Remove product from pending stock"></i>
+                                </a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                      
+                        <div class="mt-4">
+                            {{ render_submit_btn(form.submit) }}
+                            <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card mt-4">
+                <div class="card-body">
+                    <form class="search-form" action="{{url_for('add_product_to_pending_stock')}}" method="POST">
+                        <h5 class="card-title fw-bold">Add product</h5>
+                        {{ product_form.csrf_token }}
+                        {{ product_form.id(value='productid') }}
+                        <div class="row g-0 align-items-center">
+                            <div class="col-6">
+                                {{ render_field(product_form.name) }}
+                            </div>
+                            <div class="col-5">
+                                {{ render_field(product_form.expected_stock)}}
+                            </div>
+                            <div class="col-1 text-center">
+                                <button type="submit" class="add-item mb-3">
+                                    <i class="bi bi-plus-circle" aria-label="add item to grocery list"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6">
+                                <ul class="suggestions list-group">
+
+                                </ul>
+                            </div>
+                            <div class="col-5 form-floating unit-measurement d-none">
+                                {{ product_form.unit_of_measurement(class='card-text form-control border-0 px-0') }}
+                                <label class="px-0">Unit of measurement</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-5"></div>
+    </div>
+</section>
+
+{% endblock %}
+{% block javascript %}
+<script>
+     // products variable retrieved from MongoDB in backend is rendered by jinja into a json file
+     // which is then assigned to a javascript variable in order to populate suggestions in typeahead.js
+    const products = {{ products | tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/typeahead.js') }}"></script>
+
+
+{% endblock %}
