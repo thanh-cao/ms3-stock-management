@@ -1,6 +1,7 @@
 const searchInput = $('.search');
 const matchDisplay = $('.suggestions');
 const unitOfMeasurementDisplay = $('.unit-measurement');
+let product; // declare an empty products variable which will be assigned value in ajax
 
 // Type ahead function is adapted from challange nr6 from Wes Bos' 30-day JavaScript challange
 function findMatches(input, productArray) {
@@ -37,12 +38,26 @@ function select(option) {
     searchInput.val(selectData);
 
     let found = findProduct(products, selectData);
-    hiddenInput.attr('value', found[0]._id.$oid)  
+    hiddenInput.attr('value', found[0]._id.$oid)
     matchDisplay.empty();
     displayUnitOfMeasurement(found[0].unit_of_measurement);
 }
 
-$(document).ready(function() {
+function queryDatabase(url, collection) {
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: {
+            collection: collection
+        }
+    })
+        .done(productList => {
+            products = productList;
+        })
+}
+
+$(document).ready(function () {
+    queryDatabase('/ajax', 'Product')
     searchInput.on('change', displayMatches);
     searchInput.on('keyup', displayMatches);
 })

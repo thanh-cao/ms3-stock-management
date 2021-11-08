@@ -300,6 +300,28 @@ def update_stock(product_id):
         return redirect(request.referrer)
 
 
+@csrf.exempt
+@app.route('/product/search', methods=['POST'])
+@login_required
+def search_product():
+    query = request.form.get('query')
+    filtered_products = Product.objects(name__icontains=query)
+    return jsonify(filtered_products)
+
+
+@csrf.exempt
+@app.route('/ajax', methods=['POST'])
+def ajax():
+    collection = request.form.get('collection')
+    if collection == 'Product':
+        query = Product.objects()
+    if collection == 'Supplier':
+        query = Supplier.objects()
+    print(collection)
+    print(query)
+    return jsonify(query)
+
+
 #############################
 ######## Dashboard ##########
 #############################
@@ -339,7 +361,6 @@ def dashboard():
 def create_pending_stock():
     form = PendingStockForm()  # the main form to be saved in database
     product_form = AddProduct()  # add products to pending stock form
-    products = Product.objects()  # populate type ahead suggestions
     suppliers = Supplier.objects()
     form.supplier_id.choices = [(supplier.id, supplier.supplier_name)
                                 for supplier in suppliers]
@@ -360,7 +381,6 @@ def create_pending_stock():
         return redirect(url_for('dashboard'))
 
     return render_template('create-pending-stock.html', form=form,
-                           products=products,
                            product_form=product_form)
 
 
@@ -436,7 +456,6 @@ def edit_pending_stock(id):
     pending_stock = PendingStock.objects.get(id=id)
     form = PendingStockForm()
     product_form = AddProduct()
-    products = Product.objects()  # populate type ahead suggestions
 
     if request.method == 'POST':
         if len(session['pending']) == 0:
@@ -454,7 +473,6 @@ def edit_pending_stock(id):
 
     return render_template('edit-pending-stock.html',
                            pending_stock=pending_stock,
-                           products=products,
                            form=form,
                            product_form=product_form)
 
