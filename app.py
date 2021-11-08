@@ -300,6 +300,15 @@ def update_stock(product_id):
         return redirect(request.referrer)
 
 
+@csrf.exempt
+@app.route('/product/search', methods=['POST'])
+@login_required
+def search_product():
+    query = request.form.get('query')
+    filtered_products = Product.objects(name__icontains=query)
+    return jsonify(filtered_products)
+
+
 #############################
 ######## Dashboard ##########
 #############################

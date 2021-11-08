@@ -4,9 +4,9 @@
 
 <!-- Restock now section only visible if there is any product whose current stock is equal to or lower than minimum allowed  -->
 {% if restocks|length > 0 %}
-<section class="mt-3 mb-4 container">
+<section class="mt-3 mb-4">
     <div class="row">
-        <div class="col-12 col-md-7">
+        <div class="col-12 col-md-8">
             <div class="card">
                 <div class="card-body">
                     <h2 class="text-danger card-title">Restock Now!</h2>
@@ -23,7 +23,7 @@
                         </div>
                     </div>
                     {% for restock in restocks %}
-                    <div class="row border border-dark align-items-center mb-2 py-2 g-0">
+                    <div class="row border-bottom align-items-center mb-2 py-2 g-0">
                         <div class="col-6 ps-2">
                             {{ restock.name }}
                         </div>
@@ -38,17 +38,15 @@
                 </div>
             </div>
         </div>
-
-        <div class="col-12 col-md-5"></div>
     </div>
 </section>
 {% endif %}
 <!-- End of restock now section  -->
 
 <!-- Pending stock section showing a list of incoming orders -->
-<section class="mt-3 mb-4 container">
+<section class="mt-3 mb-4">
     <div class="row">
-        <div class="col-12 col-md-7">
+        <div class="col-12 col-md-8">
             <div class="card">
                 <div class="card-body">
                     <h2 class="card-title">Pending Stock</h2>
@@ -67,7 +65,7 @@
                     {% for pending in pending_stocks %}
                     <a href="{{ url_for('pending_stock_details', id=pending.id) }}"
                         class="text-decoration-none text-black">
-                        <div class="row border border-dark align-items-center py-2 g-0 mb-3 hover-gray">
+                        <div class="row border-bottom align-items-center py-2 g-0 mb-3 hover-gray">
                             <div class="col-6 ps-2">
                                 {{ pending.supplier_id.supplier_name }}
                             </div>
@@ -99,62 +97,69 @@
 <!-- End of pending stock section  -->
 
 <!-- Stock update section where user can search for a product to update and a list of products with stock change today  -->
-<section class="container">
+<section>
     <div class="row">
-        <div class="col-12 col-md-7">
+        <div class="col-12 col-md-8">
             <div class="card">
                 <div class="card-body">
                     <h2 class="card-title">Stock Update</h2>
 
                     <div class="search-product mb-4">
-                        <form class="d-flex" action="" method="POST">
-                            <input class="form-control me-2" type="text" name="query" placeholder="Search product"
+                        <form id="product-query" class="d-flex" method="POST">
+                            <input class="form-control me-2" type="text" id="query" placeholder="Search product"
                                 aria-label="Search product">
-                            <button class="btn btn-outline-primary" type="submit">Search</button>
+                            <button class="btn btn-outline-primary me-1" type="submit">Search</button>
+                            <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">Cancel</a>
                         </form>
                     </div>
+
+
                     {% if stock_change_product and stock_change_product|length > 0 %}
-                    <div class="row align-items-center mb-2 g-0">
-                        <div class="col-6">
-                            <span class="text-muted ps-2">Product Name</span>
+                    <div class="product-list">
+                        <div class="row align-items-center mb-2 g-0">
+                            <div class="col-6">
+                                <span class="text-muted ps-2">Product Name</span>
+                            </div>
+                            <div class="col-2">
+                                <span class="text-muted text-center">Current Stock</span>
+                            </div>
+                            <div class="col-2">
+                                <span class="text-muted text-center">Today's change</span>
+                            </div>
+                            <div class="col-2">
+                            </div>
                         </div>
-                        <div class="col-2">
-                            <span class="text-muted text-center">Current Stock</span>
+                        {% for product in stock_change_product %}
+                        <div class="row align-items-center mb-2 py-2 border-bottom g-0 hover-gray">
+                            <a href="{{ url_for('product_details', product_id=product.id) }}" class="text-decoration-none text-black col-6 ps-2">
+                                {{ product.name }}
+                                </a>
+                            <div class="col-2">
+                                {{ product.current_stock }}
+                            </div>
+                            <div class="col-2">
+                                {{ product.stock_change }}
+                            </div>
+                            <div class="col-2">
+                                <a class="btn text-primary p-0" data-action="showForm" data-target="#update_stock"
+                                    data-id="">
+                                    Update Stock
+                                </a>
+                            </div>
                         </div>
-                        <div class="col-2">
-                            <span class="text-muted text-center">Today's change</span>
-                        </div>
-                        <div class="col-2">
-                        </div>
+                        {% endfor %}
+                        {% endif %}
                     </div>
-                    {% for product in stock_change_product %}
-                    <div class="row align-items-center mb-2 py-2 border border-dark g-0">
-                        <div class="col-6 ps-2">
-                            {{ product.name }}
-                        </div>
-                        <div class="col-2">
-                            {{ product.current_stock }}
-                        </div>
-                        <div class="col-2">
-                            {{ product.stock_change }}
-                        </div>
-                        <div class="col-2">
-                            <a class="btn text-primary p-0" data-action="showForm" data-target="#update_stock"
-                                data-id="">
-                                Update
-                            </a>
-                        </div>
-                    </div>
-                    {% endfor %}
-                    {% endif %}
                 </div>
             </div>
         </div>
 
-        <div class="col-12 col-md-5">
-
-        </div>
+        <div class="col-12 col-md-4"></div>
     </div>
 </section>
 <!-- End of stock update section  -->
+{% endblock %}
+
+{% block javascript %}
+<script src="{{ url_for('static', filename='js/search.js') }}"></script>
 {% endblock %}

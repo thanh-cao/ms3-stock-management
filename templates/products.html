@@ -6,10 +6,11 @@
     <div class="row">
         <div class="col-12 col-md-7">
             <div class="search-product">
-                <form class="d-flex" action="" method="POST">
-                    <input class="form-control me-2" type="text" name="query" placeholder="Search product"
+                <form class="d-flex" id="product-query" method="POST">
+                    <input class="form-control me-2" type="text" id="query" placeholder="Search product"
                         aria-label="Search product">
-                    <button class="btn btn-outline-primary" type="submit">Search</button>
+                    <button class="btn btn-outline-primary me-1" type="submit">Search</button>
+                    <a href="{{ url_for('get_products') }}" class="btn btn-outline-secondary">Cancel</a>
                 </form>
             </div>
 
@@ -17,12 +18,11 @@
                 Create new product
             </a>
         </div>
-        <div class="col-12 col-md-7"></div>
     </div>
 
     <div class="row mt-4">
         <div class="col-12 col-md-7">
-            <div class="product-listing">
+            <div class="product-list">
                 <div class="accordion" id="accordionProducts">
 
                     {% for category in categories %}
@@ -137,5 +137,8 @@
     </div>
 </section>
 
+{% endblock %}
 
+{% block javascript %}
+<script src="{{ url_for('static', filename='js/search.js') }}"></script>
 {% endblock %}
