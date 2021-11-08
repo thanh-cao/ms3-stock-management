@@ -106,17 +106,20 @@
 
                     <div class="search-product mb-4">
                         <form id="product-query" class="d-flex" method="POST">
-                            <input class="form-control me-2" type="text" id="query" placeholder="Search product"
-                                aria-label="Search product">
+                            <input class="form-control me-2 search" type="text" id="query" placeholder="Search product"
+                                aria-label="Search product" autocomplete="off">
                             <button class="btn btn-outline-primary me-1" type="submit">Search</button>
                             <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">Cancel</a>
                         </form>
+                        <ul class="suggestions list-group">
+                    
+                        </ul>
                     </div>
 
 
                     {% if stock_change_product and stock_change_product|length > 0 %}
                     <div class="product-list">
-                        <div class="row align-items-center mb-2 g-0">
+                        <div class="row align-items-center border-bottom mb-2 g-0">
                             <div class="col-6">
                                 <span class="text-muted ps-2">Product Name</span>
                             </div>
@@ -161,5 +164,6 @@
 {% endblock %}
 
 {% block javascript %}
+<script src="{{ url_for('static', filename='js/typeahead.js') }}"></script>
 <script src="{{ url_for('static', filename='js/search.js') }}"></script>
 {% endblock %}

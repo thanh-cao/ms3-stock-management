@@ -38,11 +38,11 @@ function displayProductList(productLists) {
         const stockChangeDate = new Date(product.stock_change_date.$date).toDateString();
         const today = new Date().toDateString();
         const stockChange = stockChangeDate === today ? product.stock_change : 0;
-        
+
         let productRow = `
             <div class="row align-items-center mb-2 py-2 border-bottom g-0 hover-gray">
                 <a href="/products/${product._id.$oid}" class="text-decoration-none text-black col-6 ps-2">
-                ${product.name}
+                    ${product.name}
                 </a>
                 <div class="col-2">
                     ${product.current_stock}
@@ -52,7 +52,7 @@ function displayProductList(productLists) {
                 </div>
                 <div class="col-2">
                     <a class="btn text-primary p-0" data-action="showForm" data-target="#update_stock"
-                        data-id="">
+                        data-id="${product._id.$oid}">
                         Update Stock
                     </a>
                 </div>
@@ -62,6 +62,7 @@ function displayProductList(productLists) {
     })
 
     $('div.product-list').html(productListHtml);
+    $('[data-action="showForm"]').on('click', showForm);
 
     // Add card boder to product list on products.html
     if ($('div.product-list').parent().hasClass('col-12')) {

@@ -94,13 +94,7 @@
 </section>
 
 {% endblock %}
+
 {% block javascript %}
-<script>
-     // products variable retrieved from MongoDB in backend is rendered by jinja into a json file
-     // which is then assigned to a javascript variable in order to populate suggestions in typeahead.js
-    const products = {{ products | tojson }};
-</script>
 <script src="{{ url_for('static', filename='js/typeahead.js') }}"></script>
-
-
 {% endblock %}

@@ -51,9 +51,9 @@ class Product(db.Document):
             self.stock_change_date = datetime.datetime.now().date()
             self.stock_change = 0
             self.stock_change += stock_change
-
-        self.current_stock += stock_change
-        self.stock_change += stock_change
+        else:
+            self.current_stock += stock_change
+            self.stock_change += stock_change
 
 
 class PendingStock(db.Document):

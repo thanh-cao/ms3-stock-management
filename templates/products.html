@@ -7,13 +7,16 @@
         <div class="col-12 col-md-7">
             <div class="search-product">
                 <form class="d-flex" id="product-query" method="POST">
-                    <input class="form-control me-2" type="text" id="query" placeholder="Search product"
-                        aria-label="Search product">
+                    <input class="form-control me-2 search" type="text" id="query" placeholder="Search product"
+                        aria-label="Search product" autocomplete="off">
                     <button class="btn btn-outline-primary me-1" type="submit">Search</button>
                     <a href="{{ url_for('get_products') }}" class="btn btn-outline-secondary">Cancel</a>
                 </form>
+                <ul class="suggestions list-group">
+                    
+                </ul>
             </div>
-
+            
             <a class="btn btn-primary mt-4" data-action="showForm" data-target="#createProduct">
                 Create new product
             </a>
@@ -140,5 +143,6 @@
 {% endblock %}
 
 {% block javascript %}
+<script src="{{ url_for('static', filename='js/typeahead.js') }}"></script>
 <script src="{{ url_for('static', filename='js/search.js') }}"></script>
 {% endblock %}
