@@ -19,12 +19,9 @@ class CustomUserManager(UserManager):
 
 
 class UserAccess(FlaskForm):
-    username = StringField(validators=[Length(min=5, max=10), DataRequired()],
-                           render_kw={'placeholder': 'Username'},
-                           description='Username between 5 and 10 characters')
-    pin = IntegerField(validators=[Length(min=4, max=6), DataRequired()],
-                       render_kw={'placeholder': 'Pin code'},
-                       description='Choose 4 to 6 digits for pin code')
+    name = StringField(validators=[Length(min=5, max=10), DataRequired()],
+                       render_kw={'placeholder': 'Username'},
+                       description='Username between 5 and 10 characters')
     role = SelectField(choices=[('', 'Choose Role'),
                                 ('admin', 'admin'),
                                 ('staff', 'staff')],

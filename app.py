@@ -73,39 +73,31 @@ def edit_profile(account_id):
         return redirect(url_for('profile'))
 
 
-@app.route('/profile/create_accesss', methods=['POST'])
-@roles_required('admin')
-@login_required
-def create_access():
-    company = current_user.company_name
-    if request.method == 'POST':
-        access = User(
-            username=request.form.get('username'),
-            pin=request.form.get('pin'),
-            company_name=company,
-            roles=[request.form.get('role')]
-        )
-        access.save()
-        flash('New user access successfully updated')
-        return redirect(url_for('profile'))
-
-
 @app.route('/profile/edit_accesss/<access_id>', methods=['POST'])
 @login_required
 @roles_required('admin')
-def edit_accesss(access_id):
+def edit_access(access_id):
     access = User.objects.get(id=access_id)
-    access.roles.pop()
+    access.roles = []
     if request.method == 'POST':
         new_role = request.form.get('role')
         access.roles.append(new_role)
         updated_access = {
-            'username': request.form('username'),
-            'pin': request.form('pin'),
+            'username': request.form.get('username'),
+            'roles': access.roles
         }
         access.update(**updated_access)
         flash('Access successfully updated')
         return redirect(url_for('profile'))
+
+
+@app.route('/profile/delete_access/<access_id>')
+@login_required
+@roles_required('admin')
+def delete_access(access_id):
+    access = User.objects.get(id=access_id)
+    access.delete()
+    return redirect(url_for('profile'))
 
 
 #############################
