@@ -11,12 +11,11 @@
         <div class="col">
             <h1 clas="mb-3">Sign Up!</h1>
             <form action="{{ url_for('user.register') }}" method="POST">
-                {{ form.hidden_tag() }}
                 {{ form.csrf_token }}
-
             
                 {{ render_field(form.name) }}
-                {{ render_field(form.username) }}
+                {#{ render_field(form.username) }#}
+                {{ render_field(form.email) }}
                 {{ render_field(form.company_name) }}
                 {{ render_field(form.password) }}
                 {{ render_field(form.retype_password) }}

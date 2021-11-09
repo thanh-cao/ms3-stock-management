@@ -9,10 +9,8 @@ import datetime
 
 class CustomRegisterForm(RegisterForm):
     name = StringField(label='Name',
-                       validators=[DataRequired()],
-                       render_kw={'placeholder': 'Name'})
-    company_name = StringField(label='Company\'s Name',
-                               render_kw={'placeholder': 'Company\'s Name'})
+                       validators=[DataRequired()])
+    company_name = StringField(label='Company\'s Name')
 
 
 class CustomUserManager(UserManager):
