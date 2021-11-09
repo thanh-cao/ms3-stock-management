@@ -38,16 +38,15 @@ def index():
 
 
 # Create default super_admin role upon registration to account holder/owner
-@user_registered.connect_via(app)
-def create_super_admin(sender, user, **extra):
-    user.roles.append('super_admin')
-    user.save()
+# @user_registered.connect_via(app)
+# def create_admin(sender, user, **extra):
+#     user.roles.append('super_admin')
+#     user.save()
 
 
 # Routes for Profile / User access
 @app.route('/profile')
 @login_required
-@roles_required('super_admin')
 def profile():
     account = current_user
     user_access = User.objects(Q(roles='admin') | Q(roles='staff'))
@@ -62,7 +61,6 @@ def profile():
 
 @app.route('/profile/edit/<account_id>', methods=['POST'])
 @login_required
-@roles_required('super_admin')
 def edit_profile(account_id):
     account = User.objects.get(id=account_id)
     if request.method == 'POST':
@@ -75,39 +73,31 @@ def edit_profile(account_id):
         return redirect(url_for('profile'))
 
 
-@app.route('/profile/create_accesss', methods=['POST'])
-@login_required
-@roles_required('super_admin')
-def create_access():
-    company = current_user.company_name
-    if request.method == 'POST':
-        access = User(
-            username=request.form.get('username'),
-            pin=request.form.get('pin'),
-            company_name=company,
-            roles=[request.form.get('role')]
-        )
-        access.save()
-        flash('New user access successfully updated')
-        return redirect(url_for('profile'))
-
-
 @app.route('/profile/edit_accesss/<access_id>', methods=['POST'])
 @login_required
-@roles_required('super_admin')
-def edit_accesss(access_id):
+@roles_required('admin')
+def edit_access(access_id):
     access = User.objects.get(id=access_id)
-    access.roles.pop()
+    access.roles = []
     if request.method == 'POST':
         new_role = request.form.get('role')
         access.roles.append(new_role)
         updated_access = {
-            'username': request.form('username'),
-            'pin': request.form('pin'),
+            'username': request.form.get('username'),
+            'roles': access.roles
         }
         access.update(**updated_access)
         flash('Access successfully updated')
         return redirect(url_for('profile'))
+
+
+@app.route('/profile/delete_access/<access_id>')
+@login_required
+@roles_required('admin')
+def delete_access(access_id):
+    access = User.objects.get(id=access_id)
+    access.delete()
+    return redirect(url_for('profile'))
 
 
 #############################
@@ -116,6 +106,7 @@ def edit_accesss(access_id):
 
 
 @app.route('/categories')
+@roles_required('admin')
 @login_required
 def get_categories():
     form = CategoryForm()
@@ -124,6 +115,7 @@ def get_categories():
 
 
 @app.route('/categories/create', methods=['POST'])
+@roles_required('admin')
 @login_required
 def create_category():
     if request.method == 'POST':
@@ -135,6 +127,7 @@ def create_category():
 
 @app.route('/edit_category/<category_id>', methods=['POST'])
 @login_required
+@roles_required('admin')
 def edit_category(category_id):
     category = Category.objects.get(id=category_id)
     if request.method == 'POST':
@@ -147,6 +140,7 @@ def edit_category(category_id):
 
 @app.route('/categories/delete/<category_id>')
 @login_required
+@roles_required('admin')
 def delete_category(category_id):
     category = Category.objects.get(id=category_id)
     category.delete()
@@ -166,6 +160,7 @@ def get_suppliers():
 
 
 @app.route('/suppliers/create', methods=['POST'])
+@roles_required('admin')
 @login_required
 def create_supplier():
     if request.method == 'POST':
@@ -180,6 +175,7 @@ def create_supplier():
 
 
 @app.route('/edit_supplier/<supplier_id>', methods=['POST'])
+@roles_required('admin')
 @login_required
 def edit_supplier(supplier_id):
     supplier = Supplier.objects.get(id=supplier_id)
@@ -196,6 +192,7 @@ def edit_supplier(supplier_id):
 
 
 @app.route('/suppliers/delete/<supplier_id>')
+@roles_required('admin')
 @login_required
 def delete_supplier(supplier_id):
     supplier = Supplier.objects.get(id=supplier_id)
@@ -228,6 +225,7 @@ def get_products():
 
 
 @app.route('/products/create', methods=['POST'])
+@roles_required('admin')
 @login_required
 def create_product():
     if request.method == 'POST':
@@ -262,6 +260,7 @@ def product_details(product_id):
 
 
 @app.route('/products/edit/<product_id>', methods=['POST'])
+@roles_required('admin')
 @login_required
 def edit_product(product_id):
     product = Product.objects.get(id=product_id)
@@ -280,6 +279,7 @@ def edit_product(product_id):
 
 
 @app.route('/products/delete/<product_id>')
+@roles_required('admin')
 @login_required
 def delete_product(product_id):
     product = Product.objects.get(id=product_id)
@@ -317,8 +317,6 @@ def ajax():
         query = Product.objects()
     if collection == 'Supplier':
         query = Supplier.objects()
-    print(collection)
-    print(query)
     return jsonify(query)
 
 
@@ -357,6 +355,7 @@ def dashboard():
 
 
 @app.route('/pending-stock/create', methods=['GET', 'POST'])
+@roles_required('admin')
 @login_required
 def create_pending_stock():
     form = PendingStockForm()  # the main form to be saved in database
@@ -385,6 +384,7 @@ def create_pending_stock():
 
 
 @app.route('/add-pending-product', methods=['POST'])
+@roles_required('admin')
 @login_required
 def add_product_to_pending_stock():
     '''
@@ -406,6 +406,7 @@ def add_product_to_pending_stock():
 
 
 @app.route('/remove-pending-product/<id>')
+@roles_required('admin')
 @login_required
 def remove_product_from_pending_stock(id):
     '''
@@ -436,6 +437,7 @@ def pending_stock_details(id):
 
 
 @app.route('/pending-stock/delete/<id>')
+@roles_required('admin')
 @login_required
 def delete_pending_stock(id):
     '''
@@ -447,6 +449,7 @@ def delete_pending_stock(id):
 
 
 @app.route('/pending-stock/edit/<id>', methods=['GET', 'POST'])
+@roles_required('admin')
 @login_required
 def edit_pending_stock(id):
     '''
@@ -497,7 +500,6 @@ def update_pending_stock():
     session['stock'].append({'id': request.form['id'],
                              'received_stock': request.form['received_stock']})
     session.modified = True
-    print(f"after added {session['stock']}")
     return jsonify(session['stock'])
 
 

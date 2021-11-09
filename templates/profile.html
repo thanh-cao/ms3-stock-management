@@ -22,7 +22,7 @@
                         <label>Username</label>
                     </div>
                     <div class="form-floating">
-                        <p class="card-text form-control border-0 mb-1">{{ account.company_name }}</p>
+                        <p class="card-text form-control border-0 mb-1">{{ account.email }}</p>
                         <label>Email Address</label>
                     </div>
                     <div class="form-floating">
@@ -33,12 +33,13 @@
                 </div>
             </div>
 
+            {% if 'admin' in current_user.roles %}
             <div class="card mt-4">
                 <div class="card-body">
                     <h5 class="card-title fw-bold">User Access</h5>
                     <div class="row">
                         <div class="col-6">
-                            <span class="text-muted">Username</span>
+                            <span class="text-muted">Name</span>
                         </div>
                         <div class="col-3">
                             <span class="text-muted">Role</span>
@@ -47,43 +48,47 @@
                         </div>
                     </div>
                     {% for access in user_access %}
+                    <!-- There is one super admin in the system which is hidden and shall not be touched -->
+                    {% if 'super-admin'  not in access.roles %}
                     <div class="row mt-2 align-items-center">
                         <div class="col-6">
-                            {{ access.username }}
+                            {{ access.name }}
                         </div>
-                        {% for role in access.roles %}
                         <div class="col-3">
-                            {{ role|capitalize }}
+                            {% if 'admin' in access.roles %}                           
+                            Admin
+                            {% else %}
+                            Staff
+                            {% endif %}
                         </div>
-                        {% endfor %}
                         <div class="col-3">
                             <a data-action="showForm" data-target="#editUserAccessForm{{ access.id }}" class="text-decoration-none btn btn-sm btn-outline-primary">
                                 <i class="bi bi-pencil-square" aria-label="Edit current user access"></i>
                             </a>
-                            <a href="#" class="text-decoration-none btn btn-sm btn-outline-danger">
+                            <a href="{{ url_for('delete_access', access_id=access.id) }}" class="text-decoration-none btn btn-sm btn-outline-danger">
                                 <i class="bi bi-trash" aria-label="Delete current user access"></i>
                             </a>
                         </div>
                     </div>
+                    {% endif %}
                     {% endfor %}
 
-                    <a href="#" class="btn btn-primary mt-4" data-action="showForm" data-target="#userAccessForm">
-                        Create New Access</a>
+                    <!-- <a href="#" class="btn btn-primary mt-4" data-action="showForm" data-target="#userAccessForm"> -->
+                        <!-- Create New Access</a> -->
                 </div>
             </div>
+            {% endif %}
         </div>
 
         <div class="col-12 col-md-6">
-            <form id="profileForm" class="d-none mt-4" action="{{ url_for('edit_profile', account_id=account.id) }}" method="POST">
+            <form id="profileForm" class="d-none mt-4 mt-md-0" action="{{ url_for('edit_profile', account_id=account.id) }}" method="POST">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title fw-bold">Edit Profile</h5>
                         {{ account_form.csrf_token }}
 
                         {{ render_field_with_value(account_form.name, current_user.name) }}
-                        {{ render_field_with_value(account_form.username, current_user.username) }}
-                        <!-- {{ render_field_with_value(account_form.email, current_user.email) }} -->
-                        {{ render_field_with_value(account_form.company_name, current_user.company_name) }}
+                        {{ render_field_with_value(account_form.email, current_user.email) }}
                         <button type="submit" class="btn btn-primary">Update</button>
                         <a href="#" class="btn btn-outline-secondary" data-action="hideForm"
                             data-target="#profileForm">Cancel</a>
@@ -91,29 +96,14 @@
                 </div>
             </form>
 
-            <form id="userAccessForm" class="d-none mt-4" action="{{ url_for('create_access') }}" method="POST">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title fw-bold">Create User Access</h5>
-                        {{ access_form.csrf_token }}
-
-                        {{ render_field(access_form.username) }}
-                        {{ render_field(access_form.pin) }}
-                        {{ render_field(access_form.role) }}
-                        <button type="submit" class="btn btn-primary">Create New</button>
-                        <a href="#" class="btn btn-outline-secondary" data-action="hideForm"
-                            data-target="#userAccessForm">Cancel</a>
-                    </div>
-                </div>
-            </form>
+            {% if 'admin' in current_user.roles %}
             {% for access in user_access %}
-            <form id="editUserAccessForm{{ access.id }}" class="d-none mt-4" action="#" method="POST">
+            <form id="editUserAccessForm{{ access.id }}" class="d-none mt-4" action="{{  url_for('edit_access', access_id=access.id) }}" method="POST">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title fw-bold">Edit User Access</h5>
                         {{ access_form.csrf_token }}
-                        {{ render_field_with_value(access_form.username, access.username) }}
-                        {{ render_field_with_value(access_form.pin, access.pin) }}
+                        {{ render_field_with_value(access_form.name, access.name) }}
                         {{ render_field_with_value(access_form.role, access.role) }}
                         <button type="submit" class="btn btn-primary">Update</button>
                         <a href="#" class="btn btn-outline-secondary" data-action="hideForm"
@@ -122,11 +112,9 @@
                 </div>
             </form>
             {% endfor %}
+            {% endif %}
         </div>
     </div>
 </section>
-
-
-
 
 {% endblock %}

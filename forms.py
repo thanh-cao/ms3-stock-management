@@ -9,10 +9,7 @@ import datetime
 
 class CustomRegisterForm(RegisterForm):
     name = StringField(label='Name',
-                       validators=[DataRequired()],
-                       render_kw={'placeholder': 'Name'})
-    company_name = StringField(label='Company\'s Name',
-                               render_kw={'placeholder': 'Company\'s Name'})
+                       validators=[DataRequired()])
 
 
 class CustomUserManager(UserManager):
@@ -22,12 +19,9 @@ class CustomUserManager(UserManager):
 
 
 class UserAccess(FlaskForm):
-    username = StringField(validators=[Length(min=5, max=10), DataRequired()],
-                           render_kw={'placeholder': 'Username'},
-                           description='Username between 5 and 10 characters')
-    pin = IntegerField(validators=[Length(min=4, max=6), DataRequired()],
-                       render_kw={'placeholder': 'Pin code'},
-                       description='Choose 4 to 6 digits for pin code')
+    name = StringField(validators=[Length(min=5, max=10), DataRequired()],
+                       render_kw={'placeholder': 'Username'},
+                       description='Username between 5 and 10 characters')
     role = SelectField(choices=[('', 'Choose Role'),
                                 ('admin', 'admin'),
                                 ('staff', 'staff')],
@@ -41,7 +35,7 @@ class CategoryForm(FlaskForm):
 
 
 class SupplierForm(FlaskForm):
-    supplier_name = StringField(DataRequired(), render_kw={
+    supplier_name = StringField(validators=[DataRequired()], render_kw={
                                 'placeholder': 'Supplier\'s name'})
     contact_person = StringField(render_kw={'placeholder': 'Contact person'})
     address = StringField(render_kw={'placeholder': 'Address'})

@@ -13,13 +13,14 @@
                     <a href="{{ url_for('get_products') }}" class="btn btn-outline-secondary">Cancel</a>
                 </form>
                 <ul class="suggestions list-group">
-                    
+
                 </ul>
             </div>
-            
+            {% if 'admin' in current_user.roles %}
             <a class="btn btn-primary mt-4" data-action="showForm" data-target="#createProduct">
                 Create new product
             </a>
+            {% endif %}
         </div>
     </div>
 

@@ -46,7 +46,7 @@
                                     {% if product.stock_change_date.date() == today %}
                                         {{ product.stock_change }}
                                     {% else %}
-                                        0 {{today}}
+                                        0
                                     {% endif %}
                                 </p>
                                 <label class="px-0">Today's change</label>
@@ -58,12 +58,14 @@
                         <a class="btn btn-md btn-primary me-2" data-action="showForm" data-target="#updateStock">
                             Update Stock
                         </a>
+                        {% if 'admin' in current_user.roles %}
                         <a href="#" class="btn btn-md btn-outline-primary text-decoration-none me-2" data-action="showForm" data-target="#editProduct">
                             Edit
                         </a>
                         <a href="{{ url_for('delete_product', product_id=product.id) }}" class="btn btn-md btn-outline-danger">
-                           Delete
+                            Delete
                         </a>
+                        {% endif %}
                     </div>
 
                 </div>

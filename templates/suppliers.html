@@ -49,6 +49,7 @@
                                     </ul>
 
                                     <!-- Action buttons for each supplier  -->
+                                    {% if 'admin' in current_user.roles %}
                                     <div>
                                         <a data-action="showForm" data-target="#edit_supplier"
                                             data-id="{{ supplier.id }}"
@@ -60,6 +61,7 @@
                                             <i class="bi bi-trash" aria-label="Delete supplier"></i>
                                         </a>
                                     </div>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -67,13 +69,16 @@
                         {% endfor %}
                     </div>
 
+                    {% if 'admin' in current_user.roles %}
                     <a class="btn btn-primary mt-4" data-action="showForm" data-target="#create_supplier">
-                        Create new supplier</a>
+                        Create new supplier
+                    </a>
+                    {% endif %}
                 </div>
             </div>
         </div>
 
-
+        {% if 'admin' in current_user.roles %}
         <div class="col-12 col-md-6">
             <form id="create_supplier" class="d-none mt-4 mt-md-0" action="{{ url_for('create_supplier') }}"
                 method="POST">
@@ -112,6 +117,7 @@
                 </div>
             </form>
         </div>
+        {% endif %} 
     </div>
 </section>
 
