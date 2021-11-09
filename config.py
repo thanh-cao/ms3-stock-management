@@ -15,7 +15,7 @@ class ConfigClass(object):
     # Flask-User settings
     USER_ENABLE_EMAIL = True         # Enable email authentication
     USER_ENABLE_USERNAME = False       # Disable username authentication
-    USER_ENABLE_CONFIRM_EMAIL = True  # Disable email after registration
+    USER_ENABLE_CONFIRM_EMAIL = True  # Enable email after registration
     USER_ENABLE_FORGOT_PASSWORD = False  # Disable email after forgot password
     USER_ENABLE_CHANGE_PASSWORD = False  # Disable password change
     USER_SEND_PASSWORD_CHANGED_EMAIL = False  # Disable email password change

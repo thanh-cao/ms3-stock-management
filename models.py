@@ -12,16 +12,13 @@ class User(db.Document, UserMixin):
     email = db.EmailField()
     email_confirmed_at = db.DateTimeField()
     password = db.StringField()
-    company_name = db.StringField()
-    signup_date = db.DateTimeField(default=datetime.datetime.utcnow)
-    roles = db.ListField(db.StringField(), default=[])
-    pin = db.IntField(default=1010)
+    company_name = db.StringField(default='WokBar')
+    roles = db.ListField(db.StringField(), default=['staff'])
     active = db.BooleanField(default=True)
 
 
 class Category(db.Document):
     category_name = db.StringField()
-    company_id = db.ReferenceField('User')
 
 
 class Supplier(db.Document):
@@ -30,7 +27,6 @@ class Supplier(db.Document):
     address = db.StringField()
     phone = db.IntField()
     email = db.EmailField()
-    company_id = db.ReferenceField('User')
 
 
 class Product(db.Document):
@@ -43,7 +39,6 @@ class Product(db.Document):
     current_stock = db.IntField(default=0)
     stock_change = db.IntField(default=0)
     stock_change_date = db.DateTimeField(default=datetime.datetime.now)
-    company_id = db.ReferenceField('User')
 
     def update_stock(self, stock_change):
         # reset stock_change every new day in order to accumulate stock_change

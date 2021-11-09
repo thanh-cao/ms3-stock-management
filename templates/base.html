@@ -42,12 +42,14 @@
                     </ul>
                     <hr>
                     <ul class="nav nav-pills flex-column mb-auto">
+                        {% if 'admin' in current_user.roles %}
                         <li class="nav-item">
                             <a href="{{ url_for('get_categories') }}" class="nav-link text-white">
                                 <i class="bi bi-collection me-2"></i>
                                 <span class="d-md-none d-lg-inline">Categories</span>
                             </a>
                         </li>
+                        {% endif %}
                         <li>
                             <a href="{{ url_for('get_suppliers') }}" class="nav-link text-white">
                                 <i class="bi bi-person-lines-fill me-2"></i>

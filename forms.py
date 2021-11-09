@@ -10,7 +10,6 @@ import datetime
 class CustomRegisterForm(RegisterForm):
     name = StringField(label='Name',
                        validators=[DataRequired()])
-    company_name = StringField(label='Company\'s Name')
 
 
 class CustomUserManager(UserManager):
@@ -39,7 +38,7 @@ class CategoryForm(FlaskForm):
 
 
 class SupplierForm(FlaskForm):
-    supplier_name = StringField(DataRequired(), render_kw={
+    supplier_name = StringField(validators=[DataRequired()], render_kw={
                                 'placeholder': 'Supplier\'s name'})
     contact_person = StringField(render_kw={'placeholder': 'Contact person'})
     address = StringField(render_kw={'placeholder': 'Address'})
