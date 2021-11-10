@@ -32,14 +32,21 @@ user_manager = CustomUserManager(app, db, User)
 @app.route('/')
 @app.route('/index')
 def index():
+    '''
+    Create view for index page. If a user is already logged in,
+    redirect to dashboard
+    '''
     if current_user.is_authenticated:
-        return redirect(url_for('profile'))
+        return redirect(url_for('dashboard'))
     return render_template('index.html')
 
 
-# Create default super_admin role upon registration to account holder/owner
 @user_registered.connect_via(app)
 def create_business(sender, user, **extra):
+    '''
+    Create new business in database and admin role
+    upon registration to account holder/owner
+    '''
     existing_business = Business.objects(
                                  business_name=user.business_name).first()
     if not existing_business:
@@ -47,16 +54,20 @@ def create_business(sender, user, **extra):
                             business_owner=user.id)
         business.save()
         user.business_id = business.id
-        user.save()
-        user.roles.pop('staff')
+        user.account_holder = True
+        user.roles.pop()
         user.roles.append('admin')
         user.save()
 
 
-# Routes for Profile / User access
 @app.route('/profile')
 @login_required
+@roles_required('admin')
 def profile():
+    '''
+    Create view for profile page with forms to edit profile,
+    create new user access, edit user access, and delete user access
+    '''
     account = current_user
     user_access = User.objects(Q(business_id=account.business_id) &
                                Q(roles='admin') | Q(roles='staff'))
@@ -71,29 +82,61 @@ def profile():
 
 @app.route('/profile/edit/<account_id>', methods=['POST'])
 @login_required
+@roles_required('admin')
 def edit_profile(account_id):
+    '''
+    Edit profile of account holder/owner
+    '''
     account = User.objects.get(id=account_id)
+    business = Business.objects.get(id=account.business_id.id)
     if request.method == 'POST':
         updated_profile = {
             'name': request.form.get('name'),
-            'company_name': request.form.get('company_name')
+            'business_name': request.form.get('business_name')
         }
         account.update(**updated_profile)
+        business.update(business_name=request.form.get('business_name'))
         flash('Profile successfully updated')
         return redirect(url_for('profile'))
+
+
+@app.route('/profile/create_access', methods=['POST'])
+@login_required
+@roles_required('admin')
+def create_new_access():
+    '''
+    Create new user access for staff with either staff of admin role
+    '''
+    form = UserAccess()
+    password = form.password.data
+    hashed_password = user_manager.hash_password(password)
+    new_access = User(name=form.name.data,
+                      email=form.email.data,
+                      email_confirmed_at=datetime.datetime.now(),
+                      password=hashed_password,
+                      business_id=current_user.business_id)
+    new_access.save()
+    new_access.roles = []
+    new_access.roles.append(form.role.data)
+    new_access.save()
+    flash('New user access successfully created')
+    return redirect(url_for('profile'))
 
 
 @app.route('/profile/edit_accesss/<access_id>', methods=['POST'])
 @login_required
 @roles_required('admin')
 def edit_access(access_id):
+    '''
+    Edit user access for staff with either staff of admin role
+    '''
     access = User.objects.get(id=access_id)
     access.roles = []
     if request.method == 'POST':
         new_role = request.form.get('role')
         access.roles.append(new_role)
         updated_access = {
-            'username': request.form.get('username'),
+            'name': request.form.get('name'),
             'roles': access.roles
         }
         access.update(**updated_access)
@@ -105,6 +148,9 @@ def edit_access(access_id):
 @login_required
 @roles_required('admin')
 def delete_access(access_id):
+    '''
+    Delete user access for staff with either staff of admin role
+    '''
     access = User.objects.get(id=access_id)
     access.delete()
     return redirect(url_for('profile'))

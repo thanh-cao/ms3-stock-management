@@ -30,7 +30,7 @@ class ConfigClass(object):
 
     # Flask-User redirecting endpoints
     USER_AFTER_REGISTER_ENDPOINT = 'profile'
-    USER_AFTER_LOGIN_ENDPOINT = 'profile'
+    USER_AFTER_LOGIN_ENDPOINT = 'dashboard'
     USER_AFTER_LOGOUT_ENDPOINT = 'user.login'
 
     # Flask-User templates endpoints

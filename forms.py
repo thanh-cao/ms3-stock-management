@@ -34,8 +34,11 @@ class CustomUserManager(UserManager):
 
 class UserAccess(FlaskForm):
     name = StringField(validators=[Length(min=5, max=10), DataRequired()],
-                       render_kw={'placeholder': 'Username'},
-                       description='Username between 5 and 10 characters')
+                       render_kw={'placeholder': 'Name'})
+    email = EmailField(validators=[Email(), DataRequired()],
+                          render_kw={'placeholder': 'Email'})
+    password = PasswordField(validators=[DataRequired()],
+                                render_kw={'placeholder': 'Password'})
     role = SelectField(choices=[('', 'Choose Role'),
                                 ('admin', 'admin'),
                                 ('staff', 'staff')],

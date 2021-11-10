@@ -13,7 +13,6 @@ class Business(db.Document):
 
 class User(db.Document, UserMixin):
     name = db.StringField(default='')
-    username = db.StringField()
     email = db.EmailField()
     email_confirmed_at = db.DateTimeField()
     password = db.StringField()
@@ -21,6 +20,7 @@ class User(db.Document, UserMixin):
     roles = db.ListField(db.StringField(), default=['staff'])
     active = db.BooleanField(default=True)
     business_id = db.ReferenceField('Business')
+    account_holder = db.BooleanField(default=False)
 
 
 class Category(db.Document):
