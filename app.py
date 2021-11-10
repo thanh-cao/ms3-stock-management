@@ -40,7 +40,8 @@ def index():
 # Create default super_admin role upon registration to account holder/owner
 @user_registered.connect_via(app)
 def create_business(sender, user, **extra):
-    existing_business = Business.objects(business_name=user.business_name).first()
+    existing_business = Business.objects(
+                                 business_name=user.business_name).first()
     if not existing_business:
         business = Business(business_name=user.business_name,
                             business_owner=user.id)
@@ -119,7 +120,7 @@ def delete_access(access_id):
 @login_required
 def get_categories():
     form = CategoryForm()
-    categories = Category.objects()
+    categories = Category.objects(business_id=current_user.business_id)
     return render_template('categories.html', categories=categories, form=form)
 
 
@@ -129,7 +130,8 @@ def get_categories():
 def create_category():
     if request.method == 'POST':
         new_category = Category(
-            category_name=request.form.get('category_name'))
+            category_name=request.form.get('category_name'),
+            business_id=current_user.business_id)
         new_category.save()
         return redirect(url_for('get_categories'))
 
@@ -163,7 +165,7 @@ def delete_category(category_id):
 
 @app.route('/suppliers')
 def get_suppliers():
-    suppliers = Supplier.objects()
+    suppliers = Supplier.objects(business_id=current_user.business_id)
     form = SupplierForm()
     return render_template('suppliers.html', suppliers=suppliers, form=form)
 
@@ -178,7 +180,8 @@ def create_supplier():
             contact_person=request.form.get('contact_person'),
             address=request.form.get('address'),
             phone=request.form.get('phone'),
-            email=request.form.get('email'))
+            email=request.form.get('email'),
+            business_id=current_user.business_id)
         new_supplier.save()
         return redirect(url_for('get_suppliers'))
 
@@ -219,14 +222,15 @@ def delete_supplier(supplier_id):
 def get_products():
     # Create new product form and choices for select fields
     form = ProductForm()
-    categories = Category.objects()
-    suppliers = Supplier.objects()
-    products = Product.objects()
+    categories = Category.objects(business_id=current_user.business_id)
+    suppliers = Supplier.objects(business_id=current_user.business_id)
+    products = Product.objects(business_id=current_user.business_id)
     form.category_id.choices = [(category.id, category.category_name)
                                 for category in categories]
     form.supplier_id.choices = [(supplier.id, supplier.supplier_name)
                                 for supplier in suppliers]
     today = datetime.datetime.now().date()  # to find stock_change for today
+
     return render_template('products.html',
                            products=products,
                            categories=categories,
@@ -245,7 +249,8 @@ def create_product():
             supplier_id=request.form.get('supplier_id'),
             unit_of_measurement=request.form.get('unit_of_measurement'),
             min_stock_allowed=request.form.get('min_stock_allowed'),
-            current_stock=request.form.get('current_stock'))
+            current_stock=request.form.get('current_stock'),
+            business_id=current_user.business_id)
         new_product.save()
 
         flash('New product successfully created')
@@ -256,14 +261,15 @@ def create_product():
 @login_required
 def product_details(product_id):
     form = ProductForm()
-    categories = Category.objects()
-    suppliers = Supplier.objects()
+    categories = Category.objects(business_id=current_user.business_id)
+    suppliers = Supplier.objects(business_id=current_user.business_id)
     form.category_id.choices = [(category.id, category.category_name)
                                 for category in categories]
     form.supplier_id.choices = [(supplier.id, supplier.supplier_name)
                                 for supplier in suppliers]
     product = Product.objects.get(id=product_id)
     today = datetime.datetime.now().date()
+
     return render_template('product-details.html', product=product,
                            form=form, today=today)
 
@@ -314,7 +320,8 @@ def update_stock(product_id):
 @login_required
 def search_product():
     query = request.form.get('query')
-    filtered_products = Product.objects(name__icontains=query)
+    filtered_products = Product.objects(name__icontains=query,
+                                        business_id=current_user.business_id)
     return jsonify(filtered_products)
 
 
@@ -323,9 +330,9 @@ def search_product():
 def ajax():
     collection = request.form.get('collection')
     if collection == 'Product':
-        query = Product.objects()
+        query = Product.objects(business_id=current_user.business_id)
     if collection == 'Supplier':
-        query = Supplier.objects()
+        query = Supplier.objects(business_id=current_user.business_id)
     return jsonify(query)
 
 
@@ -337,8 +344,8 @@ def ajax():
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    products = Product.objects()
-    pending_stocks = PendingStock.objects()
+    products = Product.objects(business_id=current_user.business_id)
+    pending_stocks = PendingStock.objects(business_id=current_user.business_id)
 
     # Create a list of products that need to be restocked now
     # and products with stock change today
@@ -369,7 +376,7 @@ def dashboard():
 def create_pending_stock():
     form = PendingStockForm()  # the main form to be saved in database
     product_form = AddProduct()  # add products to pending stock form
-    suppliers = Supplier.objects()
+    suppliers = Supplier.objects(business_id=current_user.business_id)
     form.supplier_id.choices = [(supplier.id, supplier.supplier_name)
                                 for supplier in suppliers]
 
@@ -383,7 +390,8 @@ def create_pending_stock():
                         delivery_date=form.delivery_date.data,
                         created_date=datetime.datetime.now().date(),
                         created_by=current_user.id,
-                        product_list=product_list)
+                        product_list=product_list,
+                        business_id=current_user.business_id)
         pending_stock.save()
         session.pop('pending')
         return redirect(url_for('dashboard'))
