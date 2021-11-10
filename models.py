@@ -6,19 +6,26 @@ import datetime
 db = MongoEngine()
 
 
+class Business(db.Document):
+    business_name = db.StringField(required=True)
+    business_owner = db.ReferenceField('User')
+
+
 class User(db.Document, UserMixin):
     name = db.StringField(default='')
-    username = db.StringField()
     email = db.EmailField()
     email_confirmed_at = db.DateTimeField()
     password = db.StringField()
-    company_name = db.StringField(default='WokBar')
+    business_name = db.StringField()
     roles = db.ListField(db.StringField(), default=['staff'])
     active = db.BooleanField(default=True)
+    business_id = db.ReferenceField('Business')
+    account_holder = db.BooleanField(default=False)
 
 
 class Category(db.Document):
     category_name = db.StringField()
+    business_id = db.ReferenceField('Business')
 
 
 class Supplier(db.Document):
@@ -27,10 +34,11 @@ class Supplier(db.Document):
     address = db.StringField()
     phone = db.IntField()
     email = db.EmailField()
+    business_id = db.ReferenceField('Business')
 
 
 class Product(db.Document):
-    name = db.StringField(unique=True, required=True)
+    name = db.StringField(required=True)
     category_id = db.ReferenceField('Category', required=True)
     brand = db.StringField()
     supplier_id = db.ReferenceField('Supplier', required=True)
@@ -39,6 +47,7 @@ class Product(db.Document):
     current_stock = db.IntField(default=0)
     stock_change = db.IntField(default=0)
     stock_change_date = db.DateTimeField(default=datetime.datetime.now)
+    business_id = db.ReferenceField('Business')
 
     def update_stock(self, stock_change):
         # reset stock_change every new day in order to accumulate stock_change
@@ -59,3 +68,4 @@ class PendingStock(db.Document):
     created_by = db.ReferenceField('User')
     product_list = db.ListField()
     is_approved = db.BooleanField(default=False)
+    business_id = db.ReferenceField('Business')

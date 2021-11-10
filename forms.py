@@ -1,3 +1,4 @@
+from models import Business
 from flask_wtf import FlaskForm
 from flask_user import UserManager
 from flask_user.forms import RegisterForm
@@ -7,9 +8,22 @@ from wtforms.fields.html5 import EmailField, DateField
 import datetime
 
 
+def unique_business_validator(form, field):
+    '''
+    Form validation that the business name is unique.
+    '''
+    existing_business = Business.objects(business_name=field.data).first()
+
+    if existing_business:
+        raise ValidationError('Business name already exists.')
+
+
 class CustomRegisterForm(RegisterForm):
     name = StringField(label='Name',
                        validators=[DataRequired()])
+    business_name = StringField(label='Business Name',
+                                validators=[DataRequired(),
+                                            unique_business_validator])
 
 
 class CustomUserManager(UserManager):
@@ -20,8 +34,11 @@ class CustomUserManager(UserManager):
 
 class UserAccess(FlaskForm):
     name = StringField(validators=[Length(min=5, max=10), DataRequired()],
-                       render_kw={'placeholder': 'Username'},
-                       description='Username between 5 and 10 characters')
+                       render_kw={'placeholder': 'Name'})
+    email = EmailField(validators=[Email(), DataRequired()],
+                          render_kw={'placeholder': 'Email'})
+    password = PasswordField(validators=[DataRequired()],
+                                render_kw={'placeholder': 'Password'})
     role = SelectField(choices=[('', 'Choose Role'),
                                 ('admin', 'admin'),
                                 ('staff', 'staff')],
