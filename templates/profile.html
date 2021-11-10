@@ -18,15 +18,11 @@
                         <label>Name</label>
                     </div>
                     <div class="form-floating">
-                        <p class="card-text form-control border-0 mb-1">{{ account.username }}</p>
-                        <label>Username</label>
-                    </div>
-                    <div class="form-floating">
                         <p class="card-text form-control border-0 mb-1">{{ account.email }}</p>
                         <label>Email Address</label>
                     </div>
                     <div class="form-floating">
-                        <p class="card-text form-control border-0 mb-1">{{ account.company_name }}</p>
+                        <p class="card-text form-control border-0 mb-1">{{ account.business_name }}</p>
                         <label>Company's Name</label>
                     </div>
                     <a class="btn btn-primary" data-action="showForm" data-target="#profileForm">Edit Profile</a>
@@ -49,17 +45,13 @@
                     </div>
                     {% for access in user_access %}
                     <!-- There is one super admin in the system which is hidden and shall not be touched -->
-                    {% if 'super-admin'  not in access.roles %}
+                    
                     <div class="row mt-2 align-items-center">
                         <div class="col-6">
                             {{ access.name }}
                         </div>
                         <div class="col-3">
-                            {% if 'admin' in access.roles %}                           
-                            Admin
-                            {% else %}
-                            Staff
-                            {% endif %}
+                            {{ access.roles }}
                         </div>
                         <div class="col-3">
                             <a data-action="showForm" data-target="#editUserAccessForm{{ access.id }}" class="text-decoration-none btn btn-sm btn-outline-primary">
@@ -70,7 +62,7 @@
                             </a>
                         </div>
                     </div>
-                    {% endif %}
+                    
                     {% endfor %}
 
                     <!-- <a href="#" class="btn btn-primary mt-4" data-action="showForm" data-target="#userAccessForm"> -->

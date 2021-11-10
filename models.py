@@ -6,15 +6,21 @@ import datetime
 db = MongoEngine()
 
 
+class Business(db.Document):
+    business_name = db.StringField(required=True)
+    business_owner = db.ReferenceField('User')
+
+
 class User(db.Document, UserMixin):
     name = db.StringField(default='')
     username = db.StringField()
     email = db.EmailField()
     email_confirmed_at = db.DateTimeField()
     password = db.StringField()
-    company_name = db.StringField(default='WokBar')
+    business_name = db.StringField()
     roles = db.ListField(db.StringField(), default=['staff'])
     active = db.BooleanField(default=True)
+    business_id = db.ReferenceField('Business')
 
 
 class Category(db.Document):

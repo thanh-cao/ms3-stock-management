@@ -38,10 +38,18 @@ def index():
 
 
 # Create default super_admin role upon registration to account holder/owner
-# @user_registered.connect_via(app)
-# def create_admin(sender, user, **extra):
-#     user.roles.append('super_admin')
-#     user.save()
+@user_registered.connect_via(app)
+def create_business(sender, user, **extra):
+    existing_business = Business.objects(business_name=user.business_name).first()
+    if not existing_business:
+        business = Business(business_name=user.business_name,
+                            business_owner=user.id)
+        business.save()
+        user.business_id = business.id
+        user.save()
+        user.roles.pop('staff')
+        user.roles.append('admin')
+        user.save()
 
 
 # Routes for Profile / User access
@@ -49,7 +57,8 @@ def index():
 @login_required
 def profile():
     account = current_user
-    user_access = User.objects(Q(roles='admin') | Q(roles='staff'))
+    user_access = User.objects(Q(business_id=account.business_id) &
+                               Q(roles='admin') | Q(roles='staff'))
     account_form = CustomRegisterForm()
     access_form = UserAccess()
     return render_template('profile.html',
