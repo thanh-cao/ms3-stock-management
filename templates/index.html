@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
-{% block content %}
+{% block body %}
 <header>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light px-3 px-md-5">
+    <nav class="navbar navbar-expand-lg navbar-light px-3 px-md-5">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Stock MGMT</a>
+            <a class="navbar-brand" href="{{ url_for('index') }}">Stock MGMT</a>
 
             <ul class="navbar-nav d-flex flex-row">
                 <li class="nav-item">
@@ -16,6 +16,100 @@
         </div>
     </nav>
 </header>
-<h2>Index page</h2>
 
+<main>
+    <section class="container mt-4 hero-section">
+        <div class="row align-items-center">
+            <div class="col-12 col-md-6 col-lg-7 text-md-center text-start">
+                <div class="hero-text">
+                    <h1 class="hero-heading text-center">
+                        <span class="d-block fw-bold">Stock management</span>
+                        <span class="d-block fw-bold text-primary">simplified</span>
+                    </h1>
+                    <p>StockMGMT is a simple stock management application which helps small businesses take control
+                        of their inventory.</p>
+                </div>
+                <div class="text-center my-3">
+                    <a href="{{ url_for('user.register') }}" class="btn btn-primary px-4 py-2">Get started</a>
+                    <a href="#features" class="btn btn-outline-primary px-4 py-2">Learn more</a>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-5 mt-4 mt-md-0">
+                <img src="{{ url_for('static', filename='img/hero-image.jpg') }}" alt="Stock Management"
+                    class="img-fluid">
+            </div>
+        </div>
+
+    </section>
+
+    <section id="features" class="container mt-5">
+        <div class="row">
+            <h2 class="section-title">Features</h2>
+            <p>StockMGMT is a web-based with built-in features tailored towards small businesses to help business
+                owners build a central database of what's available in their storage. StockMGMT lifts the burden of
+                managing
+                inventory with traditional spreadsheets and save valuable management time so that business owners
+                can focus
+                more on building their business.</p>
+            </p>
+        </div>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 mt-5">
+            {% for feature in features %}
+            <div class="col mb-3">
+                <div class="card card-body p-4 h-100 my-auto">
+                    <p class="fw-bold fs-5">
+                        <i class="bi {{ feature.icon }} text-primary me-2"></i>
+                        {{ feature.title }}
+                    </p>
+                    <p class="feature-text">{{ feature.description }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="container-fluid mt-5 p-4 bg-light">
+        <div class="row">
+            <h2 class="section-title">Testimonials</h2>
+        </div>
+
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            {% for testimonial in testimonials %}
+            <div class="col mb-3">
+                <div class="card">
+                    <img src="{{ testimonial.img }}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <figure>
+                            <blockquote class="blockquote">
+                                <p class="card-text fs-6">{{ testimonial.text }}</p>
+                            </blockquote>
+                            <figcaption class="blockquote-footer">
+                                {{ testimonial.person }} from <span><em>{{ testimonial.company }}</em></span>
+                            </figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="container-fluid mt-5 p-4 bg-light">
+        <div class="row text-center">
+            <h2 class="section-title">
+                <span class="d-block">Keep StockMGMT centralized.</span>
+                <span class="d-block">Keep StockMGMT simplified.</span></h2>
+            <div class="divider"></div>
+            <p>Thousands of small businesses have taken advantage over simplicity to take control over their stock
+                management. Take your turn today!</p>
+            <div>
+                <a href="{{ url_for('user.register') }}" class="btn btn-lg btn-primary px-4 py-2">Get started now!</a>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="text-center bg-light p-4">
+    <p>Copyright &copy; <a href="{{ url_for('index') }}" class="text-decoration-none">StockMGMT 2021</a></p>
+</footer>
 {% endblock %}

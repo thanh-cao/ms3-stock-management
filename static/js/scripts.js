@@ -24,10 +24,35 @@ closeSidenav = () => {
     $('body').css('backgroundColor', 'rgb(255,255,255)');
 };
 
+// Function to send ajax request to get data from database based on collection and ObjectId.
+// The data is then set to the form's inputs by matching the input's name with the database's field name.
+function setValueToFormInputs(form, targetCollection, ObjectId) {
+    const collection = targetCollection.split('_')[1];
+
+    $.ajax({
+        url: '/ajax',
+        type: 'POST',
+        data: {
+            collection: collection,
+            id: ObjectId
+        }
+    })
+        .done(data => {
+            formElements = form[0].elements;
+            console.log(formElements);
+            Object.keys(data).forEach(key => {
+                if (formElements[key]) {
+                    formElements[key].value = data[key];
+                    console.log(formElements[key]);
+                    console.log(data[key]);
+                }
+            })
+        })
+}
+
 function showForm(target) {
     target = $(this).attr('data-target');
     $(`${target}`).toggleClass('d-none');
-    location.href = `${target}`;
 
     // If the show has data-id attribute, create a dynamic form's action based on data-id
     if ($(this).attr('data-id')) {
@@ -35,6 +60,11 @@ function showForm(target) {
         actionRoute = baseRoute + $(this).attr('data-id');
         $(`form${target}`).attr('action', actionRoute);
     };
+
+    // if the form's action is to edit, query the database using ID and set the value to form's inputs
+    if (target.includes('edit')) {
+        setValueToFormInputs($(`form${target}`), target, $(this).attr('data-id'));
+    }
 }
 
 function hideForm(target) {

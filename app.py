@@ -1,4 +1,6 @@
 import os
+import sys
+import json
 from flask import (
     Flask, flash, render_template,
     redirect, request, session, url_for, jsonify)
@@ -38,7 +40,17 @@ def index():
     '''
     if current_user.is_authenticated:
         return redirect(url_for('dashboard'))
-    return render_template('index.html')
+
+    # Get json data for feature section on index page
+    features = []
+    testimonials = []
+    with open('data/features.json', 'r') as features_data:
+        features = json.load(features_data)
+    with open('data/testimonials.json', 'r') as testimonials_data:
+        testimonials = json.load(testimonials_data)
+
+    return render_template('index.html', features=features,
+                           testimonials=testimonials)
 
 
 @user_registered.connect_via(app)
@@ -349,13 +361,13 @@ def delete_product(product_id):
     return redirect(url_for('get_products'))
 
 
-@app.route('/update_stock/<product_id>', methods=['POST'])
+@app.route('/edit_product_stock/<product_id>', methods=['POST'])
 @login_required
 def update_stock(product_id):
     product = Product.objects.get(id=product_id)
     if request.method == 'POST':
-        stock_change = int(request.form.get('stock_change'))
-        product.update_stock(stock_change)
+        stock_update = int(request.form.get('stock_update'))
+        product.update_stock(stock_update)
         product.save()
         flash('Stock successfully updated')
         return redirect(request.referrer)
@@ -366,19 +378,28 @@ def update_stock(product_id):
 @login_required
 def search_product():
     query = request.form.get('query')
+    print(query)
     filtered_products = Product.objects(name__icontains=query,
                                         business_id=current_user.business_id)
+    print(filtered_products)
     return jsonify(filtered_products)
+
+
+def str_to_class(classname):
+    '''Function to  convert string to Class object take from StackOverflow'''
+    return getattr(sys.modules[__name__], classname)
 
 
 @csrf.exempt
 @app.route('/ajax', methods=['POST'])
 def ajax():
-    collection = request.form.get('collection')
-    if collection == 'Product':
-        query = Product.objects(business_id=current_user.business_id)
-    if collection == 'Supplier':
-        query = Supplier.objects(business_id=current_user.business_id)
+    collection = request.form.get('collection').capitalize()
+    id = request.form.get('id')
+    if id:
+        query = str_to_class(collection).objects.get(id=id)
+    else:
+        query = str_to_class(collection).objects(
+                                         business_id=current_user.business_id)
     return jsonify(query)
 
 
@@ -390,6 +411,7 @@ def ajax():
 @app.route('/dashboard')
 @login_required
 def dashboard():
+    form = ProductForm()
     products = Product.objects(business_id=current_user.business_id)
     pending_stocks = PendingStock.objects(business_id=current_user.business_id)
 
@@ -413,7 +435,8 @@ def dashboard():
     return render_template('dashboard.html',
                            stock_change_product=stock_change_product,
                            restocks=restocks,
-                           pending_stocks=pending_stocks)
+                           pending_stocks=pending_stocks,
+                           form=form)
 
 
 @app.route('/pending-stock/create', methods=['GET', 'POST'])

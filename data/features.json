@@ -1,0 +1,32 @@
+[
+    {
+        "title": "Staff access",
+        "description": "Create assess to your staff with access privileges based on their role.",
+        "icon": "bi-person-plus-fill"
+    },
+    {
+        "title": "Supplier management",
+        "description": "See all your current suppliers and their contact information.",
+        "icon": "bi-person-lines-fill"
+    },
+    {
+        "title": "Product database",
+        "description": "See all of products existing in your storage with detailed information and categorized by product categories.",
+        "icon": "bi-person-lines-fill"
+    },
+    {
+        "title": "Stock flow",
+        "description": "Track stock flow as staff takes products out from the storage or receives incoming deliveries, and see how much stock is still available.",
+        "icon": "bi-arrow-left-right"
+    },
+    {
+        "title": "Notifications",
+        "description": "Be notified when a product has reached its minimum stock avaiable allowed so you can restock in time.",
+        "icon": "bi-bell-fill"
+    },
+    {
+        "title": "Dashboard",
+        "description": "Centralized dashboard for notifcations and stock change as well as upcoming inbound deliveries.",
+        "icon": "bi-speedometer2"
+    }
+]
