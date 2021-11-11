@@ -119,8 +119,8 @@
                     </div>
 
 
-                    {% if stock_change_product and stock_change_product|length > 0 %}
                     <div class="product-list">
+                    {% if stock_change_product and stock_change_product|length > 0 %}
                         <div class="row align-items-center border-bottom mb-2 g-0">
                             <div class="col-6">
                                 <span class="text-muted ps-2">Product Name</span>
@@ -146,8 +146,8 @@
                                 {{ product.stock_change }}
                             </div>
                             <div class="col-2">
-                                <a class="btn text-primary p-0" data-action="showForm" data-target="#update_stock"
-                                    data-id="">
+                                <a class="btn text-primary p-0" data-action="showForm" data-target="#edit_product_stock"
+                                    data-id="{{ product.id }}">
                                     Update Stock
                                 </a>
                             </div>
@@ -159,7 +159,27 @@
             </div>
         </div>
 
-        <div class="col-12 col-md-4"></div>
+        <div class="col-12 col-md-4">
+            <form id="edit_product_stock" class="d-none mt-4 mt-md-0" action="" method="POST">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Update Stock</h5>
+                        {{ form.csrf_token }}
+                        <div class="form-floating">
+                            {{ form.name(class='form-control border-0 bg-white', readonly='true') }}
+                            <label>Product Name</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="number" class='form-control' id="stock_update" name="stock_update">
+                            <label>Stock Change</label>
+                        </div>
+                        {{ render_submit_btn(form.submit) }}
+                        <a href="#" class="btn btn-outline-secondary" data-action="hideForm"
+                            data-target="#edit_product_stock">Cancel</a>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 </section>
 <!-- End of stock update section  -->

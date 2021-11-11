@@ -1,4 +1,5 @@
-import os, sys
+import os
+import sys
 from flask import (
     Flask, flash, render_template,
     redirect, request, session, url_for, jsonify)
@@ -386,7 +387,8 @@ def ajax():
     if id:
         query = str_to_class(collection).objects.get(id=id)
     else:
-        query = str_to_class(collection).objects(business_id=current_user.business_id)
+        query = str_to_class(collection).objects(
+                                         business_id=current_user.business_id)
     return jsonify(query)
 
 
@@ -398,6 +400,7 @@ def ajax():
 @app.route('/dashboard')
 @login_required
 def dashboard():
+    form = ProductForm()
     products = Product.objects(business_id=current_user.business_id)
     pending_stocks = PendingStock.objects(business_id=current_user.business_id)
 
@@ -421,7 +424,8 @@ def dashboard():
     return render_template('dashboard.html',
                            stock_change_product=stock_change_product,
                            restocks=restocks,
-                           pending_stocks=pending_stocks)
+                           pending_stocks=pending_stocks,
+                           form=form)
 
 
 @app.route('/pending-stock/create', methods=['GET', 'POST'])

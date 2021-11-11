@@ -51,7 +51,7 @@ function displayProductList(productLists) {
                     ${stockChange}
                 </div>
                 <div class="col-2">
-                    <a class="btn text-primary p-0" data-action="showForm" data-target="#update_stock"
+                    <a class="btn text-primary p-0" data-action="showForm" data-target="#edit_product_stock"
                         data-id="${product._id.$oid}">
                         Update Stock
                     </a>
