@@ -39,7 +39,7 @@ class UserAccess(FlaskForm):
                           render_kw={'placeholder': 'Email'})
     password = PasswordField(validators=[DataRequired()],
                                 render_kw={'placeholder': 'Password'})
-    role = SelectField(choices=[('', 'Choose Role'),
+    roles = SelectField(choices=[('', 'Choose Role'),
                                 ('admin', 'admin'),
                                 ('staff', 'staff')],
                        validators=[AnyOf('admin', 'staff')])

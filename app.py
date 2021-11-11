@@ -1,4 +1,4 @@
-import os
+import os, sys
 from flask import (
     Flask, flash, render_template,
     redirect, request, session, url_for, jsonify)
@@ -349,13 +349,13 @@ def delete_product(product_id):
     return redirect(url_for('get_products'))
 
 
-@app.route('/update_stock/<product_id>', methods=['POST'])
+@app.route('/edit_product_stock/<product_id>', methods=['POST'])
 @login_required
 def update_stock(product_id):
     product = Product.objects.get(id=product_id)
     if request.method == 'POST':
-        stock_change = int(request.form.get('stock_change'))
-        product.update_stock(stock_change)
+        stock_update = int(request.form.get('stock_update'))
+        product.update_stock(stock_update)
         product.save()
         flash('Stock successfully updated')
         return redirect(request.referrer)
@@ -366,19 +366,27 @@ def update_stock(product_id):
 @login_required
 def search_product():
     query = request.form.get('query')
+    print(query)
     filtered_products = Product.objects(name__icontains=query,
                                         business_id=current_user.business_id)
+    print(filtered_products)
     return jsonify(filtered_products)
+
+
+def str_to_class(classname):
+    '''Function to  convert string to Class object take from StackOverflow'''
+    return getattr(sys.modules[__name__], classname)
 
 
 @csrf.exempt
 @app.route('/ajax', methods=['POST'])
 def ajax():
-    collection = request.form.get('collection')
-    if collection == 'Product':
-        query = Product.objects(business_id=current_user.business_id)
-    if collection == 'Supplier':
-        query = Supplier.objects(business_id=current_user.business_id)
+    collection = request.form.get('collection').capitalize()
+    id = request.form.get('id')
+    if id:
+        query = str_to_class(collection).objects.get(id=id)
+    else:
+        query = str_to_class(collection).objects(business_id=current_user.business_id)
     return jsonify(query)
 
 
