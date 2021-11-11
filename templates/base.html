@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
+{% block head %}
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -17,7 +17,9 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
     <title>Stock Management App</title>
 </head>
+{% endblock %}
 
+{% block body %}
 <body>
 
     <!-- navigations for logged in users / dashboard navigation -->
@@ -133,5 +135,5 @@
     {% block javascript %}
     {% endblock %}
 </body>
-
+{% endblock %}
 </html>

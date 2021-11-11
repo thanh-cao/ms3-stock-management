@@ -1,0 +1,26 @@
+[
+    {
+        "img": "../static/img/testimonial-kim.jpg",
+        "text": "StockMGMT helps me keep tracking of the stock going in and coming out of the storage room anytime, anywhere.",
+        "person": "Kim",
+        "company": "Chillax Coffee and Bakery"
+    },
+    {
+        "img": "../static/img/testimonial-joshua.jpg",
+        "text": "As a home-decor shop owner, we have a lot of different products with stock levels changing every hour everyday. StockMGMT has simplified the tracking process with clean and intuitive user interface.",
+        "person": "Joshua",
+        "company": "Lovely Dovey Home"
+    },
+    {
+        "img": "../static/img/testimonial-ali.jpg",
+        "text": "It's great that StockMGMT is very easy to use since I am not very good at technology. Very great that I see right away if a product has reached its minimum level so that I can restock right away.",
+        "person": "Alireza",
+        "company": "AliShoes"
+    },
+    {
+        "img": "../static/img/testimonial-laura.jpg",
+        "text": "Such a great stock management app that suits my needs as a small fashion shop owner. I can easily check the stock level without having to manually go through the entire storage room to count.",
+        "person": "Laura",
+        "company": "A Chic Chick"
+    }
+]

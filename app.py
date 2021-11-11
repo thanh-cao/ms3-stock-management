@@ -1,5 +1,6 @@
 import os
 import sys
+import json
 from flask import (
     Flask, flash, render_template,
     redirect, request, session, url_for, jsonify)
@@ -39,7 +40,17 @@ def index():
     '''
     if current_user.is_authenticated:
         return redirect(url_for('dashboard'))
-    return render_template('index.html')
+
+    # Get json data for feature section on index page
+    features = []
+    testimonials = []
+    with open('data/features.json', 'r') as features_data:
+        features = json.load(features_data)
+    with open('data/testimonials.json', 'r') as testimonials_data:
+        testimonials = json.load(testimonials_data)
+
+    return render_template('index.html', features=features,
+                           testimonials=testimonials)
 
 
 @user_registered.connect_via(app)
