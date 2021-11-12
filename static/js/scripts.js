@@ -55,6 +55,7 @@ function setValueToFormInputs(form, targetCollection, ObjectId) {
 function showForm(target) {
     target = $(this).attr('data-target');
     $(`${target}`).toggleClass('d-none');
+    document.querySelector(target).scrollIntoView({behavior: 'smooth', block: 'center'});
 
     // If the show has data-id attribute, create a dynamic form's action based on data-id
     if ($(this).attr('data-id')) {

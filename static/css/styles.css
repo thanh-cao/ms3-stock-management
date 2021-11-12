@@ -39,26 +39,25 @@ body {
     color: var(--bs-primary);
 }
 
-/* side navigation bar on mobile screen */
-@media only screen and (max-width : 540px) {
-    nav.sidenav {
-        width: 0;
-        padding: 0;
-        transition: 0.5s;
-    }
+.sidenav .nav-link {
+    color: var(--bs-white);
+    display: flex;
+    align-items: center;
+}
 
-    nav.sidenav.show {
-        width: 180px;
-        position: fixed;
-        z-index: 1;
-        top: 0;
-        left: 0;
-    }
+.sidenav .nav-link:focus,
+.sidenav .nav-link:hover {
+    color: var(--bs-primary);
+    background: var(--bs-white);
+}
 
-    div.mobile {
-        width: 100%;
-        position: relative;
-    }
+.sidenav .nav-link.active {
+    color: var(--bs-primary);
+    background: var(--bs-white);
+}
+
+.sidenav .nav-link i {
+    margin-right: 0.7rem;;
 }
 
 /* index page */
@@ -173,6 +172,29 @@ i.bi-plus-circle:hover {
 }
 
 /* media queries */
+/** side navigation bar on mobile screen **/
+@media only screen and (max-width : 540px) {
+    nav.sidenav {
+        width: 0;
+        padding: 0;
+        transition: 0.5s;
+    }
+
+    nav.sidenav.show {
+        width: 180px;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+    }
+
+    div.mobile {
+        width: 100%;
+        position: relative;
+    }
+}
+
+/** index page **/
 @media (min-width: 1200px) {
     .hero-image {
         width: 75%;

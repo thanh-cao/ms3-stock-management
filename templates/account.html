@@ -25,7 +25,7 @@
                         <p class="card-text form-control border-0 mb-1">{{ account.business_id.business_name }}</p>
                         <label>Company's Name</label>
                     </div>
-                    <a class="btn btn-primary" data-action="showForm" data-target="#profileForm">Edit Profile</a>
+                    <a class="btn btn-primary" data-action="showForm" data-target="#accountForm">Edit Account</a>
                 </div>
             </div>
 
@@ -54,7 +54,7 @@
                             {{ role|capitalize }}
                             {% endfor %}
                         </div>
-                        <div class="col-3">
+                        <div class="col-3 px-0">
                             <a data-action="showForm" data-target="#edit_user" data-id="{{ access.id }}"
                                 class="text-decoration-none btn btn-sm btn-outline-primary">
                                 <i class="bi bi-pencil-square" aria-label="Edit current user access"></i>
@@ -75,18 +75,18 @@
         </div>
 
         <div class="col-12 col-md-6">
-            <form id="profileForm" class="d-none mt-4 mt-md-0"
-                action="{{ url_for('edit_profile', account_id=account.id) }}" method="POST">
+            <form id="accountForm" class="d-none mt-4 mt-md-0"
+                action="{{ url_for('edit_account', account_id=account.id) }}" method="POST">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title fw-bold">Edit Profile</h5>
+                        <h5 class="card-title fw-bold">Edit Account</h5>
                         {{ account_form.csrf_token }}
 
                         {{ render_field_with_value(account_form.name, current_user.name) }}
                         {{ render_field_with_value(account_form.business_name, current_user.business_id.business_name) }}
                         <button type="submit" class="btn btn-primary">Update</button>
                         <a href="#" class="btn btn-outline-secondary" data-action="hideForm"
-                            data-target="#profileForm">Cancel</a>
+                            data-target="#accountForm">Cancel</a>
                     </div>
                 </div>
             </form>
@@ -104,7 +104,7 @@
                         {{ render_field(access_form.roles) }}
                         <button type="submit" class="btn btn-primary">Create new</button>
                         <a href="#" class="btn btn-outline-secondary" data-action="hideForm"
-                            data-target="#profileForm">Cancel</a>
+                            data-target="#accountForm">Cancel</a>
                     </div>
                 </div>
             </form>

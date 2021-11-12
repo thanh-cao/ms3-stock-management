@@ -28,46 +28,45 @@
     <div class="container-fluid">
         <div class="row flex-nowrap">
             <!-- side navigation bar -->
-            <nav class="sidenav col-md-1 col-lg-2 bg-primary px-sm-2 px-0">
-                <div
-                    class="d-flex flex-column align-items-md-center align-items-lg-start text-white bg-primary min-vh-100">
-                    <ul class="nav flex-column text-white text-decoration-none">
-                        <li class="fs-4">
-                            <span class="d-md-none d-lg-inline">Username</span>
+            <nav class="sidenav col-1 col-lg-2 bg-primary px-sm-2 px-0 pt-5">
+                <div class="d-flex flex-column align-items-md-center align-items-lg-start bg-primary min-vh-100">
+                    <ul class="nav nav-pills flex-column text-decoration-none">
+                        <li class="fs-4 px-3 text-center text-white">
+                            <span class="d-sm-none d-lg-inline">{{ current_user.name }}</span>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" href="#">
-                                <i class="bi bi-power me-2"></i>
-                                <span class="d-md-none d-lg-inline">Log Off</span>
+                        <li class="nav-item pt-sm-5 pt-lg-0">
+                            <a class="nav-link" href="{{ url_for('user.logout') }}" class="nav-link">
+                                <i class="bi bi-power"></i>
+                                <span class="d-sm-none d-lg-inline">Sign out</span>
                             </a>
                         </li>
-                    </ul>
-                    <hr>
-                    <ul class="nav nav-pills flex-column mb-auto">
+
+                        <div class="my-4"></div>
+
                         {% if 'admin' in current_user.roles %}
-                        <li class="nav-item">
-                            <a href="{{ url_for('get_categories') }}" class="nav-link text-white">
-                                <i class="bi bi-collection me-2"></i>
-                                <span class="d-md-none d-lg-inline">Categories</span>
+                        <li class="nav-item mb-2">
+                            <a href="{{ url_for('get_categories') }}" class="nav-link{{ ' active' if active_page == 'categories' }}">
+                                <i class="bi bi-collection"></i>
+                                <span class="d-sm-none d-lg-inline">Categories</span>
                             </a>
                         </li>
                         {% endif %}
-                        <li>
-                            <a href="{{ url_for('get_suppliers') }}" class="nav-link text-white">
-                                <i class="bi bi-person-lines-fill me-2"></i>
-                                <span class="d-md-none d-lg-inline">Suppliers</span>
+                        <li class="nav-item mb-2">
+                            <a href="{{ url_for('get_suppliers') }}" class="nav-link{{ ' active' if active_page == 'suppliers' }}">
+                                <i class="bi bi-person-lines-fill"></i>
+                                <span class="d-sm-none d-lg-inline">Suppliers</span>
                             </a>
                         </li>
-                        <li>
-                            <a href="{{ url_for('get_products') }}" class="nav-link text-white">
-                                <i class="bi bi-grid me-2"></i>
-                                <span class="d-md-none d-lg-inline">Products</span>
+                        <li class="nav-item mb-2">
+                            <a href="{{ url_for('get_products') }}" class="nav-link{{ ' active' if active_page == 'products' }}">
+                                <i class="bi bi-grid"></i>
+                                <span class="d-sm-none d-lg-inline">Products</span>
                             </a>
                         </li>
-                        <li>
-                            <a href="{{ url_for('dashboard') }}" class="nav-link text-white">
-                                <i class="bi bi-speedometer2 me-2"></i>
-                                <span class="d-md-none d-lg-inline">Stock Flow</span>
+                        <li class="nav-item mb-2">
+                            <a href="{{ url_for('dashboard') }}" class="nav-link{{ ' active' if active_page == 'dashboard' }}">
+                                <i class="bi bi-speedometer2"></i>
+                                <span class="d-sm-none d-lg-inline">Stock Flow</span>
                             </a>
                         </li>
                     </ul>
@@ -78,28 +77,31 @@
             <div class="col-12 position-relative col-md-11 col-lg-10 pb-4">
                 <!-- top toolbar for account holder  -->
                 <header class="navbar navbar-light justify-content-start">
-                    <button class="navbar-toggler d-inline-block d-md-none" type="button"
+                    <!-- toggler for sidenav  -->
+                    <button class="navbar-toggler d-inline-block d-sm-none" type="button"
                         aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
+                    <!-- end toggler for sidenav  -->
+                    {% if current_user.account_holder == True %}
                     <ul class="navbar-nav ms-3">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="toolbarDropdown" role="button"
                                 data-bs-toggle="dropdown" aria-expanded="false">
-                                {{ current_user.company_name }}
+                                {{ current_user.business_name }}
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="toolbarDropdown">
-                                <li><a class="dropdown-item" href="{{ url_for('profile') }}">Profile</a></li>
-                                <li><a class="dropdown-item" href="{{ url_for('user.logout') }}">Sign Out</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('account') }}">Account Page</a></li>
                             </ul>
                         </li>
                     </ul>
+                    {% else %}
+                    <div class="ms-2">{{ current_user.business_name }}</div>
+                    {% endif %}
                 </header>
                 <!-- end top toolbar for account holder  -->
 
                 {% endif %}
-
-
 
                 <!-- main dashboard content -->
                 <main>
