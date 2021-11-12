@@ -2,7 +2,7 @@ body {
     font-family: 'Roboto', 'san-serif';
 }
 
-/* navigation bar */
+/* navigation bar and brand */
 .sidenav i {
     font-size: 1.2rem;
 }
@@ -12,7 +12,8 @@ body {
     z-index: 1;
 }
 
-.navbar-light .navbar-brand {
+.navbar-light .navbar-brand,
+.brand-text {
     font-size: 1.8rem;
     line-height: 0.8;
     font-weight: 600;
@@ -21,6 +22,16 @@ body {
     align-items: center;
     justify-content: center;
     flex-direction: column;
+}
+
+.brand-text {
+    color: var(--bs-white);
+    font-size: 3rem;
+}
+
+.brand-text:focus,
+.brand-text:hover {
+    color: var(--bs-primary);
 }
 
 .navbar-light .navbar-nav .nav-link:focus,
@@ -91,6 +102,30 @@ h1.hero-heading {
     border-radius: 10px;
     border: 1px solid rgba(255, 255, 255, 0.18);
     padding: 5rem;
+    width: 450px;
+}
+
+.form-navigation {
+    font-size: 2rem;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.form-navigation .form-navigation-link.active {
+    color: var(--bs-white);
+    border-bottom: 5px solid #00dcff;
+}
+
+.form-navigation-link {
+    color: #cfcfcf;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.form-navigation-link:focus,
+.form-navigation-link:hover {
+    color: var(--bs-white);
 }
 
 /* utilities */
