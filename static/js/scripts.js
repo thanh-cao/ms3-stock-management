@@ -12,6 +12,8 @@ $(document).ready(function () {
             closeSidenav();
         }
     });
+
+    if ($('.flash-message')) hideFlashMessages();
 });
 
 openSidenav = () => {
@@ -70,4 +72,10 @@ function showForm(target) {
 function hideForm(target) {
     target = $(this).attr('data-target');
     $(`${target}`).addClass('d-none');
+}
+
+function hideFlashMessages() {
+    setTimeout(() => {
+         $('.flash-message').remove();
+    }, 5000)
 }

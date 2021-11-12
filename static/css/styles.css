@@ -164,6 +164,14 @@ i.bi-plus-circle:hover {
     margin-bottom: 1.5rem;
 }
 
+.flash-message {
+    color: var(--bs-primary);
+    padding: 0.5rem 2rem;
+    border-radius: 10px;
+    display: inline;
+    background-color: #e0f0ff;
+}
+
 /* media queries */
 @media (min-width: 1200px) {
     .hero-image {

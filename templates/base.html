@@ -104,17 +104,17 @@
                 <!-- main dashboard content -->
                 <main>
                     <!-- flash messages -->
-                    <section>
+                    <div class="flash-wrapper">             
                         {% with messages = get_flashed_messages() %}
                         {% if messages %}
                         {% for message in messages %}
-                        <div class="row flashes">
-                            <p class="badge text-primary">{{ message }}</>
+                        <div class="mb-3">
+                            <p class="flash-message">{{ message }}</p>
                         </div>
                         {% endfor %}
                         {% endif %}
                         {% endwith %}
-                    </section>
+                    </div>
                     <!-- end flash messages -->
                     {% block content %}
 
