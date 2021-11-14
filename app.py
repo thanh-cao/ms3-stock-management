@@ -72,12 +72,12 @@ def create_business(sender, user, **extra):
         user.save()
 
 
-@app.route('/profile')
+@app.route('/account')
 @login_required
 @roles_required('admin')
-def profile():
+def account():
     '''
-    Create view for profile page with forms to edit profile,
+    Create view for account page with forms to edit account,
     create new user access, edit user access, and delete user access
     '''
     account = current_user
@@ -85,34 +85,34 @@ def profile():
                                Q(roles='admin') | Q(roles='staff'))
     account_form = CustomRegisterForm()
     access_form = UserAccess()
-    return render_template('profile.html',
+    return render_template('account.html',
                            account=account,
                            user_access=user_access,
                            account_form=account_form,
                            access_form=access_form)
 
 
-@app.route('/profile/edit/<account_id>', methods=['POST'])
+@app.route('/account/edit/<account_id>', methods=['POST'])
 @login_required
 @roles_required('admin')
-def edit_profile(account_id):
+def edit_account(account_id):
     '''
-    Edit profile of account holder/owner
+    Edit account of account holder/owner
     '''
     account = User.objects.get(id=account_id)
     business = Business.objects.get(id=account.business_id.id)
     if request.method == 'POST':
-        updated_profile = {
+        updated_account = {
             'name': request.form.get('name'),
             'business_name': request.form.get('business_name')
         }
-        account.update(**updated_profile)
+        account.update(**updated_account)
         business.update(business_name=request.form.get('business_name'))
-        flash('Profile successfully updated')
-        return redirect(url_for('profile'))
+        flash('account successfully updated')
+        return redirect(url_for('account'))
 
 
-@app.route('/profile/create_access', methods=['POST'])
+@app.route('/account/create_access', methods=['POST'])
 @login_required
 @roles_required('admin')
 def create_new_access():
@@ -132,10 +132,10 @@ def create_new_access():
     new_access.roles.append(form.role.data)
     new_access.save()
     flash('New user access successfully created')
-    return redirect(url_for('profile'))
+    return redirect(url_for('account'))
 
 
-@app.route('/profile/edit_accesss/<access_id>', methods=['POST'])
+@app.route('/account/edit_accesss/<access_id>', methods=['POST'])
 @login_required
 @roles_required('admin')
 def edit_access(access_id):
@@ -153,10 +153,10 @@ def edit_access(access_id):
         }
         access.update(**updated_access)
         flash('Access successfully updated')
-        return redirect(url_for('profile'))
+        return redirect(url_for('account'))
 
 
-@app.route('/profile/delete_access/<access_id>')
+@app.route('/account/delete_access/<access_id>')
 @login_required
 @roles_required('admin')
 def delete_access(access_id):
@@ -165,7 +165,7 @@ def delete_access(access_id):
     '''
     access = User.objects.get(id=access_id)
     access.delete()
-    return redirect(url_for('profile'))
+    return redirect(url_for('account'))
 
 
 #############################

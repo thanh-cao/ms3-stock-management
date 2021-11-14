@@ -12,16 +12,18 @@ $(document).ready(function () {
             closeSidenav();
         }
     });
+
+    if ($('.flash-message')) hideFlashMessages();
 });
 
 openSidenav = () => {
     $('nav.sidenav').addClass('show');
-    $('body').css('backgroundColor', 'rgba(0,0,0,0.4)');
+    $('nav.sidenav').after('<div class="overlay"></div>')
 };
 
 closeSidenav = () => {
     $('nav.sidenav').removeClass('show');
-    $('body').css('backgroundColor', 'rgb(255,255,255)');
+    $('div.overlay').remove();
 };
 
 // Function to send ajax request to get data from database based on collection and ObjectId.
@@ -53,6 +55,7 @@ function setValueToFormInputs(form, targetCollection, ObjectId) {
 function showForm(target) {
     target = $(this).attr('data-target');
     $(`${target}`).toggleClass('d-none');
+    document.querySelector(target).scrollIntoView({behavior: 'smooth', block: 'center'});
 
     // If the show has data-id attribute, create a dynamic form's action based on data-id
     if ($(this).attr('data-id')) {
@@ -70,4 +73,10 @@ function showForm(target) {
 function hideForm(target) {
     target = $(this).attr('data-target');
     $(`${target}`).addClass('d-none');
+}
+
+function hideFlashMessages() {
+    setTimeout(() => {
+         $('.flash-message').remove();
+    }, 5000)
 }

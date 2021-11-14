@@ -29,7 +29,7 @@ class ConfigClass(object):
     USER_EMAIL_SENDER_EMAIL = os.environ.get('USER_EMAIL_SENDER_EMAIL')
 
     # Flask-User redirecting endpoints
-    USER_AFTER_REGISTER_ENDPOINT = 'profile'
+    USER_AFTER_REGISTER_ENDPOINT = 'account'
     USER_AFTER_LOGIN_ENDPOINT = 'dashboard'
     USER_AFTER_LOGOUT_ENDPOINT = 'user.login'
 

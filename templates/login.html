@@ -5,20 +5,26 @@
 {% block content %}
 <section class="form-backdrop d-flex flex-column align-items-center justify-content-center min-vh-100">
     <div class="row mb-3">
-        <a href="{{ url_for('index') }}"><h1>Home</h1></a>
+        <a href="{{ url_for('index') }}" class="text-decoration-none">
+            <h1 class="brand-text">
+                <span>Stock</span>
+                <span>MGMT</span>
+            </h1>
+        </a>
     </div>
     <div class="row wrapper-glassmorphism text-white">
         <div class="col">
-            <h1 clas="mb-3">Log In</h1>
+            <div class="form-navigation">
+                <a href="{{ url_for('user.register') }}" class="form-navigation-link">Register</a>
+                <a href="{{ url_for('user.login') }}" class="form-navigation-link active">Login</a>
+            </div>
+
             <form action="{{ url_for('user.login') }}" method="POST">
                 {{ form.csrf_token }}
                 {{ render_field(form.email) }}
                 {{ render_field(form.password) }}
                 {{ render_submit_btn(form.submit) }}
             </form>
-
-            <hr class="my-4">
-            <p>Not yet a user? <a href="{{ url_for('user.register') }}">Sign up here</a> instead</p>
         </div>
     </div>
 </section>

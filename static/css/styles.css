@@ -2,7 +2,7 @@ body {
     font-family: 'Roboto', 'san-serif';
 }
 
-/* navigation bar */
+/* navigation bar and brand */
 .sidenav i {
     font-size: 1.2rem;
 }
@@ -12,26 +12,80 @@ body {
     z-index: 1;
 }
 
-/* side navigation bar on mobile screen */
-@media only screen and (max-width : 540px) {
-    nav.sidenav {
-        width: 0;
-        padding: 0;
-        transition: 0.5s;
-    }
+.navbar-light .navbar-brand,
+.brand-text {
+    font-size: 1.8rem;
+    line-height: 0.8;
+    font-weight: 600;
+    color: var(--bs-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
 
-    nav.sidenav.show {
-        width: 180px;
-        position: fixed;
-        z-index: 1;
-        top: 0;
-        left: 0;
-    }
+.brand-text {
+    color: var(--bs-white);
+    font-size: 3rem;
+}
 
-    div.mobile {
-        width: 100%;
-        position: relative;
-    }
+.brand-text:focus,
+.brand-text:hover {
+    color: var(--bs-primary);
+}
+
+.navbar-light .navbar-nav .nav-link:focus,
+.navbar-light .navbar-nav .nav-link:hover {
+    color: var(--bs-primary);
+}
+
+.sidenav .nav-link {
+    color: var(--bs-white);
+    display: flex;
+    align-items: center;
+}
+
+.sidenav .nav-link:focus,
+.sidenav .nav-link:hover {
+    color: var(--bs-primary);
+    background: var(--bs-white);
+}
+
+.sidenav .nav-link.active {
+    color: var(--bs-primary);
+    background: var(--bs-white);
+}
+
+.sidenav .nav-link i {
+    margin-right: 0.7rem;
+}
+
+/* index page */
+.hero-section,
+.features,
+.testimonials,
+.call-to-action {
+    padding: 3.5rem 1.5rem;
+}
+
+.features,
+.call-to-action {
+    background-color: #e0f0ff;
+}
+
+h1.hero-heading {
+    font-size: 2rem;
+}
+
+.section-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.features .card.card-body {
+    box-shadow: 0 8px 32px 0 rgb(94 95 102 / 24%);
 }
 
 /* signup / login form */
@@ -46,7 +100,31 @@ body {
     -webkit-backdrop-filter: blur(8.5px);
     border-radius: 10px;
     border: 1px solid rgba(255, 255, 255, 0.18);
-    padding: 5rem;
+    padding: 2.5rem;
+    width: 320px;
+}
+
+.form-navigation {
+    font-size: 2rem;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.form-navigation .form-navigation-link.active {
+    color: var(--bs-white);
+    border-bottom: 5px solid #00dcff;
+}
+
+.form-navigation-link {
+    color: #cfcfcf;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.form-navigation-link:focus,
+.form-navigation-link:hover {
+    color: var(--bs-white);
 }
 
 /* utilities */
@@ -75,5 +153,91 @@ i.bi-plus-circle:hover {
 
 .hover-gray:hover,
 .list-group-item:hover {
-    background-color:rgba(221, 221, 221, 0.8);
+    background-color: rgba(221, 221, 221, 0.8);
+}
+
+.divider {
+    width: 10%;
+    height: 3px;
+    background-color: var(--bs-primary);
+    margin-bottom: 1.5rem;
+}
+
+.flash-message {
+    color: var(--bs-primary);
+    padding: 0.5rem 2rem;
+    border-radius: 10px;
+    display: inline;
+    background-color: #e0f0ff;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1040;
+}
+
+/* media queries */
+/** side navigation bar on mobile screen **/
+@media only screen and (max-width : 540px) {
+    nav.sidenav {
+        width: 0;
+        padding: 0;
+        transition: 0.5s;
+    }
+
+    nav.sidenav.show {
+        width: 180px;
+        position: fixed;
+        z-index: 1045;
+        top: 0;
+        left: 0;
+    }
+
+    div.mobile {
+        width: 100%;
+        position: relative;
+    }
+
+    .sidenav .nav-link.active {
+        color: var(--bs-white);
+    }
+
+    .sidenav.show .nav-link.active {
+        color: var(--bs-primary);
+    }
+}
+
+/** index page **/
+@media (min-width: 1200px) {
+    .hero-image {
+        width: 75%;
+    }
+
+    h1.hero-heading {
+        font-size: 2.5rem;
+    }
+
+    .hero-section,
+    .features,
+    .testimonials,
+    .call-to-action {
+        padding: 3.5rem 3.5rem;
+    }
+
+    .navbar>.container-fluid {
+        width: 50%;
+    }
+}
+
+/** signup / login form **/
+@media (min-width: 768px) {
+    .wrapper-glassmorphism {
+        width: 450px;
+        padding: 5rem;
+    }
 }
