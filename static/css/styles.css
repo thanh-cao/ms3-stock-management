@@ -100,8 +100,8 @@ h1.hero-heading {
     -webkit-backdrop-filter: blur(8.5px);
     border-radius: 10px;
     border: 1px solid rgba(255, 255, 255, 0.18);
-    padding: 5rem;
-    width: 450px;
+    padding: 2.5rem;
+    width: 320px;
 }
 
 .form-navigation {
@@ -215,3 +215,12 @@ i.bi-plus-circle:hover {
         width: 50%;
     }
 }
+
+/** signup / login form **/
+@media (min-width: 768px) {
+    .wrapper-glassmorphism {
+        width: 450px;
+        padding: 5rem;
+    }
+}
+    
