@@ -18,12 +18,12 @@ $(document).ready(function () {
 
 openSidenav = () => {
     $('nav.sidenav').addClass('show');
-    $('body').css('backgroundColor', 'rgba(0,0,0,0.4)');
+    $('nav.sidenav').after('<div class="overlay"></div>')
 };
 
 closeSidenav = () => {
     $('nav.sidenav').removeClass('show');
-    $('body').css('backgroundColor', 'rgb(255,255,255)');
+    $('div.overlay').remove();
 };
 
 // Function to send ajax request to get data from database based on collection and ObjectId.

@@ -57,7 +57,7 @@ body {
 }
 
 .sidenav .nav-link i {
-    margin-right: 0.7rem;;
+    margin-right: 0.7rem;
 }
 
 /* index page */
@@ -171,6 +171,16 @@ i.bi-plus-circle:hover {
     background-color: #e0f0ff;
 }
 
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1040;
+}
+
 /* media queries */
 /** side navigation bar on mobile screen **/
 @media only screen and (max-width : 540px) {
@@ -183,7 +193,7 @@ i.bi-plus-circle:hover {
     nav.sidenav.show {
         width: 180px;
         position: fixed;
-        z-index: 1;
+        z-index: 1045;
         top: 0;
         left: 0;
     }
@@ -191,6 +201,14 @@ i.bi-plus-circle:hover {
     div.mobile {
         width: 100%;
         position: relative;
+    }
+
+    .sidenav .nav-link.active {
+        color: var(--bs-white);
+    }
+
+    .sidenav.show .nav-link.active {
+        color: var(--bs-primary);
     }
 }
 
@@ -223,4 +241,3 @@ i.bi-plus-circle:hover {
         padding: 5rem;
     }
 }
-    
