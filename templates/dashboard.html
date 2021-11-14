@@ -71,7 +71,7 @@
                                 {{ pending.supplier_id.supplier_name }}
                             </div>
                             <div class="col-3 text-center">
-                                {{ pending.delivery_date }}
+                                {{ pending.delivery_date.strftime('%d-%m-%Y') }}
                             </div>
                             <div class="col-3 text-center">
                                 {% if pending.is_approved == True %}

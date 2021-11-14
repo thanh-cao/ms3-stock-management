@@ -18,7 +18,7 @@
                         </div>
                         <div class="col-6">
                             <div class="form-floating">
-                                <p class="card-text form-control border-0 mb-1">{{ pending.delivery_date }}</p>
+                                <p class="card-text form-control border-0 mb-1">{{ pending.delivery_date.strftime('%d-%m-%Y') }}</p>
                                 <label class="px-0">Expected delivery</label>
                             </div>
                         </div>
@@ -27,7 +27,7 @@
                     <div class="row align-items-center pb-3 mb-3 g-0 border-bottom border-dark border-1">
                         <div class="col-6">
                             <div class="form-floating">
-                                <p class="card-text form-control border-0 mb-1">{{ pending.created_by.username }}
+                                <p class="card-text form-control border-0 mb-1">{{ pending.created_by.name }}
                                 </p>
                                 <label>Created by</label>
                             </div>
@@ -154,11 +154,15 @@
                                 {{ form.csrf_token }}
                                 {{ form.id(value=product.id) }}
 
-                                {% for item in session.stock %}
-                                    {% if item.id == product.id %}
-                                    {{ form.received_stock(class='form-control', value=item.received_stock) }}
-                                    {% endif %}
-                                {% endfor %}
+                                {% if session.stock %}
+                                    {% for item in session.stock %}
+                                        {% if item.id == product.id %}
+                                        {{ form.received_stock(class='form-control', value=item.received_stock) }}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% else %}
+                                    {{ form.received_stock(class='form-control') }}
+                                {% endif %}
                             </form>
                         </div>
                     </div>
