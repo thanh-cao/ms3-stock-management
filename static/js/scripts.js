@@ -41,12 +41,9 @@ function setValueToFormInputs(form, targetCollection, ObjectId) {
     })
         .done(data => {
             formElements = form[0].elements;
-            console.log(formElements);
             Object.keys(data).forEach(key => {
                 if (formElements[key]) {
                     formElements[key].value = data[key];
-                    console.log(formElements[key]);
-                    console.log(data[key]);
                 }
             })
         })

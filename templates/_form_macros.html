@@ -1,8 +1,5 @@
 {% macro render_field(field) %}
 <div class="mb-3">
-    {% if field.label %}
-    <label for="{{ field.name }}">{{ field.label.text }}</label>
-    {% endif %}
     {{ field(class_='form-control', **kwargs)|safe }}
     {% if field.description %}
     <div class="form-text">{{ field.description }}</div>
