@@ -100,7 +100,7 @@
                             <p class="card-text form-control border-0 mb-1">{{ product.name }}</p>
                             <label>Product Name</label>
                         </div>
-                        {{ render_field(form.stock_change) }}
+                        <input type="number" class='form-control mb-2' id="stock_update" name="stock_update" max="200">
                         {{ render_submit_btn(form.submit) }}
                         <a href="#" class="btn btn-outline-secondary" data-action="hideForm"
                             data-target="#updateStock">Cancel</a>

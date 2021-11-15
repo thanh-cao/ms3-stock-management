@@ -49,12 +49,22 @@ class Product(db.Document):
     stock_change_date = db.DateTimeField(default=datetime.datetime.now)
     business_id = db.ReferenceField('Business')
 
+    def validate_stock_change(self, stock_change):
+        '''Validate that current_stock doesn't go below 0 after stock update'''
+        validated_stock = self.current_stock + stock_change
+
+        if validated_stock < 0:
+            return False
+
+        return True
+
     def update_stock(self, stock_change):
         # reset stock_change every new day in order to accumulate stock_change
         # that is made today
         if self.stock_change_date.date() != datetime.datetime.now().date():
             self.stock_change_date = datetime.datetime.now().date()
             self.stock_change = 0
+            self.current_stock += stock_change
             self.stock_change += stock_change
         else:
             self.current_stock += stock_change
