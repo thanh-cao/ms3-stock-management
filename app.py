@@ -402,9 +402,23 @@ def search_product():
 @app.route('/dashboard')
 @login_required
 def dashboard():
+    '''
+    Dashboard shows 3 sections: Restock now shows products that have reached
+    minimum stock level. Pending stock shows incoming deliveries. Stock update
+    shows products that have stock change today, and search bar to allow quick
+    search for products to do stock update right on dashboard.
+    '''
     form = ProductForm()
     products = Product.objects(business_id=current_user.business_id)
-    pending_stocks = PendingStock.objects(business_id=current_user.business_id)
+
+    # Show incoming pending stocks dated 7 days back
+    historic_date = datetime.datetime.now().date() - datetime.timedelta(days=7)
+    pending_stocks = PendingStock.objects(business_id=current_user.business_id,
+                                          delivery_date__gt=historic_date)
+    pending_form = PendingStockForm()  # the main form to be saved in database
+    suppliers = Supplier.objects(business_id=current_user.business_id)
+    pending_form.supplier_id.choices = [(supplier.id, supplier.supplier_name)
+                                        for supplier in suppliers]
 
     # Create a list of products that need to be restocked now
     # and products with stock change today
@@ -427,7 +441,29 @@ def dashboard():
                            stock_change_product=stock_change_product,
                            restocks=restocks,
                            pending_stocks=pending_stocks,
-                           form=form)
+                           form=form,
+                           pending_form=pending_form)
+
+
+@csrf.exempt
+@app.route('/pending-stock/search', methods=['POST'])
+@login_required
+def search_pending_stock():
+    '''
+    Route to receive search query from the frontend and return the pending
+    stock list to use in search.js to display on dashboard page
+    '''
+    supplier_id = request.form.get('supplier_id')
+    delivery_date = request.form.get('delivery_date')
+
+    if delivery_date == '':
+        filtered = PendingStock.objects(supplier_id=supplier_id,
+                                        business_id=current_user.business_id)
+    else:
+        filtered = PendingStock.objects((Q(supplier_id=supplier_id) &
+                                        Q(delivery_date=delivery_date)))
+
+    return jsonify(filtered)
 
 
 @app.route('/pending-stock/create', methods=['GET', 'POST'])

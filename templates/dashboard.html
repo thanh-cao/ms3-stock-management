@@ -50,7 +50,29 @@
         <div class="col-12 col-md-8">
             <div class="card">
                 <div class="card-body">
-                    <h2 class="card-title">Pending Stock</h2>
+                    <div class="row align-items-center mb-3">
+                        <h2 class="col-8 card-title my-0">Pending Stock</h2>
+                        <button class="col-4 btn text-primary search-pending">Search</button>
+                    </div>
+
+                    <div class="row search-pending-wrapper mb-3 d-none">
+                        <form id="pending-stock-query" class="d-flex flex-column" method="POST">
+                            <div class="row">
+                                {{ render_select_field(pending_form.supplier_id) }}
+                                
+                                <div class="mb-3">
+                                    <label for="{{ pending_form.deliver_date }}">Delivery date</label>
+                                    <input class="form-control" id="delivery_date" name="delivery_date" type="date">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div>
+                                    <button class="btn btn-outline-primary me-1" type="submit">Search</button>
+                                    <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">Cancel</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
 
                     <div class="row align-items-center mb-2 g-0">
                         <div class="col-6 ps-2">
@@ -63,26 +85,29 @@
                             <span class="text-muted">Status</span>
                         </div>
                     </div>
-                    {% for pending in pending_stocks %}
-                    <a href="{{ url_for('pending_stock_details', id=pending.id) }}"
-                        class="text-decoration-none text-black">
-                        <div class="row border-bottom align-items-center py-2 g-0 mb-3 hover-gray">
-                            <div class="col-6 ps-2">
-                                {{ pending.supplier_id.supplier_name }}
+
+                    <div class="pending-stock-list">
+                        {% for pending in pending_stocks %}
+                        <a href="{{ url_for('pending_stock_details', id=pending.id) }}"
+                            class="text-decoration-none text-black">
+                            <div class="row border-bottom align-items-center py-2 g-0 mb-3 hover-gray">
+                                <div class="col-6 ps-2">
+                                    {{ pending.supplier_id.supplier_name }}
+                                </div>
+                                <div class="col-3 text-center">
+                                    {{ pending.delivery_date.strftime('%d-%m-%Y') }}
+                                </div>
+                                <div class="col-3 text-center">
+                                    {% if pending.is_approved == True %}
+                                    <span class="badge bg-success">Done</span>
+                                    {% else %}
+                                    <span class="badge bg-warning">Pending</span>
+                                    {% endif %}
+                                </div>
                             </div>
-                            <div class="col-3 text-center">
-                                {{ pending.delivery_date.strftime('%d-%m-%Y') }}
-                            </div>
-                            <div class="col-3 text-center">
-                                {% if pending.is_approved == True %}
-                                <span class="badge bg-success">Done</span>
-                                {% else %}
-                                <span class="badge bg-warning">Pending</span>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </a>
-                    {% endfor %}
+                        </a>
+                        {% endfor %}
+                    </div>
                     {% if 'admin' in current_user.roles %}
                     <a href="{{ url_for('create_pending_stock') }}" class="btn btn-sm btn-primary mt-4"
                         data-action="showForm" data-target="#createPendingStock">
@@ -115,13 +140,13 @@
                             <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">Cancel</a>
                         </form>
                         <ul class="suggestions list-group">
-                    
+
                         </ul>
                     </div>
 
 
                     <div class="product-list">
-                    {% if stock_change_product and stock_change_product|length > 0 %}
+                        {% if stock_change_product and stock_change_product|length > 0 %}
                         <div class="row align-items-center border-bottom mb-2 g-0">
                             <div class="col-6">
                                 <span class="text-muted ps-2">Product Name</span>
@@ -137,9 +162,10 @@
                         </div>
                         {% for product in stock_change_product %}
                         <div class="row align-items-center mb-2 py-2 border-bottom g-0 hover-gray">
-                            <a href="{{ url_for('product_details', product_id=product.id) }}" class="text-decoration-none text-black col-6 ps-2">
+                            <a href="{{ url_for('product_details', product_id=product.id) }}"
+                                class="text-decoration-none text-black col-6 ps-2">
                                 {{ product.name }}
-                                </a>
+                            </a>
                             <div class="col-2">
                                 {{ product.current_stock }}
                             </div>
