@@ -365,12 +365,15 @@ def delete_product(product_id):
 @login_required
 def update_stock(product_id):
     product = Product.objects.get(id=product_id)
-    if request.method == 'POST':
-        stock_update = int(request.form.get('stock_update'))
+    stock_update = int(request.form.get('stock_update'))
+
+    if product.validate_stock_change(stock_update):
         product.update_stock(stock_update)
         product.save()
         flash('Stock successfully updated')
         return redirect(request.referrer)
+    flash('Stock change cannot be greater than current stock')
+    return redirect(request.referrer)
 
 
 @csrf.exempt
@@ -634,16 +637,22 @@ def approve_pending_stock(id):
                 pending_product['received_stock'] = item['received_stock']
 
         product = Product.objects.get(id=pending_product['id'])
+
+        if product.validate_stock_change(int(item['received_stock'])) is False:
+            flash('Stock change is not valid')
+            return redirect(url_for('pending_stock_details', id=id))
+
         product.update_stock(int(item['received_stock']))
         product.save()
 
     pending_stock.is_approved = True
     pending_stock.save()
     session.pop('stock')
+    flash('Pending stock approved successfully')
     return redirect(request.referrer)
 
 
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),
             port=os.environ.get('PORT'),
-            debug=True)
+            debug=os.environ.get('DEBUG'))

@@ -157,7 +157,7 @@
                                 {% if session.stock %}
                                     {% for item in session.stock %}
                                         {% if item.id == product.id %}
-                                        {{ form.received_stock(class='form-control', value=item.received_stock) }}
+                                        {{ form.received_stock(class='form-control', value=item.received_stock, min="0") }}
                                         {% endif %}
                                     {% endfor %}
                                 {% else %}
