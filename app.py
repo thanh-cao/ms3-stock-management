@@ -168,6 +168,20 @@ def delete_access(access_id):
     return redirect(url_for('account'))
 
 
+@csrf.exempt
+@app.route('/account/query', methods=['POST'])
+@login_required
+def query_account_collection():
+    '''
+    Route to receive query call from frontend and return the data
+    to use in scripts.js in order to prepopulate the frontend forms with
+    edit functionality
+    '''
+    id = request.form.get('ObjectId')
+    data = User.objects(id=id, business_id=current_user.business_id).first()
+    return jsonify(data)
+
+
 #############################
 ##### Product category ######
 #############################
@@ -214,6 +228,20 @@ def delete_category(category_id):
     category = Category.objects.get(id=category_id)
     category.delete()
     return redirect(url_for('get_categories'))
+
+
+@csrf.exempt
+@app.route('/category/query', methods=['POST'])
+@login_required
+def query_category_collection():
+    '''
+    Route to receive query call from frontend and return the data
+    to use in scripts.js in order to prepopulate the frontend forms with
+    edit functionality
+    '''
+    id = request.form.get('ObjectId')
+    data = Category.objects(id=id, business_id=current_user.business_id).first()
+    return jsonify(data)
 
 
 #############################
@@ -268,6 +296,20 @@ def delete_supplier(supplier_id):
     supplier = Supplier.objects.get(id=supplier_id)
     supplier.delete()
     return redirect(url_for('get_suppliers'))
+
+
+@csrf.exempt
+@app.route('/supplier/query', methods=['POST'])
+@login_required
+def query_supplier_collection():
+    '''
+    Route to receive query call from frontend and return the data
+    to use in scripts.js in order to prepopulate the frontend forms with
+    edit functionality
+    '''
+    id = request.form.get('ObjectId')
+    data = Supplier.objects(id=id, business_id=current_user.business_id).first()
+    return jsonify(data)
 
 
 #############################
