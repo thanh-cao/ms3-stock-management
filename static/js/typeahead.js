@@ -1,6 +1,7 @@
 const searchInput = $('.search');
 const matchDisplay = $('.suggestions');
 const unitOfMeasurementDisplay = $('.unit-measurement');
+const supplierInput = $('#supplier_id');
 let product; // declare an empty products variable which will be assigned value in ajax
 
 // Type ahead function is adapted from challange nr6 from Wes Bos' 30-day JavaScript challange
@@ -43,12 +44,29 @@ function select(option) {
     displayUnitOfMeasurement(found[0].unit_of_measurement);
 }
 
-function queryDatabase(url, collection) {
+function queryProductDatabase() {
     $.ajax({
-        url: url,
+        url: '/product/search',
         type: 'POST',
         data: {
-            collection: collection
+            query: 'all'
+        }
+    })
+        .done(productList => {
+            products = productList;
+        })
+}
+
+function queryProductFilteredBySupplier(id) {
+    sessionStorage.setItem('supplier_id', supplierInput.val());
+    id = supplierInput.val();
+
+    $.ajax({
+        url: '/product/search',
+        type: 'POST',
+        data: {
+            query: 'supplier',
+            supplier_id: id
         }
     })
         .done(productList => {
@@ -57,7 +75,12 @@ function queryDatabase(url, collection) {
 }
 
 $(document).ready(function () {
-    queryDatabase('/ajax', 'Product')
+    if (location.href.includes('pending-stock')) {
+        supplierInput.on('change', queryProductFilteredBySupplier);
+    } else {
+        queryProductDatabase();
+    }
+
     searchInput.on('change', displayMatches);
     searchInput.on('keyup', displayMatches);
 })

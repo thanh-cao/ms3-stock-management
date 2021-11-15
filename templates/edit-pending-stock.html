@@ -13,6 +13,7 @@
                         {{ form.csrf_token }}
 
                         <div class="form-floating">
+                            <input id="supplier_id" type="hidden" value="{{ pending_stock.supplier_id.id }}">
                             <p class="card-text form-control border-0 mb-1">{{ pending_stock.supplier_id.supplier_name }}</p>
                             <label>Supplier</label>
                         </div>                        
@@ -97,4 +98,9 @@
 
 {% block javascript %}
 <script src="{{ url_for('static', filename='js/typeahead.js') }}"></script>
+
+<script>
+    const supplier_id = $('#supplier_id').val()
+    queryProductFilteredBySupplier(supplier_id);
+</script>
 {% endblock %}

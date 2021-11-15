@@ -377,30 +377,21 @@ def update_stock(product_id):
 @app.route('/product/search', methods=['POST'])
 @login_required
 def search_product():
+    '''
+    Route to receive search query from the frontend and return the product list
+    to use in search.js and typeahead.js
+    '''
     query = request.form.get('query')
-    print(query)
-    filtered_products = Product.objects(name__icontains=query,
-                                        business_id=current_user.business_id)
-    print(filtered_products)
-    return jsonify(filtered_products)
+    filtered = Product.objects(name__icontains=query,
+                               business_id=current_user.business_id)
+    if query == 'all':
+        filtered = Product.objects(business_id=current_user.business_id)
 
-
-def str_to_class(classname):
-    '''Function to  convert string to Class object take from StackOverflow'''
-    return getattr(sys.modules[__name__], classname)
-
-
-@csrf.exempt
-@app.route('/ajax', methods=['POST'])
-def ajax():
-    collection = request.form.get('collection').capitalize()
-    id = request.form.get('id')
-    if id:
-        query = str_to_class(collection).objects.get(id=id)
-    else:
-        query = str_to_class(collection).objects(
-                                         business_id=current_user.business_id)
-    return jsonify(query)
+    if query == 'supplier':
+        supplier_id = request.form.get('supplier_id')
+        filtered = Product.objects(supplier_id=supplier_id,
+                                   business_id=current_user.business_id)
+    return jsonify(filtered)
 
 
 #############################

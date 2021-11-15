@@ -82,7 +82,7 @@
                             </div>
                             <div class="col-5 form-floating unit-measurement d-none">
                                 {{ product_form.unit_of_measurement(class='card-text form-control border-0 px-0') }}
-                                <label class="px-0">Unit of measurement</label>
+                                <label class="px-0">Unit</label>
                             </div>
                         </div>
                     </form>
@@ -101,4 +101,17 @@
 
 {% block javascript %}
 <script src="{{ url_for('static', filename='js/typeahead.js') }}"></script>
+
+<script>
+    // Retrieved supplier_id from session storage and set it to the supplier input field
+    const retrieved = sessionStorage.getItem('supplier_id');
+    
+    $('#supplier_id option').each(function() {
+        if ($(this).val() == retrieved) {
+            $(this).attr('selected', 'selected');
+        }
+    });
+    
+</script>
+
 {% endblock %}
