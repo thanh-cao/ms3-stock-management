@@ -2,7 +2,7 @@ import os
 import sys
 import json
 from flask import (
-    Flask, flash, render_template,
+    Flask, flash, render_template, abort,
     redirect, request, session, url_for, jsonify)
 from flask_mongoengine import MongoEngine
 from mongoengine.queryset.visitor import Q
@@ -432,11 +432,12 @@ def dashboard():
         if item in session:
             session.pop(item)
 
-    return render_template('dashboard.html',
-                           stock_change_product=stock_change_product,
-                           restocks=restocks,
-                           pending_stocks=pending_stocks,
-                           form=form)
+    return abort(500)
+    # return render_template('dashboard.html',
+    #                        stock_change_product=stock_change_product,
+    #                        restocks=restocks,
+    #                        pending_stocks=pending_stocks,
+    #                        form=form)
 
 
 @app.route('/pending-stock/create', methods=['GET', 'POST'])
@@ -614,6 +615,21 @@ def approve_pending_stock(id):
     pending_stock.save()
     session.pop('stock')
     return redirect(request.referrer)
+
+
+### Error handlers ###
+
+
+@app.errorhandler(404)
+def page_not_found(error):
+    message = 'The page you are looking for does not exist.'
+    return render_template('error.html', error=error, message=message), 404
+
+
+@app.errorhandler(500)
+def internal_server_error(error):
+    message = 'The server encountered an internal error and was unable to complete your request.'
+    return render_template('error.html', error=error, message=message), 500
 
 
 if __name__ == '__main__':
