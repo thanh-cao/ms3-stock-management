@@ -761,6 +761,18 @@ def approve_pending_stock(id):
     return redirect(request.referrer)
 
 
+@app.errorhandler(404)
+def page_not_found(error):
+    error = 'The page you are looking for could not be found.'
+    return render_template('error.html', error=error), 404
+
+
+@app.errorhandler(500)
+def internal_server_error(error):
+    error = 'There was an error on our end. Please try again later.'
+    return render_template('error.html', error=error), 500
+
+
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),
             port=os.environ.get('PORT'),
