@@ -15,7 +15,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-uWxY/CJNBR+1zjPWmfnSnVxwRheevXITnMqoEIeG1LJrdI0GlVs/9cVSyPYXdcSF" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
-    <title>Stock Management App</title>
+    <title>StockMGMT</title>
 </head>
 {% endblock %}
 
@@ -72,7 +72,6 @@
                     </ul>
                 </div>
             </nav>
-            <!-- <div class="overlay"></div> -->
             <!-- end side navigation bar -->
             
             <div class="col-12 position-relative col-md-11 col-lg-10 pb-4">
@@ -107,12 +106,12 @@
                 <!-- main dashboard content -->
                 <main>
                     <!-- flash messages -->
-                    <div class="flash-wrapper">             
-                        {% with messages = get_flashed_messages() %}
+                    <div class="flash-wrapper">
+                        {% with messages = get_flashed_messages(with_categories=true) %}
                         {% if messages %}
-                        {% for message in messages %}
+                        {% for category, message in messages %}
                         <div class="mb-3">
-                            <p class="flash-message">{{ message }}</p>
+                            <p class="flash-message {{ category }}">{{ message }}</p>
                         </div>
                         {% endfor %}
                         {% endif %}
