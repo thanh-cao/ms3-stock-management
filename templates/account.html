@@ -55,7 +55,7 @@
                             {% endfor %}
                         </div>
                         <div class="col-3 px-0">
-                            <a data-action="showForm" data-target="#edit_user" data-id="{{ access.id }}"
+                            <a data-action="showForm" data-target="#edit_user_access" data-id="{{ access.id }}"
                                 class="text-decoration-none btn btn-sm btn-outline-primary">
                                 <i class="bi bi-pencil-square" aria-label="Edit current user access"></i>
                             </a>
@@ -104,12 +104,12 @@
                         {{ render_field(access_form.roles) }}
                         <button type="submit" class="btn btn-primary">Create new</button>
                         <a href="#" class="btn btn-outline-secondary" data-action="hideForm"
-                            data-target="#accountForm">Cancel</a>
+                            data-target="#userAccessForm">Cancel</a>
                     </div>
                 </div>
             </form>
 
-            <form id="edit_user" class="d-none mt-4" action="" method="POST">
+            <form id="edit_user_access" class="d-none mt-4" action="" method="POST">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title fw-bold">Edit User Access</h5>
@@ -118,7 +118,7 @@
                         {{ render_field(access_form.roles) }}
                         <button type="submit" class="btn btn-primary">Update</button>
                         <a href="#" class="btn btn-outline-secondary" data-action="hideForm"
-                            data-target="#edit_user">Cancel</a>
+                            data-target="#edit_user_access">Cancel</a>
                     </div>
                 </div>
             </form>

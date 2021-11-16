@@ -1,10 +1,13 @@
 from models import Business
 from flask_wtf import FlaskForm
 from flask_user import UserManager
-from flask_user.forms import RegisterForm
-from wtforms import *
-from wtforms.validators import *
+from flask_user.forms import RegisterForm, password_validator
+from wtforms import (StringField, PasswordField, SubmitField,
+                     SelectField, HiddenField, IntegerField)
+from wtforms.validators import (DataRequired, Length, Email, Optional,
+                                ValidationError, NumberRange)
 from wtforms.fields.html5 import EmailField, DateField
+from bson.objectid import ObjectId
 import datetime
 
 
@@ -33,27 +36,30 @@ class CustomUserManager(UserManager):
 
 
 class UserAccess(FlaskForm):
-    name = StringField(validators=[Length(min=5, max=10), DataRequired()],
+    name = StringField(validators=[Length(min=5, max=20,
+                                          message='Name should be between 5 to 20 characters.'),
+                                   DataRequired()],
                        render_kw={'placeholder': 'Name'})
     email = EmailField(validators=[Email(), DataRequired()],
-                          render_kw={'placeholder': 'Email'})
-    password = PasswordField(validators=[DataRequired()],
-                                render_kw={'placeholder': 'Password'})
+                       render_kw={'placeholder': 'Email'})
+    password = PasswordField(validators=[DataRequired(),
+                                         password_validator],
+                             render_kw={'placeholder': 'Password'})
     roles = SelectField(choices=[('', 'Choose Role'),
-                                ('admin', 'admin'),
-                                ('staff', 'staff')],
-                       validators=[AnyOf('admin', 'staff')])
+                                 ('admin', 'admin'),
+                                 ('staff', 'staff')],
+                        validators=[DataRequired()])
 
 
 class CategoryForm(FlaskForm):
-    category_name = StringField(DataRequired(), render_kw={
-                                'placeholder': 'Category name'})
+    category_name = StringField(validators=[DataRequired()],
+                                render_kw={'placeholder': 'Category name'})
     submit = SubmitField(label='Submit')
 
 
 class SupplierForm(FlaskForm):
-    supplier_name = StringField(validators=[DataRequired()], render_kw={
-                                'placeholder': 'Supplier\'s name'})
+    supplier_name = StringField(validators=[DataRequired()],
+                                render_kw={'placeholder': 'Supplier\'s name'})
     contact_person = StringField(render_kw={'placeholder': 'Contact person'})
     address = StringField(render_kw={'placeholder': 'Address'})
     phone = IntegerField(validators=[DataRequired(
@@ -66,14 +72,21 @@ class SupplierForm(FlaskForm):
 class ProductForm(FlaskForm):
     name = StringField(validators=[DataRequired()],
                        render_kw={'placeholder': 'Product name'})
-    category_id = SelectField(label='Choose category')
+    category_id = SelectField(label='Choose category',
+                              coerce=ObjectId,
+                              validators=[DataRequired()])
     brand = StringField(render_kw={'placeholder': 'Brand name'})
-    supplier_id = SelectField(label='Choose supplier')
+    supplier_id = SelectField(label='Choose supplier',
+                              coerce=ObjectId,
+                              validators=[DataRequired()])
     unit_of_measurement = StringField(
-        render_kw={'placeholder': 'Unit of measurement'})
-    min_stock_allowed = IntegerField(
-        render_kw={'placeholder': 'Minimum stock allowed'})
-    current_stock = IntegerField(render_kw={'placeholder': 'Current stock'})
+                             validators=[DataRequired()],
+                             render_kw={'placeholder': 'Unit of measurement'})
+    min_stock_allowed = IntegerField(validators=[DataRequired(),
+                                                 NumberRange(min=0, max=100,
+                                                             message='Min stock should be between 0 to 100')],
+                                     render_kw={'placeholder': 'Minimum stock allowed'})
+    current_stock = IntegerField(default=0, render_kw={'placeholder': 'Current stock'})
     stock_change = IntegerField(render_kw={'placeholder': 'Stock change'})
     submit = SubmitField(label='Submit')
 
@@ -93,11 +106,11 @@ class AddProduct(FlaskForm):
                        render_kw={'placeholder': 'Search product',
                                   'class': 'form-control search',
                                   'autocomplete': 'off'})
-    expected_stock = IntegerField(validators=[InputRequired(),
+    expected_stock = IntegerField(validators=[DataRequired(),
                                   NumberRange(min=1, max=100,
                                   message='Please input valid number')],
                                   render_kw={'placeholder': 'Expected stock'})
-    received_stock = IntegerField(validators=[InputRequired(),
-                                  NumberRange(min=1, max=100,
+    received_stock = IntegerField(validators=[DataRequired(),
+                                  NumberRange(min=0, max=100,
                                   message='Please input valid number')])
     unit_of_measurement = StringField()

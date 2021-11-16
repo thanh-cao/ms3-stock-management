@@ -85,8 +85,8 @@ function showForm(target) {
 
     // If the show has data-id attribute, create a dynamic form's action based on data-id
     if ($(this).attr('data-id')) {
-        baseRoute = `/${$(this).attr('data-target').substring(1)}/`;
-        actionRoute = baseRoute + $(this).attr('data-id');
+        const baseRoute = `/${$(this).attr('data-target').substring(1)}/`;
+        const actionRoute = baseRoute + $(this).attr('data-id');
         $(`form${target}`).attr('action', actionRoute);
     };
 
