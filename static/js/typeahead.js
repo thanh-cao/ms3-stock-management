@@ -2,6 +2,7 @@ const searchInput = $('.search');
 const matchDisplay = $('.suggestions');
 const unitOfMeasurementDisplay = $('.unit-measurement');
 const supplierInput = $('#supplier_id');
+const deliveryDate = $('#delivery_date');
 let product; // declare an empty products variable which will be assigned value in ajax
 
 // Type ahead function is adapted from challange nr6 from Wes Bos' 30-day JavaScript challange
@@ -74,13 +75,37 @@ function queryProductFilteredBySupplier(id) {
         })
 }
 
+function removeSessionStorage() {
+    ['supplier_id', 'delivery_date'].forEach(item => {
+        sessionStorage.removeItem(item);
+    })
+}
+
 $(document).ready(function () {
     if (location.href.includes('pending-stock')) {
+        // If location is either pending-stock/create or pending-stock/edit, query the product database
+        // filtered by supplier, save the supplier id and delivery date to session storage. Upon form submission
+        // or cancel, remove the session storage
+        queryProductFilteredBySupplier(supplierInput.val());
+
         supplierInput.on('change', queryProductFilteredBySupplier);
+
+        if (sessionStorage.getItem('delivery_date')) {
+            deliveryDate.val(sessionStorage.getItem('delivery_date'));
+        }
+
+        $('form#create-pending-stock').on('submit', removeSessionStorage)
+        $('a.btn[href="/dashboard"]').on('submit', removeSessionStorage)
+
     } else {
+        // query all products in database
         queryProductDatabase();
     }
 
     searchInput.on('change', displayMatches);
     searchInput.on('keyup', displayMatches);
+    deliveryDate.on('change', function () {
+        sessionStorage.setItem('delivery_date', deliveryDate.val());
+    });
+
 })

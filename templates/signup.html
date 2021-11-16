@@ -3,7 +3,7 @@
 {% from '_form_macros.html' import render_submit_btn %}
 
 {% block content %}
-<section class="form-backdrop d-flex flex-column align-items-center justify-content-center min-vh-100">
+<section class="form-backdrop d-flex flex-column align-items-center justify-content-center min-vh-100 py-5">
     <div class="row mb-3">
         <a href="{{ url_for('index') }}" class="text-decoration-none">
             <h1 class="brand-text">
@@ -22,11 +22,29 @@
             <form action="{{ url_for('user.register') }}" method="POST" class="text-white">
                 {{ form.csrf_token }}
 
-                {{ render_field(form.name) }}
-                {{ render_field(form.business_name) }}
-                {{ render_field(form.email) }}
-                {{ render_field(form.password) }}
-                {{ render_field(form.retype_password) }}
+                <label for="{{ form.name.name }}">{{ form.name.label.text }}</label>
+                {{ render_field(form.name)}}
+
+                <div class="mb-3">
+                    <label for="{{ form.business_name.name }}">{{ form.business_name.label.text }}</label>
+                    {{ render_field(form.business_name) }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ form.email.name }}">{{ form.email.label }}</label>
+                    {{ render_field(form.email) }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ form.password.name }}">{{ form.password.label }}</label>
+                    {{ render_field(form.password) }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ form.retype_password.name }}">{{ form.retype_password.label }}</label>
+                    {{ render_field(form.retype_password) }}
+                </div>
+                    
                 {{ render_submit_btn(form.submit) }}
             </form>
         </div>

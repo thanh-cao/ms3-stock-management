@@ -1,5 +1,4 @@
 import os
-import sys
 import json
 from flask import (
     Flask, flash, render_template,
@@ -9,7 +8,6 @@ from mongoengine.queryset.visitor import Q
 from flask_wtf.csrf import CSRFProtect
 from flask_user import login_required, current_user, roles_required
 from flask_user.signals import user_registered
-from flask_login import logout_user
 from bson.objectid import ObjectId
 from models import *
 from forms import *
@@ -108,7 +106,7 @@ def edit_account(account_id):
         }
         account.update(**updated_account)
         business.update(business_name=request.form.get('business_name'))
-        flash('account successfully updated')
+        flash('Account successfully updated', 'success')
         return redirect(url_for('account'))
 
 
@@ -122,20 +120,23 @@ def create_new_access():
     form = UserAccess()
     password = form.password.data
     hashed_password = user_manager.hash_password(password)
-    new_access = User(name=form.name.data,
-                      email=form.email.data,
-                      email_confirmed_at=datetime.datetime.now(),
-                      password=hashed_password,
-                      business_id=current_user.business_id)
-    new_access.save()
-    new_access.roles = []
-    new_access.roles.append(form.role.data)
-    new_access.save()
-    flash('New user access successfully created')
+    if form.validate_on_submit():
+        new_access = User(name=form.name.data,
+                          email=form.email.data,
+                          email_confirmed_at=datetime.datetime.now(),
+                          password=hashed_password,
+                          roles=[form.roles.data],
+                          business_id=current_user.business_id)
+        new_access.save()
+        flash('New user access successfully created', 'success')
+        return redirect(url_for('account'))
+
+    for error in form.errors:
+        flash(form.errors.get(error)[0], 'error')
     return redirect(url_for('account'))
 
 
-@app.route('/account/edit_accesss/<access_id>', methods=['POST'])
+@app.route('/edit_user_access/<access_id>', methods=['POST'])
 @login_required
 @roles_required('admin')
 def edit_access(access_id):
@@ -143,17 +144,14 @@ def edit_access(access_id):
     Edit user access for staff with either staff of admin role
     '''
     access = User.objects.get(id=access_id)
-    access.roles = []
-    if request.method == 'POST':
-        new_role = request.form.get('role')
-        access.roles.append(new_role)
-        updated_access = {
-            'name': request.form.get('name'),
-            'roles': access.roles
-        }
-        access.update(**updated_access)
-        flash('Access successfully updated')
-        return redirect(url_for('account'))
+    new_role = request.form.get('roles')
+
+    access.roles = [new_role]
+    access.name = request.form.get('name')
+    access.save()
+
+    flash('Access successfully updated', 'success')
+    return redirect(url_for('account'))
 
 
 @app.route('/account/delete_access/<access_id>')
@@ -165,7 +163,22 @@ def delete_access(access_id):
     '''
     access = User.objects.get(id=access_id)
     access.delete()
+    flash('Access successfully deleted', 'success')
     return redirect(url_for('account'))
+
+
+@csrf.exempt
+@app.route('/account/query', methods=['POST'])
+@login_required
+def query_account_collection():
+    '''
+    Route to receive query call from frontend and return the data
+    to use in scripts.js in order to prepopulate the frontend forms with
+    edit functionality
+    '''
+    id = request.form.get('ObjectId')
+    data = User.objects(id=id, business_id=current_user.business_id).first()
+    return jsonify(data)
 
 
 #############################
@@ -186,12 +199,18 @@ def get_categories():
 @roles_required('admin')
 @login_required
 def create_category():
-    if request.method == 'POST':
+    form = CategoryForm()
+    if form.validate_on_submit():
         new_category = Category(
             category_name=request.form.get('category_name'),
             business_id=current_user.business_id)
         new_category.save()
+        flash('Category successfully created', 'success')
         return redirect(url_for('get_categories'))
+
+    for error in form.errors:
+        flash(form.errors.get(error)[0], 'error')
+    return redirect(url_for('get_categories'))
 
 
 @app.route('/edit_category/<category_id>', methods=['POST'])
@@ -199,12 +218,18 @@ def create_category():
 @roles_required('admin')
 def edit_category(category_id):
     category = Category.objects.get(id=category_id)
-    if request.method == 'POST':
+    form = CategoryForm()
+    if form.validate_on_submit():
         edit = {
             'category_name': request.form.get('category_name')
         }
         category.update(**edit)
+        flash('Category successfully updated', 'success')
         return redirect(url_for('get_categories'))
+
+    for error in form.errors:
+        flash(form.errors.get(error)[0], 'error')
+    return redirect(url_for('get_categories'))
 
 
 @app.route('/categories/delete/<category_id>')
@@ -213,7 +238,23 @@ def edit_category(category_id):
 def delete_category(category_id):
     category = Category.objects.get(id=category_id)
     category.delete()
+    flash('Category successfully deleted', 'success')
     return redirect(url_for('get_categories'))
+
+
+@csrf.exempt
+@app.route('/category/query', methods=['POST'])
+@login_required
+def query_category_collection():
+    '''
+    Route to receive query call from frontend and return the data
+    to use in scripts.js in order to prepopulate the frontend forms with
+    edit functionality
+    '''
+    id = request.form.get('ObjectId')
+    data = Category.objects(id=id,
+                            business_id=current_user.business_id).first()
+    return jsonify(data)
 
 
 #############################
@@ -232,7 +273,8 @@ def get_suppliers():
 @roles_required('admin')
 @login_required
 def create_supplier():
-    if request.method == 'POST':
+    form = SupplierForm()
+    if form.validate_on_submit():
         new_supplier = Supplier(
             supplier_name=request.form.get('supplier_name'),
             contact_person=request.form.get('contact_person'),
@@ -241,7 +283,12 @@ def create_supplier():
             email=request.form.get('email'),
             business_id=current_user.business_id)
         new_supplier.save()
+        flash('Supplier successfully created', 'success')
         return redirect(url_for('get_suppliers'))
+
+    for error in form.errors:
+        flash(form.errors.get(error)[0], 'error')
+    return redirect(url_for('get_suppliers'))
 
 
 @app.route('/edit_supplier/<supplier_id>', methods=['POST'])
@@ -249,7 +296,8 @@ def create_supplier():
 @login_required
 def edit_supplier(supplier_id):
     supplier = Supplier.objects.get(id=supplier_id)
-    if request.method == 'POST':
+    form = SupplierForm()
+    if form.validate_on_submit():
         edit = {
             'supplier_name': request.form.get('supplier_name'),
             'contact_person': request.form.get('contact_person'),
@@ -258,7 +306,12 @@ def edit_supplier(supplier_id):
             'email': request.form.get('email')
         }
         supplier.update(**edit)
+        flash('Supplier successfully updated', 'success')
         return redirect(url_for('get_suppliers'))
+
+    for error in form.errors:
+        flash(form.errors.get(error)[0], 'error')
+    return redirect(url_for('get_suppliers'))
 
 
 @app.route('/suppliers/delete/<supplier_id>')
@@ -267,7 +320,23 @@ def edit_supplier(supplier_id):
 def delete_supplier(supplier_id):
     supplier = Supplier.objects.get(id=supplier_id)
     supplier.delete()
+    flash('Supplier successfully deleted', 'success')
     return redirect(url_for('get_suppliers'))
+
+
+@csrf.exempt
+@app.route('/supplier/query', methods=['POST'])
+@login_required
+def query_supplier_collection():
+    '''
+    Route to receive query call from frontend and return the data
+    to use in scripts.js in order to prepopulate the frontend forms with
+    edit functionality
+    '''
+    id = request.form.get('ObjectId')
+    data = Supplier.objects(id=id,
+                            business_id=current_user.business_id).first()
+    return jsonify(data)
 
 
 #############################
@@ -275,18 +344,48 @@ def delete_supplier(supplier_id):
 #############################
 
 
+def create_category_choices(field):
+    '''
+    Query the database for all categories and create a list of tuples
+    in order to populate dynamic options for select field
+    '''
+    categories = Category.objects(business_id=current_user.business_id)
+    category_choices = [(category.id, category.category_name)
+                        for category in categories]
+    field.choices = category_choices
+    return field.choices
+
+
+def create_supplier_choices(field):
+    '''
+    Query the database for all suppliers and create a list of tuples
+    in order to populate dynamic options for select field
+    '''
+    suppliers = Supplier.objects(business_id=current_user.business_id)
+    supplier_choices = [(supplier.id, supplier.supplier_name)
+                        for supplier in suppliers]
+    field.choices = supplier_choices
+    return field.choices
+
+
+def create_product_form():
+    '''
+    Create ProductForm and add dynamic choices to the form
+    '''
+    form = ProductForm()
+    create_category_choices(form.category_id)
+    create_supplier_choices(form.supplier_id)
+    return form
+
+
 @app.route('/products')
 @login_required
 def get_products():
     # Create new product form and choices for select fields
-    form = ProductForm()
+    form = create_product_form()
+
     categories = Category.objects(business_id=current_user.business_id)
-    suppliers = Supplier.objects(business_id=current_user.business_id)
     products = Product.objects(business_id=current_user.business_id)
-    form.category_id.choices = [(category.id, category.category_name)
-                                for category in categories]
-    form.supplier_id.choices = [(supplier.id, supplier.supplier_name)
-                                for supplier in suppliers]
     today = datetime.datetime.now().date()  # to find stock_change for today
 
     return render_template('products.html',
@@ -299,7 +398,9 @@ def get_products():
 @roles_required('admin')
 @login_required
 def create_product():
-    if request.method == 'POST':
+    form = create_product_form()
+
+    if form.validate_on_submit():
         new_product = Product(
             name=request.form.get('name'),
             category_id=request.form.get('category_id'),
@@ -311,20 +412,18 @@ def create_product():
             business_id=current_user.business_id)
         new_product.save()
 
-        flash('New product successfully created')
+        flash('New product successfully created', 'success')
         return redirect(url_for('get_products'))
+
+    for error in form.errors:
+        flash(form.errors.get(error)[0], 'error')
+    return redirect(url_for('get_products'))
 
 
 @app.route('/products/<product_id>')
 @login_required
 def product_details(product_id):
-    form = ProductForm()
-    categories = Category.objects(business_id=current_user.business_id)
-    suppliers = Supplier.objects(business_id=current_user.business_id)
-    form.category_id.choices = [(category.id, category.category_name)
-                                for category in categories]
-    form.supplier_id.choices = [(supplier.id, supplier.supplier_name)
-                                for supplier in suppliers]
+    form = create_product_form()
     product = Product.objects.get(id=product_id)
     today = datetime.datetime.now().date()
 
@@ -337,7 +436,9 @@ def product_details(product_id):
 @login_required
 def edit_product(product_id):
     product = Product.objects.get(id=product_id)
-    if request.method == 'POST':
+    form = create_product_form()
+
+    if form.validate_on_submit():
         edit = {
             'name': request.form.get('name'),
             'category_id': ObjectId(request.form.get('category_id')),
@@ -347,8 +448,12 @@ def edit_product(product_id):
             'min_stock_allowed': request.form.get('min_stock_allowed')
         }
         product.update(**edit)
-        flash('Product successfully updated')
+        flash('Product successfully updated', 'success')
         return redirect(url_for('product_details', product_id=product_id))
+
+    for error in form.errors:
+        flash(form.errors.get(error)[0], 'error')
+    return redirect(url_for('product_details', product_id=product_id))
 
 
 @app.route('/products/delete/<product_id>')
@@ -357,7 +462,7 @@ def edit_product(product_id):
 def delete_product(product_id):
     product = Product.objects.get(id=product_id)
     product.delete()
-    flash('Product is deleted')
+    flash('Product is deleted', 'success')
     return redirect(url_for('get_products'))
 
 
@@ -370,9 +475,10 @@ def update_stock(product_id):
     if product.validate_stock_change(stock_update):
         product.update_stock(stock_update)
         product.save()
-        flash('Stock successfully updated')
+        flash('Stock successfully updated', 'success')
         return redirect(request.referrer)
-    flash('Stock change cannot be greater than current stock')
+
+    flash('Stock change cannot be greater than current stock', 'error')
     return redirect(request.referrer)
 
 
@@ -418,10 +524,8 @@ def dashboard():
     historic_date = datetime.datetime.now().date() - datetime.timedelta(days=7)
     pending_stocks = PendingStock.objects(business_id=current_user.business_id,
                                           delivery_date__gt=historic_date)
-    pending_form = PendingStockForm()  # the main form to be saved in database
-    suppliers = Supplier.objects(business_id=current_user.business_id)
-    pending_form.supplier_id.choices = [(supplier.id, supplier.supplier_name)
-                                        for supplier in suppliers]
+    pending_form = PendingStockForm()  # to create search for pending stocks
+    create_supplier_choices(pending_form.supplier_id)
 
     # Create a list of products that need to be restocked now
     # and products with stock change today
@@ -444,8 +548,7 @@ def dashboard():
                            stock_change_product=stock_change_product,
                            restocks=restocks,
                            pending_stocks=pending_stocks,
-                           form=form,
-                           pending_form=pending_form)
+                           form=form, pending_form=pending_form)
 
 
 @csrf.exempt
@@ -474,15 +577,14 @@ def search_pending_stock():
 @login_required
 def create_pending_stock():
     form = PendingStockForm()  # the main form to be saved in database
+    create_supplier_choices(form.supplier_id)
     product_form = AddProduct()  # add products to pending stock form
-    suppliers = Supplier.objects(business_id=current_user.business_id)
-    form.supplier_id.choices = [(supplier.id, supplier.supplier_name)
-                                for supplier in suppliers]
 
     if form.validate_on_submit():
         if 'pending' not in session:
-            flash('Please add products to your pending stock form')
+            flash('Please add products to your pending stock form', 'error')
             return redirect(request.referrer)
+
         product_list = session['pending']
         pending_stock = PendingStock(
                         supplier_id=form.supplier_id.data,
@@ -493,8 +595,12 @@ def create_pending_stock():
                         business_id=current_user.business_id)
         pending_stock.save()
         session.pop('pending')
-        return redirect(url_for('dashboard'))
 
+        flash('Pending stock successfully created', 'success')
+        return redirect(url_for('pending_stock_details', id=pending_stock.id))
+
+    for error in form.errors:
+        flash(form.errors.get(error)[0], 'error')
     return render_template('create-pending-stock.html', form=form,
                            product_form=product_form)
 
@@ -561,6 +667,7 @@ def delete_pending_stock(id):
     '''
     pending = PendingStock.objects.get(id=id)
     pending.delete()
+    flash('Pending stock successfully deleted', 'success')
     return redirect(url_for('dashboard'))
 
 
@@ -578,8 +685,9 @@ def edit_pending_stock(id):
 
     if request.method == 'POST':
         if len(session['pending']) == 0:
-            flash('Please add products to your pending stock form')
+            flash('Please add products to your pending stock form', 'error')
             return redirect(request.referrer)
+
         product_list = session['pending']
         edit = {'delivery_date': form.delivery_date.data,
                 'created_date': datetime.datetime.now().date(),
@@ -587,7 +695,8 @@ def edit_pending_stock(id):
                 'product_list': product_list}
         pending_stock.update(**edit)
         session.pop('pending')
-        flash('Pending stock form updated successfully')
+
+        flash('Pending stock form updated successfully', 'success')
         return redirect(url_for('pending_stock_details', id=id))
 
     return render_template('edit-pending-stock.html',
@@ -639,7 +748,7 @@ def approve_pending_stock(id):
         product = Product.objects.get(id=pending_product['id'])
 
         if product.validate_stock_change(int(item['received_stock'])) is False:
-            flash('Stock change is not valid')
+            flash('Stock change is not valid', 'error')
             return redirect(url_for('pending_stock_details', id=id))
 
         product.update_stock(int(item['received_stock']))
@@ -648,8 +757,20 @@ def approve_pending_stock(id):
     pending_stock.is_approved = True
     pending_stock.save()
     session.pop('stock')
-    flash('Pending stock approved successfully')
+    flash('Pending stock approved successfully', 'success')
     return redirect(request.referrer)
+
+
+@app.errorhandler(404)
+def page_not_found(error):
+    error = 'The page you are looking for could not be found.'
+    return render_template('error.html', error=error), 404
+
+
+@app.errorhandler(500)
+def internal_server_error(error):
+    error = 'There was an error on our end. Please try again later.'
+    return render_template('error.html', error=error), 500
 
 
 if __name__ == '__main__':

@@ -163,12 +163,20 @@ i.bi-plus-circle:hover {
     margin-bottom: 1.5rem;
 }
 
-.flash-message {
+.flash-message.success {
     color: var(--bs-primary);
     padding: 0.5rem 2rem;
     border-radius: 10px;
     display: inline;
     background-color: #e0f0ff;
+}
+
+.flash-message.error {
+    color: var(--bs-danger);
+    padding: 0.5rem 2rem;
+    border-radius: 10px;
+    display: inline;
+    background-color: #ffe0e0;
 }
 
 .overlay {

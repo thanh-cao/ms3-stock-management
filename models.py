@@ -12,7 +12,7 @@ class Business(db.Document):
 
 
 class User(db.Document, UserMixin):
-    name = db.StringField(default='')
+    name = db.StringField()
     email = db.EmailField()
     email_confirmed_at = db.DateTimeField()
     password = db.StringField()
@@ -30,18 +30,18 @@ class Category(db.Document):
 
 class Supplier(db.Document):
     supplier_name = db.StringField()
-    contact_person = db.StringField()
-    address = db.StringField()
-    phone = db.IntField()
-    email = db.EmailField()
+    contact_person = db.StringField(default='')
+    address = db.StringField(default='')
+    phone = db.IntField(default=0)
+    email = db.StringField(default='')
     business_id = db.ReferenceField('Business')
 
 
 class Product(db.Document):
     name = db.StringField(required=True)
-    category_id = db.ReferenceField('Category', required=True)
-    brand = db.StringField()
-    supplier_id = db.ReferenceField('Supplier', required=True)
+    category_id = db.ReferenceField('Category')
+    brand = db.StringField(default='')
+    supplier_id = db.ReferenceField('Supplier')
     unit_of_measurement = db.StringField(required=True)
     min_stock_allowed = db.IntField(required=True)
     current_stock = db.IntField(default=0)
