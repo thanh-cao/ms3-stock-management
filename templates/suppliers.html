@@ -55,11 +55,13 @@
                                         <a data-action="showForm" data-target="#edit_supplier"
                                             data-id="{{ supplier.id }}"
                                             class="text-decoration-none btn btn-sm btn-outline-primary">
-                                            <i class="bi bi-pencil-square" aria-label="Edit supplier"></i>
+                                            <i class="bi bi-pencil-square" aria-hidden="true"></i>
+                                            <span class="visually-hidden">Edit supplier</span>
                                         </a>
                                         <a href="{{ url_for('delete_supplier', supplier_id=supplier.id) }}"
                                             class="text-decoration-none btn btn-sm btn-outline-danger">
-                                            <i class="bi bi-trash" aria-label="Delete supplier"></i>
+                                            <i class="bi bi-trash" aria-hidden="true"></i>
+                                            <span class="visually-hidden">Delete supplier</span>
                                         </a>
                                     </div>
                                     {% endif %}
