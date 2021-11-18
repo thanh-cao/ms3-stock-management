@@ -1,3 +1,10 @@
+/*
+* Prefixed by https://autoprefixer.github.io
+* PostCSS: v8.3.6,
+* Autoprefixer: v10.3.1
+* Browsers: last 4 version
+*/
+
 body {
     font-family: 'Roboto', 'san-serif';
 }
@@ -18,10 +25,19 @@ body {
     line-height: 0.8;
     font-weight: 600;
     color: var(--bs-primary);
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
 }
 
 .brand-text {
@@ -41,8 +57,12 @@ body {
 
 .sidenav .nav-link {
     color: var(--bs-white);
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    align-items: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
 }
 
 .sidenav .nav-link:focus,
@@ -85,17 +105,20 @@ h1.hero-heading {
 }
 
 .features .card.card-body {
-    box-shadow: 0 8px 32px 0 rgb(94 95 102 / 24%);
+    -webkit-box-shadow: 0 8px 32px 0 rgb(94 95 102 / 24%);
+            box-shadow: 0 8px 32px 0 rgb(94 95 102 / 24%);
 }
 
 /* signup / login form */
 .form-backdrop {
+    background-image: -o-linear-gradient(340.5deg, rgba(76, 221, 242, 1) 11.2%, rgba(92, 121, 255, 1) 91.1%);
     background-image: linear-gradient(109.5deg, rgba(76, 221, 242, 1) 11.2%, rgba(92, 121, 255, 1) 91.1%);
 }
 
 .wrapper-glassmorphism {
     background: rgb(49 95 143 / 34%);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    -webkit-box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
     backdrop-filter: blur(8.5px);
     -webkit-backdrop-filter: blur(8.5px);
     border-radius: 10px;
@@ -106,8 +129,12 @@ h1.hero-heading {
 
 .form-navigation {
     font-size: 2rem;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    justify-content: space-between;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
     margin-bottom: 1rem;
 }
 
@@ -195,6 +222,8 @@ i.bi-plus-circle:hover {
     nav.sidenav {
         width: 0;
         padding: 0;
+        -webkit-transition: 0.5s;
+        -o-transition: 0.5s;
         transition: 0.5s;
     }
 
