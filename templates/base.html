@@ -35,13 +35,13 @@
                             <span class="d-sm-none d-lg-inline">{{ current_user.name }}</span>
                         </li>
                         <li class="nav-item pt-sm-5 pt-lg-0">
-                            <a class="nav-link" href="{{ url_for('user.logout') }}" class="nav-link">
+                            <a class="nav-link" href="{{ url_for('user.logout') }}">
                                 <i class="bi bi-power"></i>
                                 <span class="d-sm-none d-lg-inline">Sign out</span>
                             </a>
                         </li>
 
-                        <div class="my-4"></div>
+                        <li class="my-4"></li>
 
                         {% if 'admin' in current_user.roles %}
                         <li class="nav-item mb-2">

@@ -23,12 +23,12 @@
                 {{ form.csrf_token }}
                 <div class="mb-3">
                     <label for="{{ form.name.name }}">{{ form.name.label.text }}</label>
-                    {{ render_field(form.name)}}
+                    {{ form.name(class='form-control')}}
                 </div>
 
                 <div class="mb-3">
                     <label for="{{ form.business_name.name }}">{{ form.business_name.label.text }}</label>
-                    {{ render_field(form.business_name) }}
+                    {{ form.business_name(class='form-control') }}
                 </div>
 
                 <div class="mb-3">
