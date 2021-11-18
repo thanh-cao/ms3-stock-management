@@ -13,7 +13,7 @@ function generateHeading() {
                 <span class="text-muted text-center">Today's change</span>
             </div>
             <div class="col-2"></div>
-        </div>`
+        </div>`;
 }
 
 function displayProductList(productLists) {
@@ -44,7 +44,7 @@ function displayProductList(productLists) {
             </div>`;
 
         productListHtml += productRow;
-    })
+    });
 
     $('div.product-list').html(productListHtml);
     $('[data-action="showForm"]').on('click', showForm);
@@ -83,7 +83,7 @@ function displayPendingStocks(pendingStocks) {
         </a>`;
 
         pendingStockListHtml += row;
-    })
+    });
 
     $('.pending-stock-list').html(pendingStockListHtml);
 
@@ -105,12 +105,12 @@ $('form#product-query').on('submit', (e) => {
     })
         .done(productList => {
             displayProductList(productList);
-        })
-})
+        });
+});
 
 $('button.search-pending').on('click', function() {
     $('.search-pending-wrapper').toggleClass('d-none');
-})
+});
 
 // query to get pending stock list
 $('form#pending-stock-query').on('submit', (e) => {
@@ -127,5 +127,5 @@ $('form#pending-stock-query').on('submit', (e) => {
         .done(pendingStocks => {
             console.log(pendingStocks);
             displayPendingStocks(pendingStocks);
-        })
-})
+        });
+});
