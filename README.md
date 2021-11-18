@@ -188,6 +188,7 @@ The project was developed using VS Code editor and its integrated version contro
 * Project management: In order to keep track of my own progression and to-dos, I created [2 kanban project boards](https://github.com/thanh-cao/ms3-stock-management/projects) on GitHub: one is for front-end work, and the other is for backend work. Based on project's requirements and wireframes, I scope out the tasks and assign them to the corresponding project board with 3 phases: To do, In progress, and Done.
 * Creating issues as a way to keep a list of small things to build / to do / to fix as I go along with developing the big features.
 * Branches: I created a branch for each feature, develop on the respective branch, and pushed them to GitHub.
+* Git commit conventional message following [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)
 
 3. Requirements to develop and deploy project:
 There are 2 requirements in order to develop the project locally and then deployed to Heroku:
@@ -272,6 +273,15 @@ Thanks to the almighty Internet and its endless resouces to learn, I have found 
 2. Flask form submission without page reload on GeeksforGeeks which gives me an idea to use ajax to communicate between frontend and backend - [Link](https://www.geeksforgeeks.org/flask-form-submission-without-page-reload/)
 3. Wes Bos' 30-day JavaScript challange (challenge number 6) which gives me a guide on creating type ahead function using ajax - [Link](https://javascript30.com/)
 4. Git commit conventional message - [Link](https://www.conventionalcommits.org/en/v1.0.0/)
+5. Codes examples adapted from respective Flask extensions' user guide in order to set up extensions and implement functionalities.
+   
+Other than the sources above, I studied thoroughly the documentations and source codes of the tools, programs, extensions in order to write my own codes. On top of that, various forums, portals, discussions, youtube channels, etc were used heavily in order to refine my understanding of Python concepts and methods, Flask frameworkand extensions, MongoDB. To name a few I have used:
+* [StackOverflow](https://stackoverflow.com/)
+* [GeeksforGeeks](https://www.geeksforgeeks.org/)
+* [dev.to](https://dev.to/)
+* [Pythonise learning Flask series](https://pythonise.com/series/learning-flask/)
+* [Pretty Printed youtube channel](https://www.youtube.com/c/PrettyPrintedTutorials/playlists)
+* Code Institute's Task Manager mini-project
 ### Content
 All the content throughout the page is written by me, inspiration for index page from [Sortly](https://www.sortly.com/).
 
