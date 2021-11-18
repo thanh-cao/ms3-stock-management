@@ -37,7 +37,7 @@ class CustomUserManager(UserManager):
 
 class UserAccess(FlaskForm):
     name = StringField(validators=[Length(min=5, max=20,
-                                          message='Name should be between 5 to 20 characters.'),
+                       message='Name should be between 5 to 20 characters.'),
                                    DataRequired()],
                        render_kw={'placeholder': 'Name'})
     email = EmailField(validators=[Email(), DataRequired()],
@@ -82,11 +82,13 @@ class ProductForm(FlaskForm):
     unit_of_measurement = StringField(
                              validators=[DataRequired()],
                              render_kw={'placeholder': 'Unit of measurement'})
-    min_stock_allowed = IntegerField(validators=[DataRequired(),
-                                                 NumberRange(min=0, max=100,
-                                                             message='Min stock should be between 0 to 100')],
-                                     render_kw={'placeholder': 'Minimum stock allowed'})
-    current_stock = IntegerField(default=0, render_kw={'placeholder': 'Current stock'})
+    min_stock_allowed = IntegerField(
+                        validators=[DataRequired(),
+                                    NumberRange(min=0, max=100,
+                            message='Min stock should be between 0 to 100')],
+                        render_kw={'placeholder': 'Minimum stock allowed'})
+    current_stock = IntegerField(default=0,
+                                 render_kw={'placeholder': 'Current stock'})
     stock_change = IntegerField(render_kw={'placeholder': 'Stock change'})
     submit = SubmitField(label='Submit')
 
