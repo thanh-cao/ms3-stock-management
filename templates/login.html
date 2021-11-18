@@ -2,7 +2,7 @@
 {% from '_form_macros.html' import render_field %}
 {% from '_form_macros.html' import render_submit_btn %}
 
-{% block content %}
+{% block body %}
 <section class="form-backdrop d-flex flex-column align-items-center justify-content-center min-vh-100">
     <div class="row mb-3">
         <a href="{{ url_for('index') }}" class="text-decoration-none">
@@ -21,11 +21,26 @@
 
             <form action="{{ url_for('user.login') }}" method="POST">
                 {{ form.csrf_token }}
-                <label for="{{ form.email.name }}">{{ form.email.label.text }}</label>
-                {{ render_field(form.email) }}
+                <div class="mb-3">
+                    <label for="{{ form.email.name }}">{{ form.email.label.text }}</label>
+                    {{ form.email (class='form-control')}}
+                    <ul class="list-unstyled">
+                        {% for error in form.errors %}
+                        <li class="text-danger">{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
 
-                <label for="{{ form.password.name }}">{{ form.password.label.text }}</label>
-                {{ render_field(form.password) }}
+                <div class="mb-3">
+                    <label for="{{ form.password.name }}">{{ form.password.label.text }}</label>
+                    {{ form.password (class='form-control')}}
+                    <ul class="list-unstyled">
+                        {% for error in form.errors %}
+                        <li class="text-danger">{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
                 {{ render_submit_btn(form.submit) }}
             </form>
         </div>

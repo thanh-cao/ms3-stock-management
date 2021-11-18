@@ -2,6 +2,8 @@
 {% from '_form_macros.html' import render_field, render_field_with_value, render_select_field, render_select_field_with_value, render_submit_btn %}
 {% block content %}
 <section class="mt-3 container">
+    <h2 class="mb-3">Pending stock details</h2>
+
     <div class="row">
         <!-- Pending stock details  -->
         <div class="col-12 col-md-7">
@@ -104,6 +106,7 @@
         </div>
         <!-- End of pending stock details  -->
 
+        {% if pending.is_approved == False %}
         <!-- Update pending stock form  -->
         <div class="col-md-5">
             <div class="card mt-4 mt-md-0 d-none" id="update_stock">
@@ -178,6 +181,7 @@
             </div>
         </div>
         <!-- End of update pending stock form  -->
+        {% endif %}
     </div>
 </section>
 

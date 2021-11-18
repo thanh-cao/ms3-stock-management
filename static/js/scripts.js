@@ -16,26 +16,26 @@ $(document).ready(function () {
     if ($('.flash-message')) hideFlashMessages();
 });
 
-openSidenav = () => {
+function openSidenav() {
     $('nav.sidenav').addClass('show');
-    $('nav.sidenav').after('<div class="overlay"></div>')
-};
+    $('nav.sidenav').after('<div class="overlay"></div>');
+}
 
-closeSidenav = () => {
+function closeSidenav() {
     $('nav.sidenav').removeClass('show');
     $('div.overlay').remove();
-};
+}
 
 // Function to send ajax request to get data from database based on collection and ObjectId.
 // The data is then set to the form's inputs by matching the input's name with the database's field name.
 function setValueToFormInputs(form, data) {
-    formElements = form[0].elements;
+    let formElements = form[0].elements;
 
     Object.keys(data).forEach(key => {
         if (formElements[key]) {
             formElements[key].value = data[key];
         }
-    })
+    });
 }
 
 function queryCollection(target, ObjectId) {
@@ -52,7 +52,7 @@ function queryCollection(target, ObjectId) {
             })
                 .done(data => {
                     setValueToFormInputs($(`form${target}`), data);
-                })
+                });
         case 'category':
             return $.ajax({
                 url: '/category/query',
@@ -63,7 +63,7 @@ function queryCollection(target, ObjectId) {
             })
                 .done(data => {
                     setValueToFormInputs($(`form${target}`), data);
-                })
+                });
         case 'supplier':
             return $.ajax({
                 url: '/supplier/query',
@@ -74,7 +74,7 @@ function queryCollection(target, ObjectId) {
             })
                 .done(data => {
                     setValueToFormInputs($(`form${target}`), data);
-                })
+                });
     }
 }
 
@@ -88,7 +88,7 @@ function showForm(target) {
         const baseRoute = `/${$(this).attr('data-target').substring(1)}/`;
         const actionRoute = baseRoute + $(this).attr('data-id');
         $(`form${target}`).attr('action', actionRoute);
-    };
+    }
 
     // if the form's action is to edit, query the database using ID and set the value to form's inputs
     if (target.includes('edit')) {
@@ -104,5 +104,5 @@ function hideForm(target) {
 function hideFlashMessages() {
     setTimeout(() => {
         $('.flash-message').remove();
-    }, 5000)
+    }, 5000);
 }
