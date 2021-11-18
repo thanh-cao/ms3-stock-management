@@ -61,7 +61,7 @@
                                 {{ render_select_field(pending_form.supplier_id) }}
                                 
                                 <div class="mb-3">
-                                    <label for="{{ pending_form.deliver_date }}">Delivery date</label>
+                                    <label for="{{ pending_form.delivery_date.name }}">Delivery date</label>
                                     <input class="form-control" id="delivery_date" name="delivery_date" type="date">
                                 </div>
                             </div>
@@ -193,12 +193,12 @@
                         <h5 class="card-title fw-bold">Update Stock</h5>
                         {{ form.csrf_token }}
                         <div class="form-floating">
-                            {{ form.name(class='form-control border-0 bg-white', readonly='true') }}
-                            <label>Product Name</label>
+                            {{ form.name(class='form-control border-0 bg-white', readonly='') }}
+                            <label for="name">Product Name</label>
                         </div>
                         <div class="form-floating mb-3">
                             <input type="number" class='form-control' id="stock_update" name="stock_update">
-                            <label>Stock Change</label>
+                            <label for="stock_update">Stock Change</label>
                         </div>
                         {{ render_submit_btn(form.submit) }}
                         <a href="#" class="btn btn-outline-secondary" data-action="hideForm"

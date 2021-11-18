@@ -181,15 +181,16 @@ def query_account_collection():
     return jsonify(data)
 
 
-#############################
-##### Product category ######
-#############################
+# This section below contains functions and routes related to categories #
 
 
 @app.route('/categories')
 @roles_required('admin')
 @login_required
 def get_categories():
+    '''
+    Create view for categories page with forms to create new / edit category
+    '''
     form = CategoryForm()
     categories = Category.objects(business_id=current_user.business_id)
     return render_template('categories.html', categories=categories, form=form)
@@ -199,6 +200,9 @@ def get_categories():
 @roles_required('admin')
 @login_required
 def create_category():
+    '''
+    Route to create new category
+    '''
     form = CategoryForm()
     if form.validate_on_submit():
         new_category = Category(
@@ -217,6 +221,9 @@ def create_category():
 @login_required
 @roles_required('admin')
 def edit_category(category_id):
+    '''
+    Route to edit category
+    '''
     category = Category.objects.get(id=category_id)
     form = CategoryForm()
     if form.validate_on_submit():
@@ -236,6 +243,9 @@ def edit_category(category_id):
 @login_required
 @roles_required('admin')
 def delete_category(category_id):
+    '''
+    Route to delete category
+    '''
     category = Category.objects.get(id=category_id)
     category.delete()
     flash('Category successfully deleted', 'success')
@@ -257,13 +267,14 @@ def query_category_collection():
     return jsonify(data)
 
 
-#############################
-######## Suppliers ##########
-#############################
+# This section below contains functions and routes related to suppliers #
 
 
 @app.route('/suppliers')
 def get_suppliers():
+    '''
+    Create view for suppliers page with forms to create new / edit supplier
+    '''
     suppliers = Supplier.objects(business_id=current_user.business_id)
     form = SupplierForm()
     return render_template('suppliers.html', suppliers=suppliers, form=form)
@@ -273,6 +284,9 @@ def get_suppliers():
 @roles_required('admin')
 @login_required
 def create_supplier():
+    '''
+    Route to create new supplier
+    '''
     form = SupplierForm()
     if form.validate_on_submit():
         new_supplier = Supplier(
@@ -295,6 +309,9 @@ def create_supplier():
 @roles_required('admin')
 @login_required
 def edit_supplier(supplier_id):
+    '''
+    Route to edit supplier
+    '''
     supplier = Supplier.objects.get(id=supplier_id)
     form = SupplierForm()
     if form.validate_on_submit():
@@ -318,6 +335,9 @@ def edit_supplier(supplier_id):
 @roles_required('admin')
 @login_required
 def delete_supplier(supplier_id):
+    '''
+    Route to delete supplier
+    '''
     supplier = Supplier.objects.get(id=supplier_id)
     supplier.delete()
     flash('Supplier successfully deleted', 'success')
@@ -339,9 +359,7 @@ def query_supplier_collection():
     return jsonify(data)
 
 
-#############################
-######### Products ##########
-#############################
+# This section below contains functions and route related to products #
 
 
 def create_category_choices(field):
@@ -381,6 +399,10 @@ def create_product_form():
 @app.route('/products')
 @login_required
 def get_products():
+    '''
+    Create view for products page categorized by categories
+    with forms to create new product
+    '''
     # Create new product form and choices for select fields
     form = create_product_form()
 
@@ -398,6 +420,9 @@ def get_products():
 @roles_required('admin')
 @login_required
 def create_product():
+    '''
+    Route to create new product
+    '''
     form = create_product_form()
 
     if form.validate_on_submit():
@@ -423,6 +448,9 @@ def create_product():
 @app.route('/products/<product_id>')
 @login_required
 def product_details(product_id):
+    '''
+    Create view to display product details and form to edit details
+    '''
     form = create_product_form()
     product = Product.objects.get(id=product_id)
     today = datetime.datetime.now().date()
@@ -435,6 +463,9 @@ def product_details(product_id):
 @roles_required('admin')
 @login_required
 def edit_product(product_id):
+    '''
+    Route to edit product
+    '''
     product = Product.objects.get(id=product_id)
     form = create_product_form()
 
@@ -460,6 +491,9 @@ def edit_product(product_id):
 @roles_required('admin')
 @login_required
 def delete_product(product_id):
+    '''
+    Route to delete product
+    '''
     product = Product.objects.get(id=product_id)
     product.delete()
     flash('Product is deleted', 'success')
@@ -469,6 +503,9 @@ def delete_product(product_id):
 @app.route('/edit_product_stock/<product_id>', methods=['POST'])
 @login_required
 def update_stock(product_id):
+    '''
+    Route to update product stock
+    '''
     product = Product.objects.get(id=product_id)
     stock_update = int(request.form.get('stock_update'))
 
@@ -503,9 +540,7 @@ def search_product():
     return jsonify(filtered)
 
 
-#############################
-######## Dashboard ##########
-#############################
+# This section below contains routes related to dashboard and pending stock #
 
 
 @app.route('/dashboard')
@@ -576,6 +611,9 @@ def search_pending_stock():
 @roles_required('admin')
 @login_required
 def create_pending_stock():
+    '''
+    Create view to display form and receive form data to create new pending stock
+    '''
     form = PendingStockForm()  # the main form to be saved in database
     create_supplier_choices(form.supplier_id)
     product_form = AddProduct()  # add products to pending stock form
@@ -761,14 +799,23 @@ def approve_pending_stock(id):
     return redirect(request.referrer)
 
 
+# Error handlers #
+
+
 @app.errorhandler(404)
 def page_not_found(error):
+    '''
+    Display error page for 404 error
+    '''
     error = 'The page you are looking for could not be found.'
     return render_template('error.html', error=error), 404
 
 
 @app.errorhandler(500)
 def internal_server_error(error):
+    '''
+    Display error page for 500 error
+    '''
     error = 'There was an error on our end. Please try again later.'
     return render_template('error.html', error=error), 500
 

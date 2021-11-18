@@ -14,10 +14,11 @@
 
                         <div class="form-floating">
                             <input id="supplier_id" type="hidden" value="{{ pending_stock.supplier_id.id }}">
-                            <p class="card-text form-control border-0 mb-1">{{ pending_stock.supplier_id.supplier_name }}</p>
+                            <p class="card-text form-control border-0 mb-1">
+                                {{ pending_stock.supplier_id.supplier_name }}</p>
                             <label>Supplier</label>
-                        </div>                        
-                        
+                        </div>
+
                         {{ render_field_with_value(form.delivery_date, pending_stock.delivery_date)}}
 
                         <div class="row align-items-center mb-2 g-0">
@@ -29,23 +30,25 @@
                             </div>
                             <div class="col-2"></div>
                         </div>
-                   
+
                         {% for item in session.pending %}
-                        <div class="row align-items-center mb-2 g-0">                        
+                        <div class="row align-items-center mb-2 g-0">
                             <div class="col-6 ps-2">
-                                {{ item.name }}  
+                                {{ item.name }}
                             </div>
                             <div class="col-4 text-center">
                                 {{item.expected_stock}} {{ item.unit_of_measurement }}
                             </div>
                             <div class="col-2 text-center">
-                                <a href="{{ url_for('remove_product_from_pending_stock', id=item.id) }}" class="text-decoration-none btn btn-sm btn-outline-danger">
-                                    <i class="bi bi-trash" aria-label="Remove product from pending stock"></i>
+                                <a href="{{ url_for('remove_product_from_pending_stock', id=item.id) }}"
+                                    class="text-decoration-none btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash" aria-hidden="true"></i>
+                                    <span class="visually-hidden">Remove product from pending stock</span>
                                 </a>
                             </div>
                         </div>
                         {% endfor %}
-                      
+
                         <div class="mt-4">
                             {{ render_submit_btn(form.submit) }}
                             <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">Cancel</a>
@@ -62,14 +65,21 @@
                         {{ product_form.id(value='productid') }}
                         <div class="row g-0 align-items-center">
                             <div class="col-6">
-                                {{ render_field(product_form.name) }}
+                                <div class="mb-3">
+                                    <label for="name" class="visually-hidden">Name</label>
+                                    {{ product_form.name }}
+                                    <ul class="list-unstyled">
+
+                                    </ul>
+                                </div>
                             </div>
                             <div class="col-5">
                                 {{ render_field(product_form.expected_stock)}}
                             </div>
                             <div class="col-1 text-center">
                                 <button type="submit" class="add-item mb-3">
-                                    <i class="bi bi-plus-circle" aria-label="add item to grocery list"></i>
+                                    <i class="bi bi-plus-circle" aria-hidden="true"></i>
+                                    <span class="visually-hidden">Add product to pending stock order</span>
                                 </button>
                             </div>
                         </div>

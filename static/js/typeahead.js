@@ -3,7 +3,7 @@ const matchDisplay = $('.suggestions');
 const unitOfMeasurementDisplay = $('.unit-measurement');
 const supplierInput = $('#supplier_id');
 const deliveryDate = $('#delivery_date');
-let product; // declare an empty products variable which will be assigned value in ajax
+let products; // declare an empty products variable which will be assigned value in ajax
 
 // Type ahead function is adapted from challange nr6 from Wes Bos' 30-day JavaScript challange
 function findMatches(input, productArray) {
@@ -11,17 +11,17 @@ function findMatches(input, productArray) {
         // use regular expression to catch user's input and then find matches
         const regex = new RegExp(input, 'gi');
         return product.name.match(regex); // matches with product's name
-    })
+    });
 }
 
 function displayMatches(matches) {
-    matchDisplayHtml = ''
+    let matchDisplayHtml = '';
     matches = findMatches(this.value, products);
 
     matches.forEach(match => {
         let matchRow = `<li class="list-group-item" onclick='select($(this))'>${match.name}</li>`;
         matchDisplayHtml += matchRow;
-    })
+    });
     matchDisplay.html(matchDisplayHtml);
 }
 
@@ -40,7 +40,7 @@ function select(option) {
     searchInput.val(selectData);
 
     let found = findProduct(products, selectData);
-    hiddenInput.attr('value', found[0]._id.$oid)
+    hiddenInput.attr('value', found[0]._id.$oid);
     matchDisplay.empty();
     displayUnitOfMeasurement(found[0].unit_of_measurement);
 }
@@ -55,7 +55,7 @@ function queryProductDatabase() {
     })
         .done(productList => {
             products = productList;
-        })
+        });
 }
 
 function queryProductFilteredBySupplier(id) {
@@ -72,13 +72,13 @@ function queryProductFilteredBySupplier(id) {
     })
         .done(productList => {
             products = productList;
-        })
+        });
 }
 
 function removeSessionStorage() {
     ['supplier_id', 'delivery_date'].forEach(item => {
         sessionStorage.removeItem(item);
-    })
+    });
 }
 
 $(document).ready(function () {
@@ -94,8 +94,8 @@ $(document).ready(function () {
             deliveryDate.val(sessionStorage.getItem('delivery_date'));
         }
 
-        $('form#create-pending-stock').on('submit', removeSessionStorage)
-        $('a.btn[href="/dashboard"]').on('submit', removeSessionStorage)
+        $('form#create-pending-stock').on('submit', removeSessionStorage);
+        $('a.btn[href="/dashboard"]').on('submit', removeSessionStorage);
 
     } else {
         // query all products in database
@@ -107,5 +107,4 @@ $(document).ready(function () {
     deliveryDate.on('change', function () {
         sessionStorage.setItem('delivery_date', deliveryDate.val());
     });
-
-})
+});
