@@ -1,10 +1,11 @@
 from models import Business
 from flask_wtf import FlaskForm
 from flask_user import UserManager
-from flask_user.forms import RegisterForm, password_validator
+from flask_user.forms import (RegisterForm, password_validator,
+                              unique_email_validator)
 from wtforms import (StringField, PasswordField, SubmitField,
                      SelectField, HiddenField, IntegerField)
-from wtforms.validators import (DataRequired, Length, Email, Optional,
+from wtforms.validators import (DataRequired, Length, Email,
                                 ValidationError, NumberRange)
 from wtforms.fields.html5 import EmailField, DateField
 from bson.objectid import ObjectId
@@ -25,7 +26,8 @@ class CustomRegisterForm(RegisterForm):
     name = StringField(label='Name',
                        validators=[DataRequired(),
                                    Length(min=5, max=20,
-                                          message='Name should be between 5 to 20 characters.')])
+                                   message='Name should be between 5 to 20 characters.'
+                                          )])
     business_name = StringField(label='Business Name',
                                 validators=[DataRequired(),
                                             unique_business_validator])
@@ -42,7 +44,8 @@ class UserAccess(FlaskForm):
                        message='Name should be between 5 to 20 characters.'),
                                    DataRequired()],
                        render_kw={'placeholder': 'Name'})
-    email = EmailField(validators=[Email(), DataRequired()],
+    email = EmailField(validators=[Email(), DataRequired(),
+                                   unique_email_validator],
                        render_kw={'placeholder': 'Email'})
     password = PasswordField(validators=[DataRequired(),
                                          password_validator],
@@ -87,7 +90,7 @@ class ProductForm(FlaskForm):
     min_stock_allowed = IntegerField(
                         validators=[DataRequired(),
                                     NumberRange(min=0, max=100,
-                            message='Min stock should be between 0 to 100')],
+                                    message='Min stock should be between 0 to 100')],
                         render_kw={'placeholder': 'Minimum stock allowed'})
     current_stock = IntegerField(default=0,
                                  render_kw={'placeholder': 'Current stock'})

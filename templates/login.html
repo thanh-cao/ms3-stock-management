@@ -4,6 +4,20 @@
 
 {% block body %}
 <section class="form-backdrop d-flex flex-column align-items-center justify-content-center min-vh-100">
+    <!-- flash messages -->
+    <div class="flash-wrapper">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="mb-3">
+            <p class="flash-message {{ category }}">{{ message }}</p>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+    <!-- end flash messages -->
+
     <div class="row mb-3">
         <a href="{{ url_for('index') }}" class="text-decoration-none">
             <h1 class="brand-text">
