@@ -527,7 +527,7 @@ def update_stock(product_id):
 
 
 @csrf.exempt
-@app.route('/product/search', methods=['POST'])
+@app.route('/product/query', methods=['POST'])
 @login_required
 def search_product():
     '''
@@ -544,6 +544,11 @@ def search_product():
         supplier_id = request.form.get('supplier_id')
         filtered = Product.objects(supplier_id=supplier_id,
                                    business_id=current_user.business_id)
+    if query == 'product':
+        product_id = request.form.get('ObjectId')
+        filtered = Product.objects(id=product_id,
+                                   business_id=current_user.business_id
+                                   ).first()
     return jsonify(filtered)
 
 
@@ -619,7 +624,8 @@ def search_pending_stock():
 @login_required
 def create_pending_stock():
     '''
-    Create view to display form and receive form data to create new pending stock
+    Create view to display form and receive form data
+    to create new pending stock
     '''
     form = PendingStockForm()  # the main form to be saved in database
     create_supplier_choices(form.supplier_id)

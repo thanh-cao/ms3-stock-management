@@ -97,7 +97,7 @@ $('form#product-query').on('submit', (e) => {
     e.preventDefault();
 
     $.ajax({
-        url: '/product/search',
+        url: '/product/query',
         type: 'POST',
         data: {
             query: $('input#query').val()

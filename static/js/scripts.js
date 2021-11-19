@@ -40,7 +40,7 @@ function setValueToFormInputs(form, data) {
 
 function queryCollection(target, ObjectId) {
     const collection = target.split('_')[1];
-    
+
     switch (collection) {
         case 'user':
             return $.ajax({
@@ -73,6 +73,19 @@ function queryCollection(target, ObjectId) {
                 }
             })
                 .done(data => {
+                    setValueToFormInputs($(`form${target}`), data);
+                });
+        case 'product':
+            return $.ajax({
+                url: '/product/query',
+                type: 'POST',
+                data: {
+                    'query': 'product',
+                    'ObjectId': ObjectId
+                }
+            })
+                .done(data => {
+                    console.log(data);
                     setValueToFormInputs($(`form${target}`), data);
                 });
     }

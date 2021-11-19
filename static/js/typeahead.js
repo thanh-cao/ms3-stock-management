@@ -47,7 +47,7 @@ function select(option) {
 
 function queryProductDatabase() {
     $.ajax({
-        url: '/product/search',
+        url: '/product/query',
         type: 'POST',
         data: {
             query: 'all'
@@ -63,7 +63,7 @@ function queryProductFilteredBySupplier(id) {
     id = supplierInput.val();
 
     $.ajax({
-        url: '/product/search',
+        url: '/product/query',
         type: 'POST',
         data: {
             query: 'supplier',
