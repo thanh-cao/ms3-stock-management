@@ -17,7 +17,7 @@
                             {{ category.category_name }}
                         </div>
                         <div class="col-3 text-center">
-                            <a data-action="showForm" data-target="#edit_category" data-id="{{ category.id }}"
+                            <a data-action="showForm" data-target="edit_category" data-id="{{ category.id }}"
                                 class="text-decoration-none btn btn-sm btn-outline-primary">
                                 <i class="bi bi-pencil-square" aria-hidden="true"></i>
                                 <span class="visually-hidden">Edit category</span>
@@ -30,14 +30,26 @@
                         </div>
                     </div>
                     {% endfor %}
-                    <a class="btn btn-primary mt-4" data-action="showForm" data-target="#createCategory">
+                    <a class="btn btn-primary mt-4" data-action="showForm" data-target="createCategoryForm">
                         Create new category</a>
                 </div>
             </div>
         </div>
 
         <div class="col-12 col-md-6">
-            <form id="createCategory" class="d-none mt-4 mt-md-0" action="{{ url_for('create_category') }}" method="POST">
+            <div id="form-container">
+
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block javascript %}
+<script>
+    var createCategoryForm = `
+            <form id="createCategory" class="mt-4 mt-md-0" action="{{ url_for('create_category') }}" method="POST">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title fw-bold">Create new category</h5>
@@ -45,13 +57,12 @@
 
                         {{ render_field(form.category_name) }}
                         {{ render_submit_btn(form.submit) }}
-                        <a href="#" class="btn btn-outline-secondary" data-action="hideForm"
-                            data-target="#createCategory">Cancel</a>
+                        <a href="#" class="btn btn-outline-secondary" data-action="hideForm">Cancel</a>
                     </div>
                 </div>
-            </form>
-
-            <form id="edit_category" class="d-none mt-4 mt-md-0" action="" method="POST">
+            </form>`;
+    var edit_category = `
+            <form id="edit_category" class="mt-4 mt-md-0" action="" method="POST">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title fw-bold">Edit category</h5>
@@ -59,13 +70,9 @@
 
                         {{ render_field(form.category_name) }}
                         {{ render_submit_btn(form.submit) }}
-                        <a href="#" class="btn btn-outline-secondary" data-action="hideForm"
-                            data-target="#edit_category">Cancel</a>
+                        <a href="#" class="btn btn-outline-secondary" data-action="hideForm">Cancel</a>
                     </div>
                 </div>
-            </form>
-        </div>
-    </div>
-</section>
-
+            </form>`;
+</script>
 {% endblock %}

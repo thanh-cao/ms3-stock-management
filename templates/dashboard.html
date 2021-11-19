@@ -173,7 +173,7 @@
                                 {{ product.stock_change }} {{ product.unit_of_measurement }}
                             </div>
                             <div class="col-2">
-                                <a class="btn text-primary p-0" data-action="showForm" data-target="#edit_product_stock"
+                                <a href="#" class="btn text-primary p-0" data-action="showForm" data-target="edit_product_stock"
                                     data-id="{{ product.id }}">
                                     Update Stock
                                 </a>
@@ -187,7 +187,19 @@
         </div>
 
         <div class="col-12 col-md-4">
-            <form id="edit_product_stock" class="d-none mt-4 mt-md-0" action="" method="POST">
+            <div id="form-container">
+
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End of stock update section  -->
+{% endblock %}
+
+{% block javascript %}
+<script>
+    var edit_product_stock = `            
+            <form id="edit_product_stock" class="mt-4 mt-md-0" action="" method="POST">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title fw-bold">Update Stock</h5>
@@ -205,14 +217,8 @@
                             data-target="#edit_product_stock">Cancel</a>
                     </div>
                 </div>
-            </form>
-        </div>
-    </div>
-</section>
-<!-- End of stock update section  -->
-{% endblock %}
-
-{% block javascript %}
+            </form>`;
+</script>
 <script src="{{ url_for('static', filename='js/typeahead.js') }}"></script>
 <script src="{{ url_for('static', filename='js/search.js') }}"></script>
 {% endblock %}

@@ -55,11 +55,11 @@
                     </div>
 
                     <div class="my-auto">
-                        <a class="btn btn-md btn-primary me-2" data-action="showForm" data-target="#updateStock">
+                        <a href="#" class="btn btn-md btn-primary me-2" data-action="showForm" data-target="updateStockForm">
                             Update Stock
                         </a>
                         {% if 'admin' in current_user.roles %}
-                        <a href="#" class="btn btn-md btn-outline-primary text-decoration-none me-2" data-action="showForm" data-target="#editProduct">
+                        <a href="#" class="btn btn-md btn-outline-primary text-decoration-none me-2" data-action="showForm" data-target="editProductForm">
                             Edit
                         </a>
                         <a href="{{ url_for('delete_product', product_id=product.id) }}" class="btn btn-md btn-outline-danger">
@@ -73,7 +73,18 @@
         </div>
 
         <div class="col-12 col-md-6">
-            <form id="editProduct" class="d-none mt-4 mt-md-0" action="{{ url_for('edit_product', product_id=product.id) }}" method="POST">
+            <div id="form-container">
+
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block javascript %}
+<script>
+    var editProductForm = `            
+            <form id="editProductForm" class="mt-4 mt-md-0" action="{{ url_for('edit_product', product_id=product.id) }}" method="POST">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title fw-bold">Edit product details</h5>
@@ -85,13 +96,13 @@
                         {{ render_field_with_value(form.unit_of_measurement, product.unit_of_measurement) }}
                         {{ render_field_with_value(form.min_stock_allowed, product.min_stock_allowed) }}
                         {{ render_submit_btn(form.submit) }}
-                        <a href="#" class="btn btn-outline-secondary" data-action="hideForm"
-                            data-target="#editProduct">Cancel</a>
+                        <a href="#" class="btn btn-outline-secondary" data-action="hideForm">Cancel</a>
                     </div>
                 </div>
-            </form>
-
-            <form id="updateStock" class="d-none mt-4 mt-md-0" action="{{ url_for('update_stock', product_id=product.id) }}" method="POST">
+            </form>`;
+    
+    var updateStockForm = `            
+            <form id="updateStockForm" class="mt-4 mt-md-0" action="{{ url_for('update_stock', product_id=product.id) }}" method="POST">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title fw-bold">Update Stock</h5>
@@ -105,12 +116,9 @@
                             <label for="stock_update">Stock Change</label>
                         </div>
                         {{ render_submit_btn(form.submit) }}
-                        <a href="#" class="btn btn-outline-secondary" data-action="hideForm"
-                            data-target="#updateStock">Cancel</a>
+                        <a href="#" class="btn btn-outline-secondary" data-action="hideForm">Cancel</a>
                     </div>
                 </div>
-            </form>
-        </div>
-    </div>
-</section>
+            </form>`;
+</script>
 {% endblock %}
