@@ -70,12 +70,12 @@
                         <div class="col-3 text-center">
                             {% for item in session.stock %}
                                 {% if item.id == product.id %}
-                                {{ item.received_stock }}
+                                {{ item.received_stock }} {{ product.unit_of_measurement }}
                                 {% endif %}
                             {% endfor %}
 
                             {% if product.received_stock %}
-                            {{ product.received_stock }}
+                            {{ product.received_stock }} {{ product.unit_of_measurement }}
                             {% endif %}
                         </div>
                     </div>
