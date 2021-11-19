@@ -23,7 +23,9 @@ def unique_business_validator(form, field):
 
 class CustomRegisterForm(RegisterForm):
     name = StringField(label='Name',
-                       validators=[DataRequired()])
+                       validators=[DataRequired(),
+                                   Length(min=5, max=20,
+                                          message='Name should be between 5 to 20 characters.')])
     business_name = StringField(label='Business Name',
                                 validators=[DataRequired(),
                                             unique_business_validator])

@@ -25,7 +25,7 @@
                     <label for="{{ form.email.name }}">{{ form.email.label.text }}</label>
                     {{ form.email (class='form-control')}}
                     <ul class="list-unstyled">
-                        {% for error in form.errors %}
+                        {% for error in form.email.errors %}
                         <li class="text-danger">{{ error }}</li>
                         {% endfor %}
                     </ul>
@@ -35,7 +35,7 @@
                     <label for="{{ form.password.name }}">{{ form.password.label.text }}</label>
                     {{ form.password (class='form-control')}}
                     <ul class="list-unstyled">
-                        {% for error in form.errors %}
+                        {% for error in form.password.errors %}
                         <li class="text-danger">{{ error }}</li>
                         {% endfor %}
                     </ul>
