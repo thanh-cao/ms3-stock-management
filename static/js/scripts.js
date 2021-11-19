@@ -4,14 +4,13 @@ $(document).ready(function () {
         openSidenav();
     });
 
-    $('[data-action="showForm"]').on('click', showForm);
-    $('[data-action="hideForm"]').on('click', hideForm);
-
     $(document).on('click', (e) => {
         if ($('nav.sidenav').hasClass('show') && !$(e.target).closest('nav.sidenav').length) {
             closeSidenav();
         }
     });
+
+    $('[data-action="showForm"]').on('click', showForm);
 
     if ($('.flash-message')) hideFlashMessages();
 });
@@ -40,7 +39,7 @@ function setValueToFormInputs(form, data) {
 
 function queryCollection(target, ObjectId) {
     const collection = target.split('_')[1];
-    
+
     switch (collection) {
         case 'user':
             return $.ajax({
@@ -51,7 +50,7 @@ function queryCollection(target, ObjectId) {
                 }
             })
                 .done(data => {
-                    setValueToFormInputs($(`form${target}`), data);
+                    setValueToFormInputs($(`form#${target}`), data);
                 });
         case 'category':
             return $.ajax({
@@ -62,7 +61,7 @@ function queryCollection(target, ObjectId) {
                 }
             })
                 .done(data => {
-                    setValueToFormInputs($(`form${target}`), data);
+                    setValueToFormInputs($(`form#${target}`), data);
                 });
         case 'supplier':
             return $.ajax({
@@ -73,32 +72,70 @@ function queryCollection(target, ObjectId) {
                 }
             })
                 .done(data => {
-                    setValueToFormInputs($(`form${target}`), data);
+                    setValueToFormInputs($(`form#${target}`), data);
+                });
+        case 'product':
+            return $.ajax({
+                url: '/product/query',
+                type: 'POST',
+                data: {
+                    'query': 'product',
+                    'ObjectId': ObjectId
+                }
+            })
+                .done(data => {
+                    setValueToFormInputs($(`form#${target}`), data);
                 });
     }
 }
 
 function showForm(target) {
     target = $(this).attr('data-target');
-    $(`${target}`).toggleClass('d-none');
-    document.querySelector(target).scrollIntoView({ behavior: 'smooth', block: 'center' });
-
+    $('#form-container').html(window[target]);
+    
     // If the show has data-id attribute, create a dynamic form's action based on data-id
     if ($(this).attr('data-id')) {
-        const baseRoute = `/${$(this).attr('data-target').substring(1)}/`;
+        const baseRoute = `/${$(this).attr('data-target')}/`;
         const actionRoute = baseRoute + $(this).attr('data-id');
-        $(`form${target}`).attr('action', actionRoute);
+        $(`form#${target}`).attr('action', actionRoute);
     }
 
     // if the form's action is to edit, query the database using ID and set the value to form's inputs
     if (target.includes('edit')) {
         queryCollection(target, $(this).attr('data-id'));
     }
+
+    if ($('input#received_stock')) {
+        activateInputEvent();
+    }
+
+    $('[data-action="hideForm"]').on('click', hideForm);
 }
 
-function hideForm(target) {
-    target = $(this).attr('data-target');
-    $(`${target}`).addClass('d-none');
+function activateInputEvent() {
+    // Use ajax to submit stock change on received_stock input's change event
+    // This is a pending step to prepare stock change data in the backend with session 'stock'
+    // before stock change is actually updated in the database when user clicks approve
+
+    $('input#received_stock').each(function() {
+        $(this).on('change', function () {
+            $.ajax({
+                    url: '/pending-stock/update',
+                    type: 'POST',
+                    data: {
+                        id: $(this).prev().val(),
+                        received_stock: $(this).val()
+                    }
+                })
+                .done(function (data) {
+                    console.log(data);
+                });
+        });
+    });
+}
+
+function hideForm() {
+    $('#form-container').empty();
 }
 
 function hideFlashMessages() {

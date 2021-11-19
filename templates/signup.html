@@ -24,18 +24,28 @@
                 <div class="mb-3">
                     <label for="{{ form.name.name }}">{{ form.name.label.text }}</label>
                     {{ form.name(class='form-control')}}
+                    <ul class="list-unstyled">
+                        {% for error in form.name.errors %}
+                        <li class="text-danger">{{ error }}</li>
+                        {% endfor %}
+                    </ul>
                 </div>
 
                 <div class="mb-3">
                     <label for="{{ form.business_name.name }}">{{ form.business_name.label.text }}</label>
                     {{ form.business_name(class='form-control') }}
+                    <ul class="list-unstyled">
+                        {% for error in form.business_name.errors %}
+                        <li class="text-danger">{{ error }}</li>
+                        {% endfor %}
+                    </ul>
                 </div>
 
                 <div class="mb-3">
                     <label for="{{ form.email.name }}">{{ form.email.label.text }}</label>
                     {{ form.email (class='form-control')}}
                     <ul class="list-unstyled">
-                        {% for error in form.errors %}
+                        {% for error in form.email.errors %}
                         <li class="text-danger">{{ error }}</li>
                         {% endfor %}
                     </ul>
@@ -45,7 +55,7 @@
                     <label for="{{ form.password.name }}">{{ form.password.label.text }}</label>
                     {{ form.password (class='form-control')}}
                     <ul class="list-unstyled">
-                        {% for error in form.errors %}
+                        {% for error in form.password.errors %}
                         <li class="text-danger">{{ error }}</li>
                         {% endfor %}
                     </ul>
@@ -55,7 +65,7 @@
                     <label for="{{ form.retype_password.name }}">{{ form.retype_password.label.text }}</label>
                     {{ form.retype_password (class='form-control')}}
                     <ul class="list-unstyled">
-                        {% for error in form.errors %}
+                        {% for error in form.retype_password.errors %}
                         <li class="text-danger">{{ error }}</li>
                         {% endfor %}
                     </ul>

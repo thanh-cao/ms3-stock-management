@@ -70,12 +70,12 @@
                         <div class="col-3 text-center">
                             {% for item in session.stock %}
                                 {% if item.id == product.id %}
-                                {{ item.received_stock }}
+                                {{ item.received_stock }} {{ product.unit_of_measurement }}
                                 {% endif %}
                             {% endfor %}
 
                             {% if product.received_stock %}
-                            {{ product.received_stock }}
+                            {{ product.received_stock }} {{ product.unit_of_measurement }}
                             {% endif %}
                         </div>
                     </div>
@@ -84,7 +84,7 @@
                     <!-- Pending stock's action buttons -->
                     {% if pending.is_approved == False %}
                     <div class="mt-4">
-                        <a data-action="showForm" data-target="#update_stock"
+                        <a data-action="showForm" data-target="update_stock"
                             class="btn btn-md btn-primary mb-2 mb-sm-0">Update Stock</a>
                         {% if session.stock and session.stock|length > 0 %}
                         <a href="{{ url_for('approve_pending_stock', id=pending.id) }}"
@@ -109,7 +109,22 @@
         {% if pending.is_approved == False %}
         <!-- Update pending stock form  -->
         <div class="col-md-5">
-            <div class="card mt-4 mt-md-0 d-none" id="update_stock">
+            <div id="form-container">
+
+            </div>
+        </div>
+        <!-- End of update pending stock form  -->
+        {% endif %}
+    </div>
+</section>
+
+{% endblock %}
+
+{% block javascript %}
+<script>
+
+    var update_stock = `            
+            <div class="card mt-4 mt-md-0" id="update_stock">
                 <div class="card-body">
                     <h5 class="card-title fw-bold fs-6">Update pending stock</h5>
                     <!-- Pending stock information -->
@@ -173,40 +188,10 @@
                     <div class="mt-4">
                         <a href="{{ url_for('pending_stock_details', id=pending.id) }}"
                             class="btn btn-md btn-primary me-2">Update</a>
-                        <a href="#" class="btn btn-outline-secondary" data-action="hideForm"
-                            data-target="#update_stock">Cancel</a>
+                        <a href="#" class="btn btn-outline-secondary" data-action="hideForm">Cancel</a>
                     </div>
                     <!-- End of update pending stock -->
                 </div>
-            </div>
-        </div>
-        <!-- End of update pending stock form  -->
-        {% endif %}
-    </div>
-</section>
-
-{% endblock %}
-
-{% block javascript %}
-<script>
-    // Use ajax to submit stock change on received_stock input's change event
-    // This is a pending step to prepare stock change data in the backend with session 'stock'
-    // before stock change is actually updated in the database when user clicks approve
-
-    $('input#received_stock').each(function (index) {
-        $(this).on('change', function () {
-            $.ajax({
-                    url: '/pending-stock/update',
-                    type: 'POST',
-                    data: {
-                        id: $(this).prev().val(),
-                        received_stock: $(this).val()
-                    }
-                })
-                .done(function (data) {
-                    console.log(data);
-                })
-        })
-    })
+            </div>`;
 </script>
 {% endblock %}

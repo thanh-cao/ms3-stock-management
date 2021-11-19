@@ -131,8 +131,9 @@ def create_new_access():
         flash('New user access successfully created', 'success')
         return redirect(url_for('account'))
 
-    for error in form.errors:
-        flash(form.errors.get(error)[0], 'error')
+    for field_errors in form.errors.values():
+        for error in field_errors:
+            flash(error, 'error')
     return redirect(url_for('account'))
 
 
@@ -212,8 +213,9 @@ def create_category():
         flash('Category successfully created', 'success')
         return redirect(url_for('get_categories'))
 
-    for error in form.errors:
-        flash(form.errors.get(error)[0], 'error')
+    for field_errors in form.errors.values():
+        for error in field_errors:
+            flash(error, 'error')
     return redirect(url_for('get_categories'))
 
 
@@ -234,8 +236,9 @@ def edit_category(category_id):
         flash('Category successfully updated', 'success')
         return redirect(url_for('get_categories'))
 
-    for error in form.errors:
-        flash(form.errors.get(error)[0], 'error')
+    for field_errors in form.errors.values():
+        for error in field_errors:
+            flash(error, 'error')
     return redirect(url_for('get_categories'))
 
 
@@ -300,8 +303,9 @@ def create_supplier():
         flash('Supplier successfully created', 'success')
         return redirect(url_for('get_suppliers'))
 
-    for error in form.errors:
-        flash(form.errors.get(error)[0], 'error')
+    for field_errors in form.errors.values():
+        for error in field_errors:
+            flash(error, 'error')
     return redirect(url_for('get_suppliers'))
 
 
@@ -326,8 +330,9 @@ def edit_supplier(supplier_id):
         flash('Supplier successfully updated', 'success')
         return redirect(url_for('get_suppliers'))
 
-    for error in form.errors:
-        flash(form.errors.get(error)[0], 'error')
+    for field_errors in form.errors.values():
+        for error in field_errors:
+            flash(error, 'error')
     return redirect(url_for('get_suppliers'))
 
 
@@ -440,8 +445,9 @@ def create_product():
         flash('New product successfully created', 'success')
         return redirect(url_for('get_products'))
 
-    for error in form.errors:
-        flash(form.errors.get(error)[0], 'error')
+    for field_errors in form.errors.values():
+        for error in field_errors:
+            flash(error, 'error')
     return redirect(url_for('get_products'))
 
 
@@ -482,8 +488,9 @@ def edit_product(product_id):
         flash('Product successfully updated', 'success')
         return redirect(url_for('product_details', product_id=product_id))
 
-    for error in form.errors:
-        flash(form.errors.get(error)[0], 'error')
+    for field_errors in form.errors.values():
+        for error in field_errors:
+            flash(error, 'error')
     return redirect(url_for('product_details', product_id=product_id))
 
 
@@ -520,7 +527,7 @@ def update_stock(product_id):
 
 
 @csrf.exempt
-@app.route('/product/search', methods=['POST'])
+@app.route('/product/query', methods=['POST'])
 @login_required
 def search_product():
     '''
@@ -537,6 +544,11 @@ def search_product():
         supplier_id = request.form.get('supplier_id')
         filtered = Product.objects(supplier_id=supplier_id,
                                    business_id=current_user.business_id)
+    if query == 'product':
+        product_id = request.form.get('ObjectId')
+        filtered = Product.objects(id=product_id,
+                                   business_id=current_user.business_id
+                                   ).first()
     return jsonify(filtered)
 
 
@@ -612,7 +624,8 @@ def search_pending_stock():
 @login_required
 def create_pending_stock():
     '''
-    Create view to display form and receive form data to create new pending stock
+    Create view to display form and receive form data
+    to create new pending stock
     '''
     form = PendingStockForm()  # the main form to be saved in database
     create_supplier_choices(form.supplier_id)
@@ -637,8 +650,9 @@ def create_pending_stock():
         flash('Pending stock successfully created', 'success')
         return redirect(url_for('pending_stock_details', id=pending_stock.id))
 
-    for error in form.errors:
-        flash(form.errors.get(error)[0], 'error')
+    for field_errors in form.errors.values():
+        for error in field_errors:
+            flash(error, 'error')
     return render_template('create-pending-stock.html', form=form,
                            product_form=product_form)
 

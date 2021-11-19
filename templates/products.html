@@ -18,7 +18,7 @@
                 </ul>
             </div>
             {% if 'admin' in current_user.roles %}
-            <a class="btn btn-primary mt-4" data-action="showForm" data-target="#createProduct">
+            <a class="btn btn-primary mt-4" data-action="showForm" data-target="createProductForm">
                 Create new product
             </a>
             {% endif %}
@@ -87,7 +87,7 @@
                                     </div>
                                     <div class="col-2">
                                         <a class="btn text-primary p-0" data-action="showForm"
-                                            data-target="#edit_product_stock" data-id="{{ product.id }}">
+                                            data-target="edit_product_stock" data-id="{{ product.id }}">
                                             Update Stock
                                         </a>
                                     </div>
@@ -103,7 +103,19 @@
         </div>
 
         <div class="col-12 col-md-5">
-            <form id="createProduct" class="d-none mt-4 mt-md-0" action="{{ url_for('create_product') }}" method="POST">
+            <div id="form-container">
+
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block javascript %}
+<script>
+    var createProductForm = `
+            <form id="createProductForm" class="mt-4 mt-md-0" action="{{ url_for('create_product') }}" method="POST">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title fw-bold">Create new product</h5>
@@ -116,13 +128,13 @@
                         {{ render_field(form.min_stock_allowed) }}
                         {{ render_field(form.current_stock) }}
                         {{ render_submit_btn(form.submit) }}
-                        <a href="#" class="btn btn-outline-secondary" data-action="hideForm"
-                            data-target="#createProduct">Cancel</a>
+                        <a href="#" class="btn btn-outline-secondary" data-action="hideForm">Cancel</a>
                     </div>
                 </div>
-            </form>
+            </form>`;
 
-            <form id="edit_product_stock" class="d-none mt-4 mt-md-0" action="" method="POST">
+    var edit_product_stock = `
+            <form id="edit_product_stock" class="mt-4 mt-md-0" action="" method="POST">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title fw-bold">Update Stock</h5>
@@ -136,18 +148,11 @@
                             <label for="stock_update">Stock Change</label>
                         </div>
                         {{ render_submit_btn(form.submit) }}
-                        <a href="#" class="btn btn-outline-secondary" data-action="hideForm"
-                            data-target="#edit_product_stock">Cancel</a>
+                        <a href="#" class="btn btn-outline-secondary" data-action="hideForm">Cancel</a>
                     </div>
                 </div>
-            </form>
-        </div>
-    </div>
-</section>
-
-{% endblock %}
-
-{% block javascript %}
+            </form>`;
+</script>
 <script src="{{ url_for('static', filename='js/typeahead.js') }}"></script>
 <script src="{{ url_for('static', filename='js/search.js') }}"></script>
 {% endblock %}

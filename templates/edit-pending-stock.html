@@ -51,7 +51,7 @@
 
                         <div class="mt-4">
                             {{ render_submit_btn(form.submit) }}
-                            <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">Cancel</a>
+                            <a href="{{ url_for('pending_stock_details', id=pending_stock.id) }}" class="btn btn-outline-secondary">Cancel</a>
                         </div>
                     </form>
                 </div>

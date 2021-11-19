@@ -88,7 +88,7 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="toolbarDropdown" role="button"
                                 data-bs-toggle="dropdown" aria-expanded="false">
-                                {{ current_user.business_name }}
+                                {{ current_user.business_id.business_name }}
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="toolbarDropdown">
                                 <li><a class="dropdown-item" href="{{ url_for('account') }}">Account Page</a></li>
@@ -96,7 +96,7 @@
                         </li>
                     </ul>
                     {% else %}
-                    <div class="ms-2">{{ current_user.business_name }}</div>
+                    <div class="ms-2">{{ current_user.business_id.business_name }}</div>
                     {% endif %}
                 </header>
                 <!-- end top toolbar for account holder  -->

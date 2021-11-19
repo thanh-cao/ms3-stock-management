@@ -52,7 +52,7 @@
                                     <!-- Action buttons for each supplier  -->
                                     {% if 'admin' in current_user.roles %}
                                     <div>
-                                        <a data-action="showForm" data-target="#edit_supplier"
+                                        <a data-action="showForm" data-target="edit_supplier"
                                             data-id="{{ supplier.id }}"
                                             class="text-decoration-none btn btn-sm btn-outline-primary">
                                             <i class="bi bi-pencil-square" aria-hidden="true"></i>
@@ -73,7 +73,7 @@
                     </div>
 
                     {% if 'admin' in current_user.roles %}
-                    <a class="btn btn-primary mt-4" data-action="showForm" data-target="#create_supplier">
+                    <a class="btn btn-primary mt-4" data-action="showForm" data-target="createSupplierForm">
                         Create new supplier
                     </a>
                     {% endif %}
@@ -83,7 +83,19 @@
 
         {% if 'admin' in current_user.roles %}
         <div class="col-12 col-md-6">
-            <form id="create_supplier" class="d-none mt-4 mt-md-0" action="{{ url_for('create_supplier') }}"
+            <div id="form-container">
+
+            </div>
+        </div>
+        {% endif %} 
+    </div>
+</section>
+
+{% endblock %}
+{% block javascript %}
+<script>
+    var createSupplierForm = `
+            <form id="createSupplierForm" class="mt-4 mt-md-0" action="{{ url_for('create_supplier') }}"
                 method="POST">
                 <div class="card">
                     <div class="card-body">
@@ -96,13 +108,13 @@
                         {{ render_field(form.email) }}
                         {{ render_field(form.address) }}
                         {{ render_submit_btn(form.submit) }}
-                        <a href="#" class="btn btn-outline-secondary" data-action="hideForm"
-                            data-target="#create_supplier">Cancel</a>
+                        <a href="#" class="btn btn-outline-secondary" data-action="hideForm">Cancel</a>
                     </div>
                 </div>
-            </form>
-
-            <form id="edit_supplier" class="d-none mt-4 mt-md-0" action="" method="POST">
+            </form>`;
+    
+            var edit_supplier = `
+            <form id="edit_supplier" class="mt-4 mt-md-0" action="" method="POST">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title fw-bold">Edit supplier</h5>
@@ -114,14 +126,9 @@
                         {{ render_field(form.phone) }}
                         {{ render_field(form.email) }}
                         {{ render_submit_btn(form.submit) }}
-                        <a href="#" class="btn btn-outline-secondary" data-action="hideForm"
-                            data-target="#edit_supplier">Cancel</a>
+                        <a href="#" class="btn btn-outline-secondary" data-action="hideForm">Cancel</a>
                     </div>
                 </div>
-            </form>
-        </div>
-        {% endif %} 
-    </div>
-</section>
-
+            </form>`;
+</script>
 {% endblock %}
