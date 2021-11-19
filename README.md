@@ -26,7 +26,8 @@ Link to the site: [http://ms3-stockmgmt.herokuapp.com/](http://ms3-stockmgmt.her
     - [Future implementations](#future-implementations)
   - [Technologies used](#technologies-used)
     - [Languages](#languages)
-    - [Frameworks, Libraries & Programs](#frameworks-libraries--programs)
+    - [Programs and Tools](#programs-and-tools)
+    - [Frameworks and Libraries](#frameworks-and-libraries)
   - [Testing](#testing)
   - [Deployment](#deployment)
     - [Development](#development)
@@ -150,7 +151,7 @@ etc.
 * [JavaScript](https://www.javascript.com/) - to add interactive functionailities to the app
 * [Python](https://www.python.org/) - to build backend functionalities handling data, database interaction, and CRUD functionalities.
   
-### Programs & Tools
+### Programs and Tools
 * [Figma](https://www.figma.com/) -  for wireframe creation.
 * [Visual Studio Code](https://code.visualstudio.com/) - the code editor being used to build the project.
 * [PicResize](https://picresize.com/) - to resize large images.
@@ -162,7 +163,8 @@ etc.
 * [Autoprefixer CSS online](https://autoprefixer.github.io/) - to parse CSS and add vendor prefixes.
 * [MongoDB](https://www.mongodb.com/) - the database being used to store application data and query.
 * [Heroku](https://www.heroku.com/) - platform being used to deploy the application
-  
+* [W3C Markup Validator](https://validator.w3.org/), [W3C CSS Validator](https://jigsaw.w3.org/css-validator/), [JSHint](https://jshint.com/), [PEP8 online](https://pep8online.com/), [Lighthouse](https://developers.google.com/web/tools/lighthouse/),  - to validate the code syntax and to check the code quality for HTML markup, CSS, JavaScript, Python, and the site overall performance.
+
 ### Frameworks and Libraries
 * [Bootstrap v5.1](https://getbootstrap.com/) - the responsive front-end framework to build the layout and style the app.
 * [jQuery](https://jquery.com/) - a Javascript library used for simplicity of traversing HTML document and manipulation, event handling, and ajax.
