@@ -19,7 +19,7 @@ Return to main [README.md](README.md) to read more about project's planning, con
 ### W3C Markup Validation
 [W3C Markup Validator](https://validator.w3.org/) was used to validate the HTML code of the website in all pages. There were some minor errors and warnings such as duplication of class, missing value `for` for `label` element, missing session heading, etc. They were all fixed accordingly to show no errors afterwards.
 
-Some noticable errors to be raised in this testing: 
+Some noticable errors to be raised in this testing documentation: 
 1. Validating registration and login page shows up 2 errors:
    * Stray end tag `</div>`: this is due the way I set up the base template and extends to the login and registration pages. A simple adjustment of `{block body}` fixes this issue.
 
@@ -27,14 +27,18 @@ Some noticable errors to be raised in this testing:
    * The nested element `label`: this is due to the use of my custom form macro and Flask-User's default setup for RegistrationForm class and its fields. I initially wanted to use `placeholder` text instead of `label` element to keep a clean design. However, Flask-User's default RegistrationForm doesn't have `render_kw` argument, so I had to use `label` element instead, not knowing that it could cause a hidden `label` element to be rendered. Rewriting the fields without using form macro fixes the issue.
   ![Nested label element in form field](readme-assets/validation-markup-signup2.png)
 
-2. Empty value for attribute `action` on `form`: Some of the forms with function to edit (user access, cateogry, supplier) have empty value for `action` attribute on purpose because the action route is created dynamically using JavaScripts when user clicks to show the respective form.
-![Empty value for action attribute on form](readme-assets/validation-form-empty-action.png)
+2. Duplicate ID on the same page
+  * My design approach for some pages was to have the create new and edit data forms on the same page as view data page with different action routes on the form for each funtionality. In the beginning, I hard-coded both of the forms in the markups and hide the forms using `d-none` Boostrap class. Clicking buttons to show forms with toggle the `d-none` class to show and hide the form. Even though the functionalities on the surface work as expected. Having duplicate IDs breaks the rule of HTML. To fix this issue, I refactor and assigned the forms' HTML in a JavaScript variable and then use `showForm()` and `hideForm()` functions to add / empty the forms from the DOM. Since I use `WTForms` for form creation and validation, I had to create the form variables in the page's script tag so that when `jinja2` renders the page, it can also render the WTForms fields accordingly. After this refactor, this issue is fixed.
+  
+  ![Duplicate ID on the same page](readme-assets/validation-duplicate-id.png)
+
 
 ### W3C CSS Validation
 [W3C CSS Validator](https://jigsaw.w3.org/css-validator/) was utilized to validate the CSS syntax written. The results show no errors.
 
 ### Lighthouse audit
 [Lighthouse](https://developers.google.com/web/tools/lighthouse/) was used to test the performance of the application in each page. The results show that the application performs well in all pages and a common theme is Accessibility, Best Practices, and SEO return above 90 points while Performance fell a bit short but still above 85 points. Looking at the suggested opportunities which could help optimize the performance, I decided to not act upon them because Lighthouse suggest to eliminate or reduce unused CSS or JavaScript, all of which are core libraries I use to build the website, and therefore cannot be eliminated.
+
 ![Lighthouse score on index page](readme-assets/lighthouse-index.png)
 ![Lighthouse score on dashboard page](readme-assets/lighthouse-dashboard.png)
 ![Lighthouse score on products page](readme-assets/lighthouse-products.png)
@@ -43,7 +47,7 @@ Some noticable errors to be raised in this testing:
 [JSHint](https://jshint.com/) was used to test the quality and JavaScript syntax use of the three JavaScripts files in this project. The results show no particular errors except for missing semicolons, which I have accordingly updated in the code. There are warnings on unused variable `select` on typeahead.js file and `showForm` on search.js file. However, `select` function is used embedded with the html `<li>` element while `showForm` is a function writte in the scripts.js file, which search.js also has access to the variable. Therefore, these 2 warnings can be ignored.
 
 ### PEP8 online
-[PEP8 online](https://pep8online.com/) was used to test the quality and syntax of the Python code in this project. The results show error code `E501 Line too long` for line 88 on forms.py file. I have tried to adjust the formatting for this particular line. However, it is either I get code `501` or code `E128 continuation line under-indented for visual indent`. I decide to keep the proper indentation for readability and the line is only 88 character longs which don't affect much the readability of the code.
+[PEP8 online](https://pep8online.com/) was used to test the quality and syntax of the Python code in this project. The results show error code `E501 Line too long` for line 29 and 93 on forms.py file. I have tried to adjust the formatting for this particular line. However, it is either I get code `501` or code `E128 continuation line under-indented for visual indent`. I decide to keep the proper indentation for readability and the line is only 85 or 87 character longs which don't affect much the readability of the code.
 
 ## User stories testing
 ### As a new visitor, I want to...
@@ -54,7 +58,8 @@ Some noticable errors to be raised in this testing:
 
 2. ...be able to sign up in order to start using the app.
 * The main navigation bar on landing page is simple and focus to only 2 actions: registration and login. There are also 2 other buttons directing to registration page on index page. Therefore, it is very clear and simple for new, even novice, users to locate where they can sign up.
-![Main navigation bar on landing page](readme-assets/features/features-navigation-index.png)
+
+  ![Main navigation bar on landing page](readme-assets/features/features-navigation-index.png)
 * The registration and login page are designed with simple, clean, and focus approach so that users are not distracted by other actions than just register an account and log in.
 
   ![Registration and login page](readme-assets/features/features-navigation-registration-login.png)
@@ -86,13 +91,15 @@ Some noticable errors to be raised in this testing:
 * On product listing page, users can see clearly only one possible action button with a clear descriptive text `Create new product`. Upon clicking the button, a form will appear to which allows them to fill in the product details and create a new product.
 * Each product item shown on the product listing accordion has a gray hover effect when users hover their mouse over to indicate that the product can be clicked to view the product's details.
 * At product's details page, admin users can see 3 action buttons which clear descriptive texts what each button does. Clickin `edit` button will show a form to edit the product's details. Clicking `delete` button will delete the product from the database. Clicking `update stock` button will allow users to update product's stock level.
-![Product details page](readme-assets/features/features-product-details.png)
+
+  ![Product details page](readme-assets/features/features-product-details.png)
 
 6. ...search for a product in the product list.
 * On top of product listing page, there is a search bar with a descriptive text hinting to users that they can search for a product by typing in the search bar.
 * Search bar has type ahead functionality which queries all the products available in the database that belongs to the user's company and matches with user's regex search query as they type in order to let users know what products are available.
 * Beside product listing page, search product feature is also available on dashboard where user is directed to upon login for quick access to the functionality.
-![Product search](readme-assets/features/features-product-search.png)
+
+  ![Product search](readme-assets/features/features-product-search.png)
 
 7. ...update products' stocks.
 * Each product item in the product listing accordion has a button to update the product's stock level. This action is also available on product'details page level, and dashboard when user has searched for a product.
@@ -169,10 +176,10 @@ Some noticable errors to be raised in this testing:
 
 ## Known bugs and issues
 Due to time constraints and (still) limited experience and knowledge, a few interactions and functionalities are not fully perfected.
-1. Clicking to show form, close form or type ahead suggestions can take 2 clicks to register the event.
+1. Clicking type ahead suggestions can take 2 clicks to register the event.
 2. When user adds product to pending stock form, if user chooses to type in the product name by themselves instead of clicking the type ahead suggestion, and the input does not match exactly the product name in the database, the scripts will fail to detect the product's ID in order to populate related information and further actions to be done on the product.
 
 ## Further possible improvements
 1. Refactor app structure with blueprint
    * The current app and code structure is not ideal to scale and maintain in the future to add more features and functionality. Refactoring the app into blueprint structure was supposed to be done. However, I came into some issues while doing this and with the time constraints, I decided to leave it as is right now since it is a nice to do for the scope of this project. This will be done at a later point when the time permits for my own learning. 
-2. Dynamic form generation with JavaScripts upon button click instead of the current hard-coded forms into the markups and hide with CSS.
+2. Dynamic form generation with JavaScripts maybe could have been done in a more clever and cleaner way.
