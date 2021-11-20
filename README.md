@@ -155,6 +155,7 @@ etc.
 * [Figma](https://www.figma.com/) -  for wireframe creation.
 * [Visual Studio Code](https://code.visualstudio.com/) - the code editor being used to build the project.
 * [PicResize](https://picresize.com/) - to resize large images.
+* [Glassmorphism CSS Generator](https://ui.glass/generator/) - to generate glassmorphism effects for registration and login page.
 * [Chrome DevTools](https://developer.chrome.com/docs/devtools/) - used heavily for debugging during development and testing process.
 * [Git](https://git-scm.com/) - the built-in Git feature in VS Code was used for version control and push to github.
 * [Github](https://github.com/) - Github is used to store project's code remotely. 
